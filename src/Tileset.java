@@ -14,7 +14,7 @@ public class Tileset {
 		tileset = new ArrayList<BufferedImage>();	
 		
 		try {
-			tilesetimg = ImageIO.read(getClass().getResource("tileset.gif"));
+			tilesetimg = ImageIO.read(getClass().getResource("resources/tileset.gif"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

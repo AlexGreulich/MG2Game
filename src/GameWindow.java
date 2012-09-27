@@ -13,18 +13,18 @@ public class GameWindow extends JFrame{
 	//Point pointOfView = new Point(0,0);
 	Gameloop gameloop;
 	public GameWindow(){
-		super("");
+		super("Cybercalypse");
 		
 		setSize(800,600);
+		controls = new Controls();
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		level = new Level();
-		controls = new Controls();
-		addKeyListener(controls);
-		player = new Player(this,50,50);
+		
+		player = new Player(this);//,50,50
 		panel = new GamePanel(this);
 		gameloop = new Gameloop(this);
-		
+		addKeyListener(controls);
 		
 		add(panel);
 		setVisible(true);
@@ -32,11 +32,12 @@ public class GameWindow extends JFrame{
 		
 		panelThread = new Thread(panel);
 		gameloopthread = new Thread(gameloop);
-		panelThread.run();
-		gameloopthread.run();
+		
+		panelThread.start();
+		gameloopthread.start();
 		
 		setResizable(false);
-		//pack();
+		pack();
 	}
 	
 	public static void main(String[] args){

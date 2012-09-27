@@ -4,61 +4,61 @@ public class Gameloop implements Runnable{
 	GameWindow window;
 	Player player;
 	Controls controls;
-	int speed = 5;
+	int speed = 2;
 	int gamespeed =5;
 	
 	public Gameloop(GameWindow w){
 		
 		window = w;
 		player = window.player;
-		controls = window.controls;
+		controls = w.controls;
 		
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		while (true){
 			float amAnfang = System.currentTimeMillis();
 			
 			if((controls.hoch) && (controls.links)){
-//				player.posX = player.posX - speed;
-//				player.posY = player.posY - speed;
-				player.setX(player.posX -speed);
-				player.setY(player.posY -speed);
+				player.posX = player.posX - speed;
+				player.posY = player.posY - speed;
+//				player.setX(player.posX -speed);
+//				player.setY(player.posY -speed);
 				controls.richtung = 7;
 			}else if((controls.hoch) && (controls.rechts)){
-//				player.posX = player.posX + speed;
-//				player.posY = player.posY - speed;
-				player.setX(player.posX + speed);
-				player.setY(player.posY - speed);
+				player.posX = player.posX + speed;
+				player.posY = player.posY - speed;
+//				player.setX(player.posX + speed);
+//				player.setY(player.posY - speed);
 				controls.richtung = 6;
-			}else if((controls.hoch)){
-//				player.posY = player.posY - speed;
-				player.setY(player.posY - speed);
+			}else if(controls.hoch){
+				player.posY = player.posY - speed;
+//				player.setY(player.posY - speed);
 				controls.richtung = 3;
 			}else if((controls.runter) && (controls.links)){
-//				player.posX = player.posX - speed;
-//				player.posY = player.posY + speed;
-				player.setX(player.posX - speed);
-				player.setY(player.posY + speed);
+				player.posX = player.posX - speed;
+				player.posY = player.posY + speed;
+//				player.setX(player.posX - speed);
+//				player.setY(player.posY + speed);
 				controls.richtung = 4;
 			}else if((controls.runter) && (controls.rechts)){
-//				player.posX = player.posX + speed;
-//				player.posY = player.posY + speed;
-				player.setX(player.posX + speed);
-				player.setY(player.posY + speed);
+				player.posX = player.posX + speed;
+				player.posY = player.posY + speed;
+//				player.setX(player.posX + speed);
+//				player.setY(player.posY + speed);
 				controls.richtung = 5;
-			}else if((controls.runter)){
-//				player.posY = player.posY + speed;
-				player.setY(player.posY + speed);
+			}else if(controls.runter){
+				player.posY = player.posY + speed;
+//				player.setY(player.posY + speed);
 				controls.richtung = 0;
-			}else if((controls.links)){
-//				player.posX = player.posX - speed;
-				player.setX(player.posX - speed);
+			}else if(controls.links){
+				player.posX = player.posX - speed;
+//				player.setX(player.posX - speed);
 				controls.richtung = 1;
-			}else if((controls.rechts)){
-//				player.posX = player.posX + speed;
-				player.setX(player.posX + speed);
+			}else if(controls.rechts){
+				player.posX = player.posX + speed;
+//				player.setX(player.posX + speed);
 				controls.richtung = 2;
 			}
 			float amEnde = System.currentTimeMillis()- amAnfang;

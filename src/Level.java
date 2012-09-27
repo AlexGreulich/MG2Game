@@ -18,7 +18,7 @@ public class Level {
 			//alletiles = ImageIO.read(arg0);
 			//BufferedImage erstestile = ImageIO.read(getClass().getResource("ersterisotileentwurf.gif"));
 			//BufferedImage zweitestile = ImageIO.read(getClass().getResource("zweiterisotileentwurf.gif"));
-			kartenbild = ImageIO.read(getClass().getResource("ersterraum.gif"));
+			kartenbild = ImageIO.read(getClass().getResource("resources/ersterraum.gif"));
 			//tileset = new ArrayList<BufferedImage>();
 			//tileset.add(erstestile);
 			//tileset.add(zweitestile);

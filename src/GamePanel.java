@@ -79,7 +79,7 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		
 		this.createBufferStrategy(2);	//Bufferstrategie setzen, 2= double buffer, 3=triple buffer
 		buffer = this.getBufferStrategy();

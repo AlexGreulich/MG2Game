@@ -12,13 +12,13 @@ public class Player extends Objekt{
 	float animation = 0.0f;
 	BufferedImage[] hoch_cycle,runter_cycle, links_cycle,rechts_cycle,hochlinks_cycle,hochrechts_cycle,runterlinks_cycle,runterrechts_cycle;
 	
-	public Player(GameWindow w, int x, int y){
+	public Player(GameWindow w){//, int x, int y
 		
 		window = w;
-		controls = window.controls;
+		controls = w.controls;
 		
-		posX =x;
-		posY = y;
+		posX =50;
+		posY = 50;
 		energy = 100;
 		image = null;
 		hoch_cycle = new BufferedImage[8];
@@ -31,7 +31,7 @@ public class Player extends Objekt{
 		runterrechts_cycle = new BufferedImage[8];
 		
 		try{
-			img = ImageIO.read(getClass().getResource("charset.gif"));
+			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
 			int count =0;
 			for(int a = 0; a< img.getHeight()/96; a++){
 				for(int b =0; b<img.getWidth()/64;b++){
@@ -96,28 +96,28 @@ public class Player extends Objekt{
 		switch(controls.richtung){
 			case(0):
 				image = runter_cycle[(int)animation];
-				
+				break;
 			case(1):
 				image = links_cycle[(int)animation];
-				
+				break;
 			case(2):
 				image = rechts_cycle[(int)animation];
-				
+				break;
 			case(3):
 				image = hoch_cycle[(int)animation];
-				
+				break;
 			case(4):
 				image = runterlinks_cycle[(int)animation];
-				
+				break;
 			case(5):
 				image = runterrechts_cycle[(int)animation];
-				
+				break;
 			case(6):
 				image = hochrechts_cycle[(int)animation];
-				
+				break;
 			case(7):
 				image = hochlinks_cycle[(int)animation];
-				
+				break;
 		}
 		return image;
 		
