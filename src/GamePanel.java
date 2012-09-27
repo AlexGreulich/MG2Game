@@ -1,5 +1,6 @@
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -23,14 +24,23 @@ public class GamePanel extends Canvas implements Runnable{
 	int kartenhoehe, kartenbreite;
 	ArrayList<BufferedImage> tileset;
 	int[][][]karte;
+	
+	Tileset set;
+	
+	Player player;
+	int gamespeed =5;
+	
 	public GamePanel(GameWindow w){
 		
 		window = w;
-		level = w.level;
+		level = window.level;
 		kartenbreite = level.kartenbild.getWidth();
 		kartenhoehe = level.kartenbild.getHeight();
-		tileset = level.tileset;
+		
+		set = new Tileset();
+		tileset = set.tileset;
 		karte = level.karte;
+		player = window.player;
 		this.setIgnoreRepaint(true);
 		
 		
@@ -45,6 +55,10 @@ public class GamePanel extends Canvas implements Runnable{
 		
 	}
 	
+	public Dimension getPreferredSize(){
+		return new Dimension(800,600);		//?
+	}
+	
 	public void zeichneLevel(Graphics g){
 		
 		for(int x = 0; x < kartenbreite;x++){
@@ -52,13 +66,16 @@ public class GamePanel extends Canvas implements Runnable{
 				BufferedImage i = tileset.get(level.karte[x][y][0]);
 				if(y%2 == 0){
 					g.drawImage(i, x*64,y*16-16,null);
-					g.setColor(Color.WHITE);
 				}else{
 					g.drawImage(i, x*64 +32, y*16-16,null);
 				}
 				
 			}
 		}
+	}
+	
+	public void zeichneSpieler(Graphics g){
+		g.drawImage(player.getImage(),player.getX(),player.getY()-32,64,96,null);
 	}
 	
 	@Override
@@ -68,6 +85,7 @@ public class GamePanel extends Canvas implements Runnable{
 		buffer = this.getBufferStrategy();
 		
 		while(true){
+			float amAnfang = System.currentTimeMillis();
 			try{
 				g2d = bi.createGraphics();
 				g2d.setColor(Color.BLACK);
@@ -75,6 +93,7 @@ public class GamePanel extends Canvas implements Runnable{
 				
 				//hier dinge zeichnen
 				zeichneLevel(g2d);
+				zeichneSpieler(g2d);
 				
 				graphics = buffer.getDrawGraphics();
 				graphics.drawImage(bi,0,0,null);
@@ -93,7 +112,14 @@ public class GamePanel extends Canvas implements Runnable{
 				}
 			}
 			
-			
+			float amEnde = System.currentTimeMillis()- amAnfang;
+			if(gamespeed > amEnde){
+				try {
+					Thread.sleep(gamespeed -(int)amEnde);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 			
 		}
 	}

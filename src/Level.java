@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Level {
 
-	ArrayList<BufferedImage> tileset;
+	//ArrayList<BufferedImage> tileset;
 	BufferedImage alletiles, kartenbild;
 	int[][][] karte;
 	
@@ -16,10 +16,12 @@ public class Level {
 		
 		try{
 			//alletiles = ImageIO.read(arg0);
-			BufferedImage erstestile = ImageIO.read(getClass().getResource("ersterisotileentwurf.gif"));
+			//BufferedImage erstestile = ImageIO.read(getClass().getResource("ersterisotileentwurf.gif"));
+			//BufferedImage zweitestile = ImageIO.read(getClass().getResource("zweiterisotileentwurf.gif"));
 			kartenbild = ImageIO.read(getClass().getResource("ersterraum.gif"));
-			tileset = new ArrayList<BufferedImage>();
-			tileset.add(erstestile);
+			//tileset = new ArrayList<BufferedImage>();
+			//tileset.add(erstestile);
+			//tileset.add(zweitestile);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -35,6 +37,9 @@ public class Level {
 				Color c = new Color(kartenbild.getRGB(x, y));
 				if(c.equals(Color.BLACK)){
 					karte[x][y][0]=0;
+				}
+				else if(c.equals(Color.RED)){
+					karte[x][y][0]=1;
 				}
 			}
 		}
