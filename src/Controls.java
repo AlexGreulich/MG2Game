@@ -12,22 +12,18 @@ public class Controls implements KeyListener{
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_UP:
 				inBewegung = true;
-				richtung = 3;
 				hoch=true;
 				break;
 			case KeyEvent.VK_DOWN:
 				inBewegung = true;
-				richtung=0;
 				runter=true;
 				break;
 			case KeyEvent.VK_LEFT:
 				inBewegung = true;
-				richtung=1;
 				links=true;
 				break;
 			case KeyEvent.VK_RIGHT:
 				inBewegung = true;
-				richtung=2;
 				rechts=true;
 				break;
 		}

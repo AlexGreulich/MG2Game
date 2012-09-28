@@ -18,9 +18,9 @@ public class Tileset {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		for(int x =0; x<tilesetimg.getWidth()/64; x++){
-			for(int y =0; y<tilesetimg.getHeight()/64; y++){
-				BufferedImage i = tilesetimg.getSubimage(x*64, y*64, 64, 64);
+		for(int y =0; y<tilesetimg.getHeight()/128; y++){
+			for(int x =0; x<tilesetimg.getWidth()/64; x++){
+				BufferedImage i = tilesetimg.getSubimage(x*64, y*128, 64, 128);
 				tileset.add(i);
 			}
 		}

@@ -10,12 +10,11 @@ public class GameWindow extends JFrame{
 	Controls controls;
 	Thread panelThread, gameloopthread;
 	Level level;
-	//Point pointOfView = new Point(0,0);
 	Gameloop gameloop;
 	public GameWindow(){
 		super("Cybercalypse");
 		
-		setSize(800,600);
+		setSize(1920,1080);
 		controls = new Controls();
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

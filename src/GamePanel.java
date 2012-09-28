@@ -34,8 +34,8 @@ public class GamePanel extends Canvas implements Runnable{
 		
 		window = w;
 		level = window.level;
-		kartenbreite = level.kartenbild.getWidth();
-		kartenhoehe = level.kartenbild.getHeight();
+		kartenbreite = level.kartenbild.getWidth()*64;
+		kartenhoehe = level.kartenbild.getHeight()*128;
 		
 		set = new Tileset();
 		tileset = set.tileset;
@@ -51,25 +51,25 @@ public class GamePanel extends Canvas implements Runnable{
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
 		GraphicsConfiguration gc = gd.getDefaultConfiguration();
 		
-		bi = gc.createCompatibleImage(800,600);
+		bi = gc.createCompatibleImage(1920,1080);
 		
 	}
 	
 	public Dimension getPreferredSize(){
-		return new Dimension(800,600);		//?
+		return new Dimension(1920,1080);		//?
 	}
 	
 	public void zeichneLevel(Graphics g){
 		
-		for(int x = 0; x < kartenbreite;x++){
-			for(int y = 0; y < kartenhoehe;y++){
+		for(int x = 0; x < kartenbreite/64;x++){
+			for(int y = 0; y < kartenhoehe/128;y++){
 				BufferedImage i = tileset.get(level.karte[x][y][0]);
 				if(y%2 == 0){
-					g.drawImage(i, x*64,y*16-16,null);
+					g.drawImage(i, x*64,y*16,null);//g.drawImage(i, x*64,y*16-16,null);
 				}else{
-					g.drawImage(i, x*64 +32, y*16-16,null);
+					g.drawImage(i, x*64 +32, y*16,null);//g.drawImage(i, x*64 +32, y*16-16,null);
 				}
-				
+				//i=null;
 			}
 		}
 	}
@@ -89,7 +89,7 @@ public class GamePanel extends Canvas implements Runnable{
 			try{
 				g2d = bi.createGraphics();
 				g2d.setColor(Color.BLACK);
-				g2d.fillRect(0,0,800,600);
+				g2d.fillRect(0,0,1920,1080);
 				
 				//hier dinge zeichnen
 				zeichneLevel(g2d);

@@ -17,8 +17,8 @@ public class Player extends Objekt{
 		window = w;
 		controls = w.controls;
 		
-		posX =50;
-		posY = 50;
+		posX =100;
+		posY = 100;
 		energy = 100;
 		image = null;
 		hoch_cycle = new BufferedImage[8];
