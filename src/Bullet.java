@@ -8,7 +8,7 @@ public class Bullet extends Objekt{
 	
 	int speed;
 	int damageOnHit;
-	int richtung;
+	int direction;
 	Player player;
 	
 	
@@ -28,11 +28,11 @@ public class Bullet extends Objekt{
 		
 	}
 	public void setDirection(int d){
-		richtung = d;
+		direction = d;
 	}
 	
 	public int getDirection(){
-		return this.richtung;
+		return this.direction;
 	}
 
 }

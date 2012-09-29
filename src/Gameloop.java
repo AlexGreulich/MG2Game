@@ -7,8 +7,8 @@ public class Gameloop implements Runnable{
 	
 	GamePanel panel;
 	
-	int speed = 2;
-	int gamespeed =5;
+	int speed = 5;
+	int gamespeed =20;
 	
 	public Gameloop(GameWindow w){
 		
@@ -21,86 +21,86 @@ public class Gameloop implements Runnable{
 	@Override
 	public synchronized void run() {
 		while (true){
-			float amAnfang = System.currentTimeMillis();
+			float onStart = System.currentTimeMillis();
 			
 			if(player.posX < 65){
 				player.posX =65;
 			}
-			if(player.posX > panel.kartenbreite){
-				player.posX = panel.kartenbreite -130;
+			if(player.posX > panel.mapWidth){
+				player.posX = panel.mapWidth -130;
 			}
 			if(player.posY < 65){
 				player.posY = 65;
 			}
-			if(player.posY > panel.kartenhoehe){
-				player.posY = panel.kartenhoehe -192;
+			if(player.posY > panel.mapHeight){
+				player.posY = panel.mapHeight -192;
 			}
 			
-			if((controls.hoch) && (controls.links)){
+			if((controls.up) && (controls.left)){
 				if((player.posX > 64) && (player.posY > 96)){
-					if(panel.karte[player.posX/64 -1][player.posY/96 -1][1] != 1){
+					if(panel.map[player.posX/64 -1][player.posY/96 -1][1] != 1){
 						player.posX = player.posX - speed;
 						player.posY = player.posY - speed;
-						controls.richtung = 7;
+						controls.direction = 7;
 					}
 				}
 				
 				
-			}else if((controls.hoch) && (controls.rechts)){
-				if((player.posX < panel.kartenbreite -64) && (player.posY >96)){
-					if(panel.karte[player.posX/64 +1][player.posY/96 -1][1] != 1){
+			}else if((controls.up) && (controls.right)){
+				if((player.posX < panel.mapWidth -64) && (player.posY >96)){
+					if(panel.map[player.posX/64 +1][player.posY/96 -1][1] != 1){
 						player.posX = player.posX + speed;
 						player.posY = player.posY - speed;
-						controls.richtung = 6;
+						controls.direction = 6;
 					}
 				}
 				
-			}else if((controls.runter) && (controls.links)){
-				if((player.posX > 64) && (player.posY < panel.kartenhoehe-96)){
-					if(panel.karte[player.posX/64 -1][player.posY/96 +1][1] != 1){
+			}else if((controls.down) && (controls.left)){
+				if((player.posX > 64) && (player.posY < panel.mapHeight-96)){
+					if(panel.map[player.posX/64 -1][player.posY/96 +1][1] != 1){
 						player.posX = player.posX - speed;
 						player.posY = player.posY + speed;
-						controls.richtung = 4;
+						controls.direction = 4;
 				}
 				}
 				
-			}else if((controls.runter) && (controls.rechts)){
-				if((player.posX < panel.kartenbreite -64) && (player.posY < panel.kartenhoehe -96)){
-					if(panel.karte[player.posX/64 +1][player.posY/96 +1][1] != 1){
+			}else if((controls.down) && (controls.right)){
+				if((player.posX < panel.mapWidth -64) && (player.posY < panel.mapHeight -96)){
+					if(panel.map[player.posX/64 +1][player.posY/96 +1][1] != 1){
 						player.posX = player.posX + speed;
 						player.posY = player.posY + speed;
-						controls.richtung = 5;
+						controls.direction = 5;
 					}
 				}
-			}else if(controls.hoch){
+			}else if(controls.up){
 				if(player.posY > 96){
-					if(panel.karte[player.posX/64 ][player.posY/96 -1][1] != 1){
+					if(panel.map[player.posX/64 ][player.posY/96 -1][1] != 1){
 						player.posY = player.posY - speed;
-						controls.richtung = 3;
+						controls.direction = 3;
 					}
 				}
 				
-			}else if(controls.runter){
-				if(player.posY < panel.kartenhoehe -96){
-					if(panel.karte[player.posX/64][player.posY/96 +1][1] != 1){
+			}else if(controls.down){
+				if(player.posY < panel.mapHeight -96){
+					if(panel.map[player.posX/64][player.posY/96 +1][1] != 1){
 						player.posY = player.posY + speed;
-						controls.richtung = 0;
+						controls.direction = 0;
 					}
 				}
 				
-			}else if(controls.links){
+			}else if(controls.left){
 				if(player.posX > 64){
-					if(panel.karte[player.posX/64 -1][player.posY/96][1] != 1){
+					if(panel.map[player.posX/64 -1][player.posY/96][1] != 1){
 						player.posX = player.posX - speed;
-						controls.richtung = 1;
+						controls.direction = 1;
 					}
 				}
 				
-			}else if(controls.rechts){
-				if(player.posX < panel.kartenbreite-64){
-					if(panel.karte[player.posX/64 +1][player.posY/96][1] != 1){
+			}else if(controls.right){
+				if(player.posX < panel.mapWidth-64){
+					if(panel.map[player.posX/64 +1][player.posY/96][1] != 1){
 						player.posX = player.posX + speed;
-						controls.richtung = 2;
+						controls.direction = 2;
 					}
 				}
 				
@@ -108,10 +108,10 @@ public class Gameloop implements Runnable{
 			
 			
 			
-			float amEnde = System.currentTimeMillis()- amAnfang;
-			if(gamespeed > amEnde){
+			float onEnd = System.currentTimeMillis()- onStart;
+			if(gamespeed > onEnd){
 				try {
-					Thread.sleep(gamespeed -(int)amEnde);
+					Thread.sleep(gamespeed -(int)onEnd);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

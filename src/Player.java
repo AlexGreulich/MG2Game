@@ -83,7 +83,7 @@ public class Player extends Objekt{
 		posY += y;
 	}
 	public BufferedImage getImage(){
-		if(controls.inBewegung){
+		if(controls.isMoving){
 			animation += 0.33;
 		}else{
 			animation = 0.0f;
@@ -93,7 +93,7 @@ public class Player extends Objekt{
 		}
 		
 		
-		switch(controls.richtung){
+		switch(controls.direction){
 			case(0):
 				image = runter_cycle[(int)animation];
 				break;

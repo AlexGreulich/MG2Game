@@ -8,28 +8,28 @@ import javax.imageio.ImageIO;
 
 public class BulletHandler implements Runnable{
 
-	int gamespeed =5;
+	int gamespeed =20;
 	GameWindow window;
 	GamePanel panel;
-	ArrayList<Bullet> kugelnimraum;
+	ArrayList<Bullet> bulletsInRoom;
 	Controls controls;
 	
 	Player player;
 	BufferedImage[] bulletpics;
-	Rectangle raumgrenzen;
+	Rectangle levelBorders;
 	
-	int feuerrate; //ob das funktioniert?
-	boolean abgefeuert;
+	int firerate; //ob das funktioniert?
+	boolean fired;
 	
 	public BulletHandler(GameWindow w){
 		
 		window = w;
 		panel = window.panel;
-		kugelnimraum = panel.kugelnimraum;
+		bulletsInRoom = panel.bulletsInRoom;
 		controls = window.controls;
 		player = window.player;
-		raumgrenzen = new Rectangle(0,0,panel.kartenbreite,panel.kartenhoehe);
-		feuerrate =0;
+		levelBorders = new Rectangle(0,0,panel.mapWidth,panel.mapHeight);
+		firerate =0;
 		
 		
 		try{
@@ -37,9 +37,9 @@ public class BulletHandler implements Runnable{
 			bulletpics = new BufferedImage[8];
 			
 			BufferedImage bulletset = ImageIO.read(getClass().getResource("resources/bulletversuch.gif"));
-			for(int a = 0;a < 2; a++){
-				for(int b = 0; b < 2; b++){
-					if((a != 1) && (b !=1)){
+			for(int a = 0;a <= 2; a++){
+				for(int b = 0; b <= 2; b++){
+					if(((a==1)&&(b==1))==false){
 						BufferedImage i = bulletset.getSubimage(a*5, b*5, 5,5);
 						bulletpics[index] = i;
 						index++;
@@ -61,115 +61,115 @@ public class BulletHandler implements Runnable{
 	@Override
 	public synchronized void run() {
 		while(true){
-			float amAnfang = System.currentTimeMillis();
-			if(feuerrate == 50){
-				abgefeuert = false;
-				feuerrate =0;
+			float onStart = System.currentTimeMillis();
+			if(firerate == 50){
+				fired = false;
+				firerate =0;
 			}
 			
 			// es kann nur gefeuert werden wenn abgefeuert == false ist, sonst wird feuerrate bis 50 gewartet
-			if(!abgefeuert){
+			if(!fired){
 					// pfeiltasten abfragen um neue kugeln zu erzeugen
-				if((controls.hochfeuern) && (controls.linksfeuern)){
+				if((controls.fireUP) && (controls.fireLEFT)){
 					
-					Bullet b = new Bullet(player.posX + 32, player.posY+64, 5);	//später für damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 32, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(0);
 					setImage(b);
-					panel.kugelnimraum.add(b);
+					panel.bulletsInRoom.add(b);
 					
-					abgefeuert = true;
+					fired = true;
 					
-				}if((controls.hochfeuern) && (controls.rechtsfeuern)){
-					Bullet b = new Bullet(player.posX + 32, player.posY+64, 5);	//später für damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(2);
-					setImage(b);
-					panel.kugelnimraum.add(b);
-					abgefeuert = true;
-					
-				}if((controls.runterfeuern) && (controls.linksfeuern)){
-					Bullet b = new Bullet(player.posX + 32, player.posY+64, 5);	//später für damageonhit: player.aktuelleWaffe.damage
+				}else if((controls.fireUP) && (controls.fireRIGHT)){
+					Bullet b = new Bullet(player.posX + 32, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(5);
 					setImage(b);
-					panel.kugelnimraum.add(b);
-					abgefeuert = true;
+					panel.bulletsInRoom.add(b);
+					fired = true;
 					
-				}else if((controls.runterfeuern) && (controls.rechtsfeuern)){
-					Bullet b = new Bullet(player.posX + 32, player.posY+64, 5);	//später für damageonhit: player.aktuelleWaffe.damage
+				}else if((controls.fireDOWN) && (controls.fireLEFT)){
+					Bullet b = new Bullet(player.posX + 32, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					b.setDirection(2);
+					setImage(b);
+					panel.bulletsInRoom.add(b);
+					fired = true;
+					
+				}else if((controls.fireDOWN) && (controls.fireRIGHT)){
+					Bullet b = new Bullet(player.posX + 32, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(7);
 					setImage(b);
-					panel.kugelnimraum.add(b);
-					abgefeuert = true;
+					panel.bulletsInRoom.add(b);
+					fired = true;
 					
-				}else if(controls.hochfeuern){
-					Bullet b = new Bullet(player.posX + 32, player.posY+64, 5);	//später für damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(1);
-					setImage(b);
-					panel.kugelnimraum.add(b);
-					abgefeuert = true;
-					
-				}else if(controls.runterfeuern){
-					Bullet b = new Bullet(player.posX + 32, player.posY+64, 5);	//später für damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(6);
-					setImage(b);
-					panel.kugelnimraum.add(b);
-					abgefeuert = true;
-					
-				}else if(controls.linksfeuern){
-					Bullet b = new Bullet(player.posX + 32, player.posY+64, 5);	//später für damageonhit: player.aktuelleWaffe.damage
+				}else if(controls.fireUP){
+					Bullet b = new Bullet(player.posX + 32, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(3);
 					setImage(b);
-					panel.kugelnimraum.add(b);
-					abgefeuert = true;
+					panel.bulletsInRoom.add(b);
+					fired = true;
 					
-				}else if(controls.rechtsfeuern){
-					Bullet b = new Bullet(player.posX + 32, player.posY+64, 5);	//später für damageonhit: player.aktuelleWaffe.damage
+				}else if(controls.fireDOWN){
+					Bullet b = new Bullet(player.posX + 32, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(4);
 					setImage(b);
-					panel.kugelnimraum.add(b);
-					abgefeuert = true;
+					panel.bulletsInRoom.add(b);
+					fired = true;
+					
+				}else if(controls.fireLEFT){
+					Bullet b = new Bullet(player.posX + 32, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					b.setDirection(1);
+					setImage(b);
+					panel.bulletsInRoom.add(b);
+					fired = true;
+					
+				}else if(controls.fireRIGHT){
+					Bullet b = new Bullet(player.posX + 32, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					b.setDirection(6);
+					setImage(b);
+					panel.bulletsInRoom.add(b);
+					fired = true;
 				}
 			}
 			
 			
-			feuerrate++;
-			//kugel-array durchgehen und bewegung/position durchführen/aktualisieren
+			firerate++;
+			//kugel-array durchgehen und bewegung/position durchfhren/aktualisieren
 			
-			for (int index=0;index < panel.kugelnimraum.size();index++){
+			for (int index=0;index < panel.bulletsInRoom.size();index++){
 				
 //				if(kugelnimraum.get(index).posX <= 0){
 //					
 //				}
 				
-				if(kugelnimraum.size() >0){
+				if(bulletsInRoom.size() >0){
 				
-					Bullet b= kugelnimraum.get(index);
+					Bullet b= bulletsInRoom.get(index);
 					if (b != null){
 						
-						switch(b.richtung){
+						switch(b.getDirection()){
 						
 						case(0):
 							b.posX--;
 							b.posY--;
 							break;
 						case(1):
-							b.posY++;
+							b.posX--;
 							break;
 						case(2):
+							b.posX--;
+							b.posY++;
+							break;
+						case(3):
+							b.posY--;
+							break;
+						case(4):
+							b.posY++;
+							break;
+						case(5):
 							b.posX++;
 							b.posY--;
 							break;
-						case(3):
-							b.posX--;
-							break;
-						case(4):
-							b.posX++;
-							break;
-						case(5):
-							b.posX--;
-							b.posY++;
-							break;
 						case(6):
-							b.posY++;
+							b.posX++;
 							break;
 						case(7):
 							b.posX++;
@@ -177,7 +177,9 @@ public class BulletHandler implements Runnable{
 							break;
 						}
 						
-						
+						if((b.posX < 0) || (b.posX > levelBorders.width) || (b.posY <0) || (b.posY > levelBorders.height)){
+							panel.bulletsInRoom.remove(index);
+						}
 //						if(b.richtung == 0){
 //							b.posX --;
 //							b.posY --;
@@ -204,11 +206,12 @@ public class BulletHandler implements Runnable{
 				
 			}
 //			Thread.yield();
-			float amEnde = System.currentTimeMillis() - amAnfang;
-			if(amEnde > gamespeed){
+			float onEnd = System.currentTimeMillis() - onStart;
+			if( gamespeed> onEnd){
 				try{
-					Thread.sleep(gamespeed - (int)amEnde);
-				
+					if((gamespeed -(int)onEnd) > 0){
+						Thread.sleep(gamespeed - (int)onEnd);
+					}
 			}catch(InterruptedException e){
 				e.printStackTrace();
 			}

@@ -4,40 +4,40 @@ import java.awt.event.KeyListener;
 
 public class Controls implements KeyListener{
 
-	int richtung=0;
-	boolean hoch = false,runter = false, links = false, rechts = false, inBewegung = false;
-	boolean hochfeuern, runterfeuern, linksfeuern, rechtsfeuern;
+	int direction=0;
+	boolean up = false,down = false, left = false, right = false, isMoving = false;
+	boolean fireUP, fireDOWN, fireLEFT, fireRIGHT;
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_UP:
-				hochfeuern = true;
+				fireUP = true;
 				break;
 			case KeyEvent.VK_DOWN:
-				runterfeuern = true;
+				fireDOWN = true;
 				break;
 			case KeyEvent.VK_LEFT:
-				linksfeuern = true;
+				fireLEFT = true;
 				break;
 			case KeyEvent.VK_RIGHT:
-				rechtsfeuern = true;
+				fireRIGHT = true;
 				break;
 			case KeyEvent.VK_W:
-				inBewegung = true;
-				hoch=true;
+				isMoving = true;
+				up=true;
 				break;
 			case KeyEvent.VK_A:
-				inBewegung = true;
-				links=true;
+				isMoving = true;
+				left=true;
 				break;
 			case KeyEvent.VK_S:
-				inBewegung = true;
-				runter=true;
+				isMoving = true;
+				down=true;
 				break;
 			case KeyEvent.VK_D:
-				inBewegung = true;
-				rechts=true;
+				isMoving = true;
+				right=true;
 				break;
 				
 		}
@@ -47,32 +47,32 @@ public class Controls implements KeyListener{
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_UP:
-				hochfeuern = false;
+				fireUP = false;
 				break;
 			case KeyEvent.VK_DOWN:
-				runterfeuern = false;
+				fireDOWN = false;
 				break;
 			case KeyEvent.VK_LEFT:
-				linksfeuern = false;
+				fireLEFT = false;
 				break;
 			case KeyEvent.VK_RIGHT:
-				rechtsfeuern = false;
+				fireRIGHT = false;
 				break;
 			case KeyEvent.VK_W:
-				hoch = false;
-				inBewegung = false;
+				up = false;
+				isMoving = false;
 				break;
 			case KeyEvent.VK_A:
-				links = false;
-				inBewegung = false;
+				left = false;
+				isMoving = false;
 				break;
 			case KeyEvent.VK_S:
-				runter = false;
-				inBewegung = false;
+				down = false;
+				isMoving = false;
 				break;
 			case KeyEvent.VK_D:
-				rechts = false;
-				inBewegung = false;
+				right = false;
+				isMoving = false;
 				break;
 		}
 	}

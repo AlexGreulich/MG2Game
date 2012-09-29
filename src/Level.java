@@ -8,25 +8,25 @@ import javax.imageio.ImageIO;
 
 public class Level {
 
-	BufferedImage alletiles, kartenbild;
-	int[][][] karte;
+	BufferedImage allTiles, mapPic;
+	int[][][] map;
 	
 	public Level(){
 		
 		try{
 			
-			kartenbild = ImageIO.read(getClass().getResource("resources/ersterraum.gif"));
+			mapPic = ImageIO.read(getClass().getResource("resources/ersterraum.gif"));
 			
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 		
-		karteLaden();
+		loadMap();
 	}
-	public void  karteLaden(){
-		int hoehe =kartenbild.getHeight();
-		int breite = kartenbild.getWidth();
-		karte = new int[breite][hoehe][4];
+	public void  loadMap(){
+		int mapHeight =mapPic.getHeight();
+		int mapWidth = mapPic.getWidth();
+		map = new int[mapWidth][mapHeight][4];
 		
 		/* legende:
 		 * [x][y][z]
@@ -59,21 +59,21 @@ public class Level {
 		Color plattenriss = new Color(0,0,200);
 		Color plattenriss2 = new Color(0,0,250);
 		
-		for(int x = 0; x < breite;x++){
-			for(int y = 0; y < hoehe;y++){
-				Color c = new Color(kartenbild.getRGB(x, y));
+		for(int x = 0; x < mapWidth;x++){
+			for(int y = 0; y < mapHeight;y++){
+				Color c = new Color(mapPic.getRGB(x, y));
 				
-				if(c.equals(	 schotter		)){		karte[x][y][0]=0;}
-				else if(c.equals(schottergrob	)){		karte[x][y][0]=1;}
-				else if(c.equals(steinplatten	)){		karte[x][y][0]=2;}
-				else if(c.equals(steinplatten2	)){		karte[x][y][0]=3;}
-				else if(c.equals(plattenriss	)){		karte[x][y][0]=4;}
-				else if(c.equals(plattenriss2	)){		karte[x][y][0]=5;}
+				if(c.equals(	 schotter		)){		map[x][y][0]=0;}
+				else if(c.equals(schottergrob	)){		map[x][y][0]=1;}
+				else if(c.equals(steinplatten	)){		map[x][y][0]=2;}
+				else if(c.equals(steinplatten2	)){		map[x][y][0]=3;}
+				else if(c.equals(plattenriss	)){		map[x][y][0]=4;}
+				else if(c.equals(plattenriss2	)){		map[x][y][0]=5;}
 				
 			}
 		}
 		//zum testen:
-		karte[10][10][1]=1;
-		karte[10][11][1]=1;
+		map[10][10][1]=1;
+		map[10][11][1]=1;
 	}
 }

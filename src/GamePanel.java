@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 
 public class GamePanel extends Canvas implements Runnable{
@@ -21,31 +22,31 @@ public class GamePanel extends Canvas implements Runnable{
 	Graphics2D g2d ;
 	BufferStrategy buffer;
 	BufferedImage bi;
-	int panelbreite,panelhoehe; 
+	int panelwidth,panelheight; 
 	Level level;
-	int kartenhoehe, kartenbreite;
+	int mapHeight, mapWidth;
 	ArrayList<BufferedImage> tileset;
-	int[][][]karte;
+	int[][][]map;
 	
 	Tileset set;
 	
 	Player player;
-	int gamespeed =5;
+	int gamespeed =20;
 	//BulletHandler bullethandler;
 	
-	ArrayList<Bullet> kugelnimraum;
-	Collection  kugeln;
+	ArrayList<Bullet> bulletsInRoom;
+	Collection  bullets;
 	
 	public GamePanel(GameWindow w){
 		
 		window = w;
 		level = window.level;
-		kartenbreite = level.kartenbild.getWidth()*64;
-		kartenhoehe = level.kartenbild.getHeight()*128;
+		mapWidth = level.mapPic.getWidth()*64;
+		mapHeight = level.mapPic.getHeight()*128;
 		
 		set = new Tileset();
 		tileset = set.tileset;
-		karte = level.karte;
+		map = level.map;
 		player = window.player;
 		this.setIgnoreRepaint(true);
 		
@@ -58,24 +59,24 @@ public class GamePanel extends Canvas implements Runnable{
 		GraphicsConfiguration gc = gd.getDefaultConfiguration();
 		
 		bi = gc.createCompatibleImage(1920,1080);
-		panelbreite = gc.getBounds().width;
-		panelhoehe = gc.getBounds().height;
-		kugelnimraum = new ArrayList<Bullet>();
-		kugeln = Collections.synchronizedList(kugelnimraum);
+		panelwidth = gc.getBounds().width;
+		panelheight = gc.getBounds().height;
+		bulletsInRoom = new ArrayList<Bullet>();
+		bullets = Collections.synchronizedList(bulletsInRoom);
 	}
 	
 	public Dimension getPreferredSize(){
 		
 		
 		
-		return new Dimension(panelbreite,panelhoehe);		//?
+		return new Dimension(panelwidth,panelheight);		//?
 	}
 	
-	public void zeichneLevel(Graphics g){
+	public void drawLevel(Graphics g){
 		
-		for(int x = 0; x < kartenbreite/64;x++){
-			for(int y = 0; y < kartenhoehe/128;y++){
-				BufferedImage i = tileset.get(level.karte[x][y][0]);
+		for(int x = 0; x < mapWidth/64;x++){
+			for(int y = 0; y < mapHeight/128;y++){
+				BufferedImage i = tileset.get(level.map[x][y][0]);
 				if(y%2 == 0){
 					g.drawImage(i, x*64,y*16,null);//g.drawImage(i, x*64,y*16-16,null);
 				}else{
@@ -86,21 +87,23 @@ public class GamePanel extends Canvas implements Runnable{
 		}
 	}
 	
-	public void zeichneSpieler(Graphics g){
+	public void drawPlayer(Graphics g){
 		g.drawImage(player.getImage(),player.getX(),player.getY()-32,64,96,null);
 	}
 	
-	public void zeichneKugeln(Graphics g){
+	public void drawBullets (Graphics g){
 		
-		
-		for(int index =0; index< kugelnimraum.size();index++){
-			Bullet b = kugelnimraum.get(index);
+//		Collections.synchronizedList(
+//			
+//		}
+		for(int index =0; index < bulletsInRoom.size();index++){
+			Bullet b = bulletsInRoom.get(index);
 			if(b != null){
 				g.drawImage(b.image,b.posX,b.posY,null);
 				
 			}
 		}
-		//kugeln.clear();
+		
 	}
 	
 	
@@ -111,16 +114,16 @@ public class GamePanel extends Canvas implements Runnable{
 		buffer = this.getBufferStrategy();
 		
 		while(true){
-			float amAnfang = System.currentTimeMillis();
+			float onStart = System.currentTimeMillis();
 			try{
 				g2d = bi.createGraphics();
 				g2d.setColor(Color.BLACK);
 				g2d.fillRect(0,0,1920,1080);
 				
 				//hier dinge zeichnen
-				zeichneLevel(g2d);
-				zeichneSpieler(g2d);
-				zeichneKugeln(g2d);
+				drawLevel(g2d);
+				drawPlayer(g2d);
+				drawBullets(g2d);
 				
 				graphics = buffer.getDrawGraphics();
 				graphics.drawImage(bi,0,0,null);
@@ -139,10 +142,10 @@ public class GamePanel extends Canvas implements Runnable{
 				}
 			}
 			
-			float amEnde = System.currentTimeMillis()- amAnfang;
-			if(gamespeed > amEnde){
+			float onEnd = System.currentTimeMillis()- onStart;
+			if(gamespeed > onEnd){
 				try {
-					Thread.sleep(gamespeed -(int)amEnde);
+					Thread.sleep(gamespeed -(int)onEnd);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
