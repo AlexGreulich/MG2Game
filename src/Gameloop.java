@@ -55,14 +55,6 @@ public class Gameloop implements Runnable{
 					}
 				}
 				
-			}else if(controls.hoch){
-				if(player.posY > 96){
-					if(panel.karte[player.posX/64 ][player.posY/96 -1][1] != 1){
-						player.posY = player.posY - speed;
-						controls.richtung = 3;
-					}
-				}
-				
 			}else if((controls.runter) && (controls.links)){
 				if((player.posX > 64) && (player.posY < panel.kartenhoehe-96)){
 					if(panel.karte[player.posX/64 -1][player.posY/96 +1][1] != 1){
@@ -80,6 +72,14 @@ public class Gameloop implements Runnable{
 						controls.richtung = 5;
 					}
 				}
+			}else if(controls.hoch){
+				if(player.posY > 96){
+					if(panel.karte[player.posX/64 ][player.posY/96 -1][1] != 1){
+						player.posY = player.posY - speed;
+						controls.richtung = 3;
+					}
+				}
+				
 			}else if(controls.runter){
 				if(player.posY < panel.kartenhoehe -96){
 					if(panel.karte[player.posX/64][player.posY/96 +1][1] != 1){
@@ -105,7 +105,6 @@ public class Gameloop implements Runnable{
 				}
 				
 			}
-			
 			
 			
 			

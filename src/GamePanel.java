@@ -9,6 +9,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class GamePanel extends Canvas implements Runnable{
@@ -19,7 +21,7 @@ public class GamePanel extends Canvas implements Runnable{
 	Graphics2D g2d ;
 	BufferStrategy buffer;
 	BufferedImage bi;
-	
+	int panelbreite,panelhoehe; 
 	Level level;
 	int kartenhoehe, kartenbreite;
 	ArrayList<BufferedImage> tileset;
@@ -29,6 +31,10 @@ public class GamePanel extends Canvas implements Runnable{
 	
 	Player player;
 	int gamespeed =5;
+	//BulletHandler bullethandler;
+	
+	ArrayList<Bullet> kugelnimraum;
+	Collection  kugeln;
 	
 	public GamePanel(GameWindow w){
 		
@@ -52,11 +58,17 @@ public class GamePanel extends Canvas implements Runnable{
 		GraphicsConfiguration gc = gd.getDefaultConfiguration();
 		
 		bi = gc.createCompatibleImage(1920,1080);
-		
+		panelbreite = gc.getBounds().width;
+		panelhoehe = gc.getBounds().height;
+		kugelnimraum = new ArrayList<Bullet>();
+		kugeln = Collections.synchronizedList(kugelnimraum);
 	}
 	
 	public Dimension getPreferredSize(){
-		return new Dimension(1920,1080);		//?
+		
+		
+		
+		return new Dimension(panelbreite,panelhoehe);		//?
 	}
 	
 	public void zeichneLevel(Graphics g){
@@ -78,6 +90,20 @@ public class GamePanel extends Canvas implements Runnable{
 		g.drawImage(player.getImage(),player.getX(),player.getY()-32,64,96,null);
 	}
 	
+	public void zeichneKugeln(Graphics g){
+		
+		
+		for(int index =0; index< kugelnimraum.size();index++){
+			Bullet b = kugelnimraum.get(index);
+			if(b != null){
+				g.drawImage(b.image,b.posX,b.posY,null);
+				
+			}
+		}
+		//kugeln.clear();
+	}
+	
+	
 	@Override
 	public synchronized void run() {
 		
@@ -94,6 +120,7 @@ public class GamePanel extends Canvas implements Runnable{
 				//hier dinge zeichnen
 				zeichneLevel(g2d);
 				zeichneSpieler(g2d);
+				zeichneKugeln(g2d);
 				
 				graphics = buffer.getDrawGraphics();
 				graphics.drawImage(bi,0,0,null);
