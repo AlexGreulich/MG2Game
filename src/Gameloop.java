@@ -7,8 +7,8 @@ public class Gameloop implements Runnable{
 	
 	GamePanel panel;
 	
-	int speed = 5;
-	int gamespeed =20;
+	int speed = 2;
+	int gamespeed =5;
 	
 	public Gameloop(GameWindow w){
 		

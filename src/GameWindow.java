@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioFormat.Encoding;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
+
+//import org.omg.IOP.Encoding;
 
 
 public class GameWindow extends JFrame{
@@ -19,9 +25,10 @@ public class GameWindow extends JFrame{
 	Gameloop gameloop;
 	BulletHandler bullethandler;
 	
-//	AudioClip audioClip;
-	
-	public GameWindow(){
+	//AudioClip audioClip;
+	Clip clip;
+	int framePosition;
+	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
 		
 		setSize(1920,1080);
@@ -38,10 +45,36 @@ public class GameWindow extends JFrame{
 		add(panel);
 		bullethandler = new BulletHandler(this);
 		
-//		audioClip = new AudioClip();
-//		File audiofile = new File(""+getClass().getResource("audio/test_track_01.mp3"));
-//		try {
-//			audioClip.open(audiofile);
+		//audioClip = new AudioClip();
+		File audiofile = new File("F:\\myworkspace\\ProjectMG2\\src\\test_track_01.mp3");
+
+			////	audioClip.open(audiofile);
+			//} catch (UnsupportedAudioFileException e) {
+			//	e.printStackTrace();
+		//	} catch (IOException e) {
+		//		e.printStackTrace();
+		//	} catch (LineUnavailableException e) {
+		//		e.printStackTrace();
+			//}
+//			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audiofile);
+//			if (audioInputStream.getFormat().getEncoding() != Encoding.PCM_SIGNED &&
+//					audioInputStream.getFormat().getEncoding() != Encoding.PCM_UNSIGNED){
+//					//audioInputStream = decode(audioInputStream);
+//					AudioFormat baseFormat = audioInputStream.getFormat();
+//					AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 
+//							baseFormat.getSampleRate(),
+//							16,
+//							baseFormat.getChannels(),
+//							baseFormat.getChannels() * 2,
+//							baseFormat.getSampleRate(),
+//							false);
+//					AudioInputStream decodedAudioInputStream = AudioSystem.getAudioInputStream(decodedFormat, audioInputStream);
+//					audioInputStream = decodedAudioInputStream;
+//				}
+//				framePosition = 0;
+//				clip = AudioSystem.getClip();
+//				clip.open(audioInputStream);
+//				clip.loop(5);
 //		} catch (UnsupportedAudioFileException e) {
 //			e.printStackTrace();
 //		} catch (IOException e) {
@@ -70,7 +103,7 @@ public class GameWindow extends JFrame{
 		pack();
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		
 		new GameWindow();
 		

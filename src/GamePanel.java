@@ -8,10 +8,19 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 
 public class GamePanel extends Canvas implements Runnable{
@@ -31,10 +40,11 @@ public class GamePanel extends Canvas implements Runnable{
 	Tileset set;
 	
 	Player player;
-	int gamespeed =20;
+	int gamespeed =5;
 	//BulletHandler bullethandler;
 	
 	ArrayList<Bullet> bulletsInRoom;
+	ArrayList<Enemy> enemylist;
 	Collection  bullets;
 	
 	public GamePanel(GameWindow w){
@@ -50,7 +60,15 @@ public class GamePanel extends Canvas implements Runnable{
 		player = window.player;
 		this.setIgnoreRepaint(true);
 		
-		
+//		try {
+////			soundStart();
+//		} catch (UnsupportedAudioFileException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (LineUnavailableException e) {
+//			e.printStackTrace();
+//		}
 		
 		graphics =null;
 		g2d = null;
@@ -64,6 +82,25 @@ public class GamePanel extends Canvas implements Runnable{
 		bulletsInRoom = new ArrayList<Bullet>();
 		bullets = Collections.synchronizedList(bulletsInRoom);
 	}
+	
+//	public void soundStart() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+//		//URL url = new URL(getClass().getResource("audio/"), null);
+//	//	String filestr = url.getFile();
+//		File file = new File("test_track_01.mp3");
+//		AudioInputStream ais = AudioSystem.getAudioInputStream(file);
+//		AudioFormat mp3AudioFormat = ais.getFormat();
+//		AudioFormat decodedAudioFormat = new AudioFormat( AudioFormat.Encoding.PCM_SIGNED, 
+//				mp3AudioFormat.getSampleRate(), 
+//				16, 
+//				mp3AudioFormat.getChannels(), 
+//				mp3AudioFormat.getChannels() * 2, 
+//				mp3AudioFormat.getSampleRate(), 
+//				false);
+//		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(decodedAudioFormat, ais);
+//		Clip clip = AudioSystem.getClip();
+//		clip.open(ais);
+//		clip.start();
+//	}
 	
 	public Dimension getPreferredSize(){
 		
@@ -124,6 +161,8 @@ public class GamePanel extends Canvas implements Runnable{
 				drawLevel(g2d);
 				drawPlayer(g2d);
 				drawBullets(g2d);
+				
+				
 				
 				graphics = buffer.getDrawGraphics();
 				graphics.drawImage(bi,0,0,null);
