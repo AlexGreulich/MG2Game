@@ -4,7 +4,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public class Bullet extends Entity{
+public class Bullet extends Objekt{
 	
 	int speed;
 	int damageOnHit;

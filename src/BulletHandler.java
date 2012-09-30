@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class BulletHandler implements Runnable{
 
-	int gamespeed =5;
+	int gamespeed =20;
 	GameWindow window;
 	GamePanel panel;
 	ArrayList<Bullet> bulletsInRoom;
@@ -133,14 +133,14 @@ public class BulletHandler implements Runnable{
 			
 			firerate++;
 			//kugel-array durchgehen und bewegung/position durchfhren/aktualisieren
-			if(bulletsInRoom.size() >0){
+			
 			for (int index=0;index < panel.bulletsInRoom.size();index++){
 				
 //				if(kugelnimraum.get(index).posX <= 0){
 //					
 //				}
 				
-				
+				if(bulletsInRoom.size() >0){
 				
 					Bullet b= bulletsInRoom.get(index);
 					if (b != null){
@@ -148,42 +148,36 @@ public class BulletHandler implements Runnable{
 						switch(b.getDirection()){
 						
 						case(0):
-							b.posX = b.posX - 20;
-							b.posY = b.posY - 20;							//b.posY--;
+							b.posX--;
+							b.posY--;
 							break;
 						case(1):
-							b.posX = b.posX - 20;//--;
+							b.posX--;
 							break;
 						case(2):
-							b.posX = b.posX - 20;//--;
-							b.posY = b.posY + 20;//++;
+							b.posX--;
+							b.posY++;
 							break;
 						case(3):
-							b.posY = b.posY - 20;//--;
+							b.posY--;
 							break;
 						case(4):
-							b.posY = b.posY + 20;//++;
+							b.posY++;
 							break;
 						case(5):
-							b.posX = b.posX + 20;//++;
-							b.posY = b.posY - 20;//--;
+							b.posX++;
+							b.posY--;
 							break;
 						case(6):
-							b.posX = b.posX + 20;//++;
+							b.posX++;
 							break;
 						case(7):
-							b.posX = b.posX + 20;//++;
-							b.posY = b.posY + 20;//++;
+							b.posX++;
+							b.posY++;
 							break;
 						}
 						
-						if(b.posX < 0){
-							panel.bulletsInRoom.remove(index);
-						}else if(b.posX > levelBorders.width){
-							panel.bulletsInRoom.remove(index);
-						}else if(b.posY <0){
-							panel.bulletsInRoom.remove(index);
-						}else if(b.posY > levelBorders.height){
+						if((b.posX < 0) || (b.posX > levelBorders.width) || (b.posY <0) || (b.posY > levelBorders.height)){
 							panel.bulletsInRoom.remove(index);
 						}
 //						if(b.richtung == 0){

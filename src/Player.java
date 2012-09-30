@@ -4,7 +4,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public class Player extends Entity{
+public class Player extends Objekt{
 
 	GameWindow window;
 	Controls controls;
