@@ -25,7 +25,7 @@ public class GameWindow extends JFrame{
 	Gameloop gameloop;
 	BulletHandler bullethandler;
 	
-	//AudioClip audioClip;
+	
 	Clip clip;
 	int framePosition;
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
@@ -37,7 +37,7 @@ public class GameWindow extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		level = new Level();
 		
-		player = new Player(this);//,50,50
+		player = new Player(this);
 		panel = new GamePanel(this);
 		gameloop = new Gameloop(this);
 		addKeyListener(controls);
@@ -45,44 +45,22 @@ public class GameWindow extends JFrame{
 		add(panel);
 		bullethandler = new BulletHandler(this);
 		
-		//audioClip = new AudioClip();
-		File audiofile = new File("F:\\myworkspace\\ProjectMG2\\src\\test_track_01.mp3");
-
-			////	audioClip.open(audiofile);
-			//} catch (UnsupportedAudioFileException e) {
-			//	e.printStackTrace();
-		//	} catch (IOException e) {
-		//		e.printStackTrace();
-		//	} catch (LineUnavailableException e) {
-		//		e.printStackTrace();
-			//}
-//			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audiofile);
-//			if (audioInputStream.getFormat().getEncoding() != Encoding.PCM_SIGNED &&
-//					audioInputStream.getFormat().getEncoding() != Encoding.PCM_UNSIGNED){
-//					//audioInputStream = decode(audioInputStream);
-//					AudioFormat baseFormat = audioInputStream.getFormat();
-//					AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 
-//							baseFormat.getSampleRate(),
-//							16,
-//							baseFormat.getChannels(),
-//							baseFormat.getChannels() * 2,
-//							baseFormat.getSampleRate(),
-//							false);
-//					AudioInputStream decodedAudioInputStream = AudioSystem.getAudioInputStream(decodedFormat, audioInputStream);
-//					audioInputStream = decodedAudioInputStream;
-//				}
-//				framePosition = 0;
-//				clip = AudioSystem.getClip();
-//				clip.open(audioInputStream);
-//				clip.loop(5);
-//		} catch (UnsupportedAudioFileException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (LineUnavailableException e) {
-//			e.printStackTrace();
-//		}
-//		AudioFormat audioFormat = audioClip.getFormat();
+		AudioInputStream mp3audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource("audio/test_track_01.mp3"));
+		
+		AudioFormat audioFormat = mp3audioInputStream.getFormat();
+		AudioFormat decoded = new AudioFormat( 
+				AudioFormat.Encoding.PCM_SIGNED, // encoding 
+				audioFormat.getSampleRate(), // sample rate 
+				16, // bits per sample 
+				audioFormat.getChannels(), // number of channels 
+				audioFormat.getChannels() * 2, // bytes per frame 
+				audioFormat.getSampleRate(), // frames per second 
+				false);
+		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(decoded, mp3audioInputStream);
+		clip = AudioSystem.getClip();
+		clip.open(audioInputStream);
+		clip.start();
+		
 		
 		setVisible(true);
 		this.setIgnoreRepaint(true);

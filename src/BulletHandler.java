@@ -18,7 +18,7 @@ public class BulletHandler implements Runnable{
 	BufferedImage[] bulletpics;
 	Rectangle levelBorders;
 	
-	int firerate; //ob das funktioniert?
+	int firerate; 
 	boolean fired;
 	
 	public BulletHandler(GameWindow w){
@@ -30,7 +30,6 @@ public class BulletHandler implements Runnable{
 		player = window.player;
 		levelBorders = new Rectangle(0,0,panel.mapWidth,panel.mapHeight);
 		firerate =0;
-		
 		
 		try{
 			int index =0;
@@ -44,7 +43,6 @@ public class BulletHandler implements Runnable{
 						bulletpics[index] = i;
 						index++;
 					}
-					
 				}
 			}
 			
@@ -129,18 +127,10 @@ public class BulletHandler implements Runnable{
 					fired = true;
 				}
 			}
-			
-			
 			firerate++;
 			//kugel-array durchgehen und bewegung/position durchfhren/aktualisieren
 			if(bulletsInRoom.size() >0){
 			for (int index=0;index < panel.bulletsInRoom.size();index++){
-				
-//				if(kugelnimraum.get(index).posX <= 0){
-//					
-//				}
-				
-				
 				
 					Bullet b= bulletsInRoom.get(index);
 					if (b != null){
@@ -186,44 +176,20 @@ public class BulletHandler implements Runnable{
 						}else if(b.posY > levelBorders.height){
 							panel.bulletsInRoom.remove(index);
 						}
-//						if(b.richtung == 0){
-//							b.posX --;
-//							b.posY --;
-//						}if(b.richtung == 1){
-//							b.posY ++;
-//						}if(b.richtung == 2){
-//							b.posX++;
-//							b.posY--;
-//						}if(b.richtung == 3){
-//							b.posX--;
-//						}if(b.richtung == 4){
-//							b.posX++;
-//						}if(b.richtung == 5){
-//							b.posX--;
-//							b.posY++;
-//						}if(b.richtung == 6){
-//							b.posY++;
-//						}if(b.richtung == 7){
-//							b.posX++;
-//							b.posY++;
-//						} 
 					}
 				}
 				
 			}
-//			Thread.yield();
 			float onEnd = System.currentTimeMillis() - onStart;
 			if( gamespeed> onEnd){
 				try{
 					if((gamespeed -(int)onEnd) > 0){
 						Thread.sleep(gamespeed - (int)onEnd);
 					}
-			}catch(InterruptedException e){
-				e.printStackTrace();
+				}catch(InterruptedException e){
+					e.printStackTrace();
+				}
 			}
-			}
-			
 		}
 	}
-	
 }

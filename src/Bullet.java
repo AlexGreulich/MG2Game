@@ -21,10 +21,8 @@ public class Bullet extends Entity{
 		
 		energy = 100;
 		
-		speed = 10;	//?
+		speed = 10;	
 		damageOnHit = d;
-		//richtung = direction;
-		
 		
 	}
 	public void setDirection(int d){
