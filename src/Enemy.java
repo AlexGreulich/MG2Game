@@ -93,54 +93,81 @@ public class Enemy extends Entity{
 		return y;
 	}
 	public void calcDirection(){
-		if ( getXDistancePlayer()>=0 && getYDistancePlayer()<0){ //spieler oben rechts vom gegner
-			float tmp = getXDistancePlayer()+1/((getYDistancePlayer()*-1)+1);
-			if (tmp >= 4){
-				enemyDirection=6;
-			}
-			else if (tmp<4 && tmp>=1/4){
-				enemyDirection=5;
+	/*
+	90Grad eines ViertelKreises aufgeteilt in 4 Teile um jeder Richtung den gleichen Anteil zu geben
+	zb.0-22.5 fuer rechts = 1 Anteil (rechts wird in zwei Vierteln des Kreises erfasst und bekommt jeweils einen Anteil)
+	22.5-67.5 fuer oben/rechts = 2Anteile (oben/rechts wird nur in einem Viertelkreis beruecksichtigt und bekommt direkt 2 Anteile)
+	67.5-90 fuer oben = 1 Anteil (das gleiche wie fuer rechts)
+	1/tan(67.5Grad) = 0.41
+	1/tan(22.5Grad) = 2.42 --> wegen getXDistancePlayer()/getYDistancePlayer() entspricht
+	Ankathete/Gegenkathete (also 1/tan(alpha)). Andersrum waere es der normal tangens
+	*/
+	if ((getXDistancePlayer()>0) && (getYDistancePlayer()<0)){ //spieler oben rechts vom gegner
+		float tmp = getXDistancePlayer()/(getYDistancePlayer()*-1);
+		if (tmp >= 2.42){
+			enemyDirection=6;
+		}
+		else if (tmp<2.42 && tmp>=0.41){
+			enemyDirection=5;
+		}
+		else if (tmp<0.41){
+			enemyDirection=3;
+		}
+	}
+	else if ( (getXDistancePlayer()>0) && (getYDistancePlayer()>0)){ //spieler unten rechts vom gegner
+		float tmp = getXDistancePlayer()/(getYDistancePlayer());
+		if (tmp >= 2.42){
+			enemyDirection=6;
+		}
+		else if (tmp<2.42 && tmp>=0.41){
+			enemyDirection=7;
+		}
+		else if (tmp<0.41){
+			enemyDirection=4;
+		}
+	}
+	else if ( (getXDistancePlayer()<0) && (getYDistancePlayer()>0)){ //spieler unten links vom gegner
+		float tmp = (getXDistancePlayer()*-1)/(getYDistancePlayer());
+		if (tmp >= 2.42){
+			enemyDirection=1;
+		}
+		else if (tmp<2.42 && tmp>=0.41){
+			enemyDirection=2;
+		}
+		else if (tmp<0.41){
+			enemyDirection=4;
+		}
+	}
+	else if ( (getXDistancePlayer()<0) && (getYDistancePlayer()<0)){ //spieler oben links vom gegner
+		float tmp = (getXDistancePlayer()*-1)/(getYDistancePlayer()*-1);
+		if (tmp >= 2.42){
+			enemyDirection=1;
+		}
+		else if (tmp<2.42 && tmp>=0.41){
+			enemyDirection=0;
+		}
+		else if (tmp<0.41){
+			enemyDirection=3;
+		}
+	}
+	else if ((getXDistancePlayer()==0) || (getYDistancePlayer()==0)){
+		if (getXDistancePlayer()==0){
+			if (getYDistancePlayer()>0){
+				enemyDirection=4;
 			}
 			else{
 				enemyDirection=3;
 			}
 		}
-		else if ( getXDistancePlayer()>=0 && getYDistancePlayer()>=0){ //spieler unten rechts vom gegner
-			float tmp = getXDistancePlayer()+1/(getYDistancePlayer()+1);
-			if (tmp >= 4){
+		else if (getYDistancePlayer()==0){
+			if (getXDistancePlayer()>0){
 				enemyDirection=6;
 			}
-			else if (tmp<4 && tmp>=1/4){
-				enemyDirection=7;
-			}
 			else{
-				enemyDirection=4;
-			}
-		}
-		else if ( getXDistancePlayer()<0 && getYDistancePlayer()>=0){ //spieler unten links vom gegner
-			float tmp = (getXDistancePlayer()*-1)+1/(getYDistancePlayer()+1);
-			if (tmp >= 4){
 				enemyDirection=1;
 			}
-			else if (tmp<4 && tmp>=1/4){
-				enemyDirection=2;
-			}
-			else{
-				enemyDirection=4;
-			}
 		}
-		else if ( getXDistancePlayer()<0 && getYDistancePlayer()<0){ //spieler oben links vom gegner
-			float tmp = (getXDistancePlayer()*-1)+1/((getYDistancePlayer()*-1)+1);
-			if (tmp >= 4){
-				enemyDirection=1;
-			}
-			else if (tmp<4 && tmp>=1/4){
-				enemyDirection=0;
-			}
-			else{
-				enemyDirection=3;
-			}
-		}
+	}
 	}
 	public void move(){
 		calcDirection();

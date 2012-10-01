@@ -11,9 +11,8 @@ public class Bullet extends Entity{
 	int direction;
 	Player player;
 	
-	
-	
 	BufferedImage image;
+	
 	public Bullet(int x, int y, int d){//, int direction
 		
 		posX = x;

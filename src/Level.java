@@ -15,7 +15,7 @@ public class Level {
 		
 		try{
 			
-			mapPic = ImageIO.read(getClass().getResource("resources/ersterraum.gif"));
+			mapPic = ImageIO.read(getClass().getResource("resources/zweiterraum.gif"));
 			
 		}catch(IOException e){
 			e.printStackTrace();

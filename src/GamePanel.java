@@ -33,6 +33,7 @@ public class GamePanel extends Canvas implements Runnable{
 	Tileset set;
 	
 	Player player;
+	Enemy enemy;
 	int gamespeed =5;
 	
 	ArrayList<Bullet> bulletsInRoom;
@@ -49,6 +50,7 @@ public class GamePanel extends Canvas implements Runnable{
 		tileset = set.tileset;
 		map = level.map;
 		player = window.player;
+		enemy = window.enemy;
 		this.setIgnoreRepaint(true);
 		
 		graphics =null;
@@ -67,6 +69,9 @@ public class GamePanel extends Canvas implements Runnable{
 		return new Dimension(panelwidth,panelheight);		//?
 	}
 	
+	public void drawEnemy(Graphics g){
+		g.drawImage(enemy.getImage(),enemy.getX(),enemy.getY()-32,64,96,null);
+	}
 	public void drawLevel(Graphics g){
 		
 		for(int x = 0; x < mapWidth/64;x++){
@@ -112,11 +117,11 @@ public class GamePanel extends Canvas implements Runnable{
 				drawLevel(g2d);
 				drawPlayer(g2d);
 				drawBullets(g2d);
-				
+				drawEnemy(g2d);
 				graphics = buffer.getDrawGraphics();
 				
 				AffineTransform at = new AffineTransform();
-				at.scale(2, 2);
+				at.scale(2,2);
 				Graphics2D gr2d = (Graphics2D)graphics;
 				gr2d.setTransform(at);
 				

@@ -5,6 +5,7 @@ public class Gameloop implements Runnable{
 	Player player;
 	Controls controls;
 	
+	Enemy enemy;
 	GamePanel panel;
 	
 	int speed = 2;
@@ -14,6 +15,7 @@ public class Gameloop implements Runnable{
 		
 		window = w;
 		player = window.player;
+		enemy = window.enemy;
 		controls = window.controls;
 		panel = window.panel;
 	}
@@ -22,6 +24,8 @@ public class Gameloop implements Runnable{
 	public synchronized void run() {
 		while (true){
 			float onStart = System.currentTimeMillis();
+			
+			enemy.move();
 			
 			if(player.posX < 65){
 				player.posX =65;
@@ -103,11 +107,7 @@ public class Gameloop implements Runnable{
 						controls.direction = 2;
 					}
 				}
-				
 			}
-			
-			
-			
 			float onEnd = System.currentTimeMillis()- onStart;
 			if(gamespeed > onEnd){
 				try {

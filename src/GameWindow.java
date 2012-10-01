@@ -19,6 +19,7 @@ public class GameWindow extends JFrame{
 
 	GamePanel panel;
 	Player player;
+	Enemy enemy;
 	Controls controls;
 	Thread panelThread, gameloopthread, bulletthread;
 	Level level;
@@ -38,6 +39,7 @@ public class GameWindow extends JFrame{
 		level = new Level();
 		
 		player = new Player(this);
+		enemy = new Enemy(this,100,100);
 		panel = new GamePanel(this);
 		gameloop = new Gameloop(this);
 		addKeyListener(controls);
@@ -60,7 +62,7 @@ public class GameWindow extends JFrame{
 		clip = AudioSystem.getClip();
 		clip.open(audioInputStream);
 		clip.start();
-		
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
 		setVisible(true);
 		this.setIgnoreRepaint(true);
