@@ -12,6 +12,7 @@ public class BulletHandler implements Runnable{
 	GameWindow window;
 	GamePanel panel;
 	ArrayList<Bullet> bulletsInRoom;
+	ArrayList<Enemy> enemylist;
 	Controls controls;
 	
 	Player player;
@@ -26,6 +27,7 @@ public class BulletHandler implements Runnable{
 		window = w;
 		panel = window.panel;
 		bulletsInRoom = window.bulletsInRoom;
+		enemylist = window.enemylist;
 		controls = window.controls;
 		player = window.player;
 		levelBorders = new Rectangle(0,0,panel.mapWidth,panel.mapHeight);
@@ -56,6 +58,30 @@ public class BulletHandler implements Runnable{
 		
 	}
 	
+	public void collisionCheck(){
+		if(bulletsInRoom.size() >0){
+			for(Bullet b: bulletsInRoom){
+				b.updateBounds();
+				if(enemylist.size()>0){
+					for(Enemy e: enemylist){
+						if(b.bounds.intersects(e.enemyBounds)){
+							e.energy = e.energy - 0.1f;
+						//	bulletsInRoom.remove(b);
+							
+						/*-> kugel soll entfernt werden wenn getroffen, das
+						 * gibt aber einen thread konflikt, daher 
+						 * muss es eine temporäre kopie der bulletlist geben,
+						 * mit der die eigentliche liste zum schluss 
+						 * überschrieben wird 
+						 * */
+						}
+					}
+				}
+				
+			}
+		}
+	}
+	
 	@Override
 	public synchronized void run() {
 		while(true){
@@ -64,7 +90,7 @@ public class BulletHandler implements Runnable{
 				fired = false;
 				firerate =0;
 			}
-			
+			collisionCheck();
 			// es kann nur gefeuert werden wenn abgefeuert == false ist, sonst wird feuerrate bis 50 gewartet
 			if(!fired){
 					// pfeiltasten abfragen um neue kugeln zu erzeugen

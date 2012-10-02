@@ -122,7 +122,7 @@ public class GamePanel extends Canvas implements Runnable{
 		
 		int index =0;
 		for(Enemy e : enemylist){
-			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y, 50, 100 + (index*20));
+			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 100 + (index*20));
 			index++;
 		}
 		
