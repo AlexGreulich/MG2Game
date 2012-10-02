@@ -1,16 +1,20 @@
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 
-public class Player extends Entity{
+public class Player {
 
+	int posX, posY; 
+	float energy;
 	GameWindow window;
 	Controls controls;
 	BufferedImage img,image;
 	float animation = 0.0f;
 	BufferedImage[] hoch_cycle,runter_cycle, links_cycle,rechts_cycle,hochlinks_cycle,hochrechts_cycle,runterlinks_cycle,runterrechts_cycle;
+	Rectangle playerBounds;
 	
 	public Player(GameWindow w){//, int x, int y
 		
@@ -19,8 +23,9 @@ public class Player extends Entity{
 		
 		posX =100;
 		posY = 100;
-		energy = 100;
+		energy = 100f;
 		image = null;
+		playerBounds = new Rectangle(this.posX+8, this.posY+8, 48, 80);
 		hoch_cycle = new BufferedImage[8];
 		runter_cycle  = new BufferedImage[8];
 		links_cycle = new BufferedImage[8];
@@ -32,7 +37,7 @@ public class Player extends Entity{
 		
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
-			int count =0;
+//			int count =0;
 			for(int a = 0; a< img.getHeight()/96; a++){
 				for(int b =0; b<img.getWidth()/64;b++){
 					//
@@ -82,6 +87,11 @@ public class Player extends Entity{
 	public void setY(int y){
 		posY += y;
 	}
+	
+	public void updateBounds(){
+		playerBounds.setBounds(this.posX+8, this.posY+8, 48, 80);
+	}
+	
 	public BufferedImage getImage(){
 		if(controls.isMoving){
 			animation += 0.33;

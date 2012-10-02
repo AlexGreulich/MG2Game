@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFormat.Encoding;
@@ -19,14 +20,15 @@ public class GameWindow extends JFrame{
 
 	GamePanel panel;
 	Player player;
-	Enemy enemy;
+	//Enemy enemy;
 	Controls controls;
-	Thread panelThread, gameloopthread, bulletthread;
+	Thread panelThread, gameloopthread, bulletthread, enemythread;
 	Level level;
 	Gameloop gameloop;
 	BulletHandler bullethandler;
-	
-	
+	EnemyController enemycontrol;
+	ArrayList<Bullet> bulletsInRoom;
+	ArrayList<Enemy> enemylist;
 	Clip clip;
 	int framePosition;
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
@@ -34,18 +36,26 @@ public class GameWindow extends JFrame{
 		
 		setSize(1920,1080);
 		controls = new Controls();
+		player = new Player(this);
+		enemylist = new ArrayList<Enemy>();
+		enemycontrol = new EnemyController(this);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		level = new Level();
+		bulletsInRoom = new ArrayList<Bullet>();
 		
-		player = new Player(this);
-		enemy = new Enemy(this,100,100);
+		
+		
 		panel = new GamePanel(this);
 		gameloop = new Gameloop(this);
 		addKeyListener(controls);
 		
 		add(panel);
+		
 		bullethandler = new BulletHandler(this);
+	
+		
+		
 		
 		AudioInputStream mp3audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource("audio/test_track_01.mp3"));
 		
@@ -70,9 +80,11 @@ public class GameWindow extends JFrame{
 		panelThread = new Thread(panel);
 		gameloopthread = new Thread(gameloop);
 		bulletthread = new Thread(bullethandler);
+		enemythread = new Thread(enemycontrol);
 		panelThread.start();
 		gameloopthread.start();
 		bulletthread.start();
+		enemythread.start();
 		
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		int scrx = (int) (screen.getWidth()/2)-350;

@@ -1,3 +1,4 @@
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -13,16 +14,20 @@ public class Enemy extends Entity{
 	BufferedImage img,image;
 	float animation = 0.0f;
 	BufferedImage[] hoch_cycle,runter_cycle, links_cycle,rechts_cycle,hochlinks_cycle,hochrechts_cycle,runterlinks_cycle,runterrechts_cycle;
+	Rectangle enemyBounds;
 	
 	public Enemy(GameWindow w, int x, int y){//
 		window = w;
 		player = window.player;
 		
-		speed=2;
+		speed=1;
 		posX =300;
 		posY = 300;
-		energy = 100;
+		energy = 100f;
 		image = null;
+		
+		enemyBounds = new Rectangle(this.posX+8, this.posY+8, 48, 80);
+		
 		hoch_cycle = new BufferedImage[8];
 		runter_cycle  = new BufferedImage[8];
 		links_cycle = new BufferedImage[8];
@@ -92,6 +97,11 @@ public class Enemy extends Entity{
 		int y = player.getY() - posY;
 		return y;
 	}
+	
+	public void updateBounds(){
+		enemyBounds.setBounds(this.posX+8, this.posY+8, 48, 80);
+	}
+	
 	public void calcDirection(){
 	/*
 	90Grad eines ViertelKreises aufgeteilt in 4 Teile um jeder Richtung den gleichen Anteil zu geben
@@ -198,7 +208,7 @@ public class Enemy extends Entity{
 		else if(enemyDirection ==5){
 			int tmp = getX()+speed;
 			setX(tmp);
-			tmp = getY()+speed;
+			tmp = getY()-speed;
 			setY(tmp);
 		}
 		else if(enemyDirection ==6){

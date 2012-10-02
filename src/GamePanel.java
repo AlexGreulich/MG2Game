@@ -50,7 +50,8 @@ public class GamePanel extends Canvas implements Runnable{
 		tileset = set.tileset;
 		map = level.map;
 		player = window.player;
-		enemy = window.enemy;
+		enemylist = window.enemylist;
+		
 		this.setIgnoreRepaint(true);
 		
 		graphics =null;
@@ -62,15 +63,21 @@ public class GamePanel extends Canvas implements Runnable{
 		bi = gc.createCompatibleImage(1920,1080);
 		panelwidth = gc.getBounds().width;
 		panelheight = gc.getBounds().height;
-		bulletsInRoom = new ArrayList<Bullet>();
+		bulletsInRoom = window.bulletsInRoom;
 	}
 	
 	public Dimension getPreferredSize(){
 		return new Dimension(panelwidth,panelheight);		//?
 	}
 	
-	public void drawEnemy(Graphics g){
-		g.drawImage(enemy.getImage(),enemy.getX(),enemy.getY()-32,64,96,null);
+	public void drawEnemies(Graphics g){
+		
+		if(enemylist.size() > 0){
+			for (Enemy e : enemylist){
+				g.drawImage(e.getImage(),e.getX(),e.getY()-32,64,96,null);
+			}
+		}
+		
 	}
 	public void drawLevel(Graphics g){
 		
@@ -92,13 +99,34 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	public void drawBullets (Graphics g){
-		
-		for(int index =0; index < bulletsInRoom.size();index++){
+		if(bulletsInRoom.size() > 0){
+			for(int index =0; index < bulletsInRoom.size();index++){
 			Bullet b = bulletsInRoom.get(index);
 			if(b != null){
 				g.drawImage(b.image,b.posX,b.posY,null);
 			}
 		}
+		}
+		
+	}
+	
+	public void drawGUI(Graphics g){
+		//hier wird später noch ein schicker rahmen mit feldern für lebensenergie, inventar etc gezeichnet
+		//erstmal nur anzeige der lebensenergie und sowas zum debuggen
+		g.setColor(Color.WHITE);
+		if(player.energy >0){
+			g.drawString("Lebensenergie: "+ (int)player.energy,50 ,50);
+		}else{
+			g.drawString("Spieler waere jetzt tot, Energie: "+ player.energy,50 ,50 );
+		}
+		
+		int index =0;
+		for(Enemy e : enemylist){
+			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y, 50, 100 + (index*20));
+			index++;
+		}
+		
+		
 	}
 	@Override
 	public synchronized void run() {
@@ -117,7 +145,9 @@ public class GamePanel extends Canvas implements Runnable{
 				drawLevel(g2d);
 				drawPlayer(g2d);
 				drawBullets(g2d);
-				drawEnemy(g2d);
+				drawEnemies(g2d);
+				drawGUI(g2d);
+				
 				graphics = buffer.getDrawGraphics();
 				
 				AffineTransform at = new AffineTransform();
