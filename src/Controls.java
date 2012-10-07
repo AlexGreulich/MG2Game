@@ -74,6 +74,9 @@ public class Controls implements KeyListener{
 				right = false;
 				isMoving = false;
 				break;
+			case KeyEvent.VK_Q:
+				System.exit(0);
+				
 		}
 	}
 

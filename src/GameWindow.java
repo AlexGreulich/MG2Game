@@ -1,11 +1,10 @@
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -31,10 +30,25 @@ public class GameWindow extends JFrame{
 	ArrayList<Enemy> enemylist;
 	Clip clip;
 	int framePosition;
+	
+	Point cameraPosition = new Point(0,0);
+	Dimension screen;
+	
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
 		
-		setSize(1920,1080);
+		
+		screen = Toolkit.getDefaultToolkit().getScreenSize();
+//		int scrx = (int) (screen.getWidth()/2)-350;
+//		int scry = (int) (screen.getHeight()/2)-370;
+									//		setLocation(scrx, scry);
+//		setSize(scrx,scry);
+		
+		setResizable(false);
+		setUndecorated(true);
+									//setSize(1920,1080);
+		
+		
 		controls = new Controls();
 		player = new Player(this);
 		enemylist = new ArrayList<Enemy>();
@@ -69,9 +83,13 @@ public class GameWindow extends JFrame{
 				audioFormat.getSampleRate(), // frames per second 
 				false);
 		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(decoded, mp3audioInputStream);
+		
+//		SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat); 
+//		sourceDataLine.open(audioFormat);
+		
 		clip = AudioSystem.getClip();
 		clip.open(audioInputStream);
-		clip.start();
+//		clip.start();
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
 		setVisible(true);
@@ -86,12 +104,7 @@ public class GameWindow extends JFrame{
 		bulletthread.start();
 		enemythread.start();
 		
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		int scrx = (int) (screen.getWidth()/2)-350;
-		int scry = (int) (screen.getHeight()/2)-370;
-		setLocation(scrx, scry);
 		
-		setResizable(false);
 		pack();
 	}
 	

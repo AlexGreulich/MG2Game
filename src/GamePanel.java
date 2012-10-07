@@ -6,14 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
-import javax.sound.sampled.Clip;
 
 
 public class GamePanel extends Canvas implements Runnable{
@@ -27,10 +24,10 @@ public class GamePanel extends Canvas implements Runnable{
 	int panelwidth,panelheight; 
 	Level level;
 	int mapHeight, mapWidth;
-	ArrayList<BufferedImage> tileset;
+	ArrayList<BufferedImage> tilesetfloor, tilesetwalls;
 	int[][][]map;
 	
-	Tileset set;
+	Tileset tileset;
 	
 	Player player;
 	Enemy enemy;
@@ -43,11 +40,12 @@ public class GamePanel extends Canvas implements Runnable{
 		
 		window = w;
 		level = window.level;
-		mapWidth = level.mapPic.getWidth()*64;
-		mapHeight = level.mapPic.getHeight()*128;
+		mapWidth = level.mapPic.getWidth()*32;
+		mapHeight = level.mapPic.getHeight()*64;
 		
-		set = new Tileset();
-		tileset = set.tileset;
+		tileset = new Tileset();
+		tilesetfloor = tileset.tilesetfloor;
+		tilesetwalls = tileset.tilesetwalls;
 		map = level.map;
 		player = window.player;
 		enemylist = window.enemylist;
@@ -74,28 +72,76 @@ public class GamePanel extends Canvas implements Runnable{
 		
 		if(enemylist.size() > 0){
 			for (Enemy e : enemylist){
-				g.drawImage(e.getImage(),e.getX(),e.getY()-32,64,96,null);
+				g.drawImage(e.getImage(),e.getX(),e.getY()-16,32,48,null);
 			}
 		}
 		
 	}
-	public void drawLevel(Graphics g){
+	public void drawLevelFloor(Graphics g){
 		
-		for(int x = 0; x < mapWidth/64;x++){
-			for(int y = 0; y < mapHeight/128;y++){
-				BufferedImage i = tileset.get(level.map[x][y][0]);
-				if(y%2 == 0){
-					g.drawImage(i, x*64,y*16,null);//g.drawImage(i, x*64,y*16-16,null);
-				}else{
-					g.drawImage(i, x*64 +32, y*16,null);//g.drawImage(i, x*64 +32, y*16-16,null);
+		for(int x = 0; x < mapWidth/32;x++){
+			for(int y = 0; y < mapHeight/64;y++){
+				
+				if(level.map[x][y][0] <200){
+					BufferedImage i = tilesetfloor.get(level.map[x][y][0]);
+					int z = y%2;
+					switch(z){
+					case(0):
+						g.drawImage(i, x*32,y*8-16,null);//g.drawImage(i, x*64,y*16-16,null);
+					break;
+					case(1):
+						g.drawImage(i, x*32-16, y*8-16,null);//g.drawImage(i, x*64 +32, y*16-16,null);
+						break;
+					}
+//						if(y%2 == 0){
+//					}else{
+						
+						
+//					}
 				}
+				
+				//64 pixel:
+//			for(int x = 0; x < mapWidth/64;x++){
+//				for(int y = 0; y < mapHeight/128;y++){
+//					BufferedImage i = tileset.get(level.map[x][y][0]);
+//					if(y%2 == 0){
+//						g.drawImage(i, x*64,y*16,null);//g.drawImage(i, x*64,y*16-16,null);
+//					}else{
+//						g.drawImage(i, x*64 +32, y*16,null);//g.drawImage(i, x*64 +32, y*16-16,null);
+//					}
 				//i=null;
+			}
+		}
+	}
+	public void drawLevelWalls(Graphics g){
+		for(int x = 0; x < mapWidth/32;x++){
+			for(int y = 0; y < mapHeight/64;y++){
+				if((level.map[x][y][3] < 200)){//&&(level.map[x][y][3]>=0)
+					
+					if(level.map[x][y][3] !=666){
+						BufferedImage i = tilesetwalls.get(level.map[x][y][3]);
+						//					if(y%2 == 0){
+						int z = y%2;
+						switch(z){
+							case(0):
+								g.drawImage(i, x*32,y*8-8,null);//g.drawImage(i, x*64,y*16-16,null);
+//									}else{
+								i=null;
+								break;
+							case(1):
+								g.drawImage(i, x*32 -16, y*8-8,null);//g.drawImage(i, x*64 +32, y*16-16,null);
+//					}
+								i =null;
+								break;
+						}
+					}
+				}
 			}
 		}
 	}
 	
 	public void drawPlayer(Graphics g){
-		g.drawImage(player.getImage(),player.getX(),player.getY()-32,64,96,null);
+		g.drawImage(player.getImage(),player.getX(),player.getY()-16,32,48,null);
 	}
 	
 	public void drawBullets (Graphics g){
@@ -125,7 +171,7 @@ public class GamePanel extends Canvas implements Runnable{
 			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 100 + (index*20));
 			index++;
 		}
-		
+		g.drawString("[Q]uit", 50,10);
 		
 	}
 	@Override
@@ -139,10 +185,16 @@ public class GamePanel extends Canvas implements Runnable{
 			try{
 				g2d = bi.createGraphics();
 				g2d.setColor(Color.BLACK);
-				g2d.fillRect(0,0,1920,1080);
+				g2d.fillRect(window.cameraPosition.x,window.cameraPosition.y,window.screen.width,window.screen.height);
+				
+				
+				
 				
 				//hier dinge zeichnen
-				drawLevel(g2d);
+				
+				
+				drawLevelWalls(g2d);
+				drawLevelFloor(g2d);
 				drawPlayer(g2d);
 				drawBullets(g2d);
 				drawEnemies(g2d);
@@ -154,7 +206,7 @@ public class GamePanel extends Canvas implements Runnable{
 				at.scale(2,2);
 				Graphics2D gr2d = (Graphics2D)graphics;
 				gr2d.setTransform(at);
-				
+			
 				graphics.drawImage(bi,0,0,null);
 				
 				if(!buffer.contentsLost()){

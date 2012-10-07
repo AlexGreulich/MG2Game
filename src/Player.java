@@ -21,8 +21,8 @@ public class Player {
 		window = w;
 		controls = w.controls;
 		
-		posX =100;
-		posY = 100;
+		posX =500;
+		posY = 300;
 		energy = 100f;
 		image = null;
 		playerBounds = new Rectangle(this.posX+8, this.posY+8, 48, 80);
@@ -38,33 +38,33 @@ public class Player {
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
 //			int count =0;
-			for(int a = 0; a< img.getHeight()/96; a++){
-				for(int b =0; b<img.getWidth()/64;b++){
+			for(int a = 0; a< img.getHeight()/48; a++){
+				for(int b =0; b<img.getWidth()/32;b++){
 					//
 					switch(a){
 						case(0):
-							runter_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							runter_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(1):	
-							links_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							links_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(2):
-							rechts_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							rechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(3):
-							hoch_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							hoch_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(4):
-							runterlinks_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							runterlinks_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(5):
-							runterrechts_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							runterrechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(6):
-							hochrechts_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							hochrechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(7):
-							hochlinks_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							hochlinks_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 					}
 				}
@@ -89,7 +89,7 @@ public class Player {
 	}
 	
 	public void updateBounds(){
-		playerBounds.setBounds(this.posX+8, this.posY+8, 48, 80);
+		playerBounds.setBounds(this.posX+4, this.posY+4, 24, 40);
 	}
 	
 	public BufferedImage getImage(){

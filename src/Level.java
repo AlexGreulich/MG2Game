@@ -8,15 +8,15 @@ import javax.imageio.ImageIO;
 
 public class Level {
 
-	BufferedImage allTiles, mapPic;
+	BufferedImage allTiles, mapPic,mapPicwalls;
 	int[][][] map;
 	
 	public Level(){
 		
 		try{
 			
-			mapPic = ImageIO.read(getClass().getResource("resources/zweiterraum.gif"));
-			
+			mapPic = ImageIO.read(getClass().getResource("resources/neuerraum2.gif"));
+			mapPicwalls = ImageIO.read(getClass().getResource("resources/neuerraum2waende.gif"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -58,10 +58,14 @@ public class Level {
 		Color steinplatten2 = new Color(0,0,150);
 		Color plattenriss = new Color(0,0,200);
 		Color plattenriss2 = new Color(0,0,250);
-		
+		Color wandrechts = new Color(0,150,0);
+		Color wandlinks = new Color(0,150,100);
 		for(int x = 0; x < mapWidth;x++){
 			for(int y = 0; y < mapHeight;y++){
 				Color c = new Color(mapPic.getRGB(x, y));
+				Color d =new Color(mapPicwalls.getRGB(x, y));
+				
+			//bodentiles
 				
 				if(c.equals(	 schotter		)){		map[x][y][0]=0;}
 				else if(c.equals(schottergrob	)){		map[x][y][0]=1;}
@@ -70,10 +74,27 @@ public class Level {
 				else if(c.equals(plattenriss	)){		map[x][y][0]=4;}
 				else if(c.equals(plattenriss2	)){		map[x][y][0]=5;}
 				
+				
+				else if(c.equals(Color.WHITE)){				map[x][y][3]=666;
+															map[x][y][0]=666;
+															map[x][y][1]=1;;}
+				else{
+						//map[x][y][3]=666;
+				}
+			
+			//wand-tiles
+				
+				if(d.equals(wandrechts)){					map[x][y][3]=1;
+															map[x][y][1]=1;
+				}else if(d.equals(wandlinks)){				map[x][y][3]=0;
+															map[x][y][1]=1;
+				}else{
+					map[x][y][3]=666;
+				}
 			}
 		}
 		//zum testen:
-		map[10][10][1]=1;
-		map[10][11][1]=1;
+		
+		;
 	}
 }

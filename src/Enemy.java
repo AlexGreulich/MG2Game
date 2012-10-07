@@ -26,7 +26,7 @@ public class Enemy extends Entity{
 		energy = 100f;
 		image = null;
 		
-		enemyBounds = new Rectangle(this.posX+8, this.posY+8, 48, 80);
+		enemyBounds = new Rectangle(this.posX+4, this.posY+4, 24, 40);
 		
 		hoch_cycle = new BufferedImage[8];
 		runter_cycle  = new BufferedImage[8];
@@ -40,33 +40,33 @@ public class Enemy extends Entity{
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
 			int count =0;
-			for(int a = 0; a< img.getHeight()/96; a++){
-				for(int b =0; b<img.getWidth()/64;b++){
+			for(int a = 0; a< img.getHeight()/48; a++){
+				for(int b =0; b<img.getWidth()/32;b++){
 					//
 					switch(a){
 						case(0):
-							runter_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							runter_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(1):	
-							links_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							links_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(2):
-							rechts_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							rechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(3):
-							hoch_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							hoch_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(4):
-							runterlinks_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							runterlinks_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(5):
-							runterrechts_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							runterrechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(6):
-							hochrechts_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							hochrechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 						case(7):
-							hochlinks_cycle[b] = img.getSubimage(b*64, a*96, 64, 96);
+							hochlinks_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
 							break;
 					}
 				}

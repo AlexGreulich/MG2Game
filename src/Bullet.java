@@ -15,7 +15,7 @@ public class Bullet extends Entity{
 		
 		posX = x;
 		posY = y;
-		bounds = new Rectangle(this.posX,this.posY,5,5);
+		bounds = new Rectangle(this.posX,this.posY,3,3);
 		energy = 100;
 		
 		speed = 10;	
@@ -27,7 +27,7 @@ public class Bullet extends Entity{
 	}
 	
 	public void updateBounds(){
-		bounds.setBounds(this.posX,this.posY,5,5);
+		bounds.setBounds(this.posX,this.posY,3,3);
 	}
 	
 	public int getDirection(){

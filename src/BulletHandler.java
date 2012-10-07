@@ -41,7 +41,7 @@ public class BulletHandler implements Runnable{
 			for(int a = 0;a <= 2; a++){
 				for(int b = 0; b <= 2; b++){
 					if(((a==1)&&(b==1))==false){
-						BufferedImage i = bulletset.getSubimage(a*5, b*5, 5,5);
+						BufferedImage i = bulletset.getSubimage(a*3, b*3, 3,3);
 						bulletpics[index] = i;
 						index++;
 					}
