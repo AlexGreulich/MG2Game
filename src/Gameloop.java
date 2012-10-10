@@ -92,18 +92,18 @@ public class Gameloop implements Runnable{
 			
 			
 			
-		if(collisionshape.contains(playermiddle.x, playermiddle.y)){
+//		if(collisionshape.contains(playermiddle.x, playermiddle.y)){
 			//Spielerbewegung, Tastenabfrage
 			if((controls.up) && (controls.left)){
 //				if((player.posX > 64) && (player.posY > 96)){
 					//wenn das tile begehbar ist (muss vllt noch anders geregelt werden):
-					if(map[player.posX  /32][player.posY /48][1] != 1){
+//					if(map[player.posX  /32][player.posY /48][1] != 1){
 				
 						player.posX = player.posX - speed;
 						player.posY = player.posY - speed;
 						controls.direction = 7;
 					
-				}
+//				}
 				
 				
 			}else if((controls.up) && (controls.right)){
@@ -162,11 +162,11 @@ public class Gameloop implements Runnable{
 						player.posX = player.posX + speed;
 						controls.direction = 2;
 //					}
-//				}
-			}
-		}else{		//spieler hat die grenze überschritten
-//			collisionshape.
-		}
+				}
+//			}
+//		}else{		//spieler hat die grenze überschritten
+////			collisionshape.
+//		}
 			
 			float onEnd = System.currentTimeMillis()- onStart;
 			if(gamespeed > onEnd){
@@ -180,4 +180,4 @@ public class Gameloop implements Runnable{
 		
 	}
 
-}
+	}

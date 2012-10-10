@@ -123,6 +123,7 @@ public class Level {
 				p.y = p.y*8 +32 ;
 			}
 					collisionshape.addPoint(p.x, p.y);
+//					collisionshape = collisionshape.
 					
 		}
 		

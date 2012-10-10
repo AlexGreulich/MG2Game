@@ -181,6 +181,7 @@ public class GamePanel extends Canvas implements Runnable{
 			g.setColor(Color.RED);
 			g.fillRect(p.x, p.y, 1, 1);
 		}
+		g.drawPolygon(collision);
 	}
 	@Override
 	public synchronized void run() {
