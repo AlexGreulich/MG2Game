@@ -88,9 +88,9 @@ public class GameWindow extends JFrame{
 //		sourceDataLine.open(audioFormat);
 		
 		clip = AudioSystem.getClip();
-		clip.open(audioInputStream);
+		//clip.open(audioInputStream);
 //		clip.start();
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		//clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
 		setVisible(true);
 		this.setIgnoreRepaint(true);
