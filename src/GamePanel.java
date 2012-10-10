@@ -6,7 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Shape;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -36,6 +37,8 @@ public class GamePanel extends Canvas implements Runnable{
 	ArrayList<Bullet> bulletsInRoom;
 	ArrayList<Enemy> enemylist;
 	
+	Polygon collision;
+	
 	public GamePanel(GameWindow w){
 		
 		window = w;
@@ -62,6 +65,8 @@ public class GamePanel extends Canvas implements Runnable{
 		panelwidth = gc.getBounds().width;
 		panelheight = gc.getBounds().height;
 		bulletsInRoom = window.bulletsInRoom;
+		
+		collision = level.collisionshape;
 	}
 	
 	public Dimension getPreferredSize(){
@@ -79,18 +84,18 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	public void drawLevelFloor(Graphics g){
 		
-		for(int x = 0; x < mapWidth/32;x++){
-			for(int y = 0; y < mapHeight/64;y++){
+		for(int y = 0; y < mapHeight/64;y++){
+			for(int x = 0; x < mapWidth/32;x++){
 				
 				if(level.map[x][y][0] <200){
 					BufferedImage i = tilesetfloor.get(level.map[x][y][0]);
 					int z = y%2;
 					switch(z){
 					case(0):
-						g.drawImage(i, x*32,y*8-16,null);//g.drawImage(i, x*64,y*16-16,null);
+						g.drawImage(i, x*32,y*8,null);//g.drawImage(i, x*64,y*16-16,null);-16
 					break;
 					case(1):
-						g.drawImage(i, x*32-16, y*8-16,null);//g.drawImage(i, x*64 +32, y*16-16,null);
+						g.drawImage(i, x*32+16, y*8,null);//g.drawImage(i, x*64 +32, y*16-16,null);
 						break;
 					}
 //						if(y%2 == 0){
@@ -114,8 +119,8 @@ public class GamePanel extends Canvas implements Runnable{
 		}
 	}
 	public void drawLevelWalls(Graphics g){
-		for(int x = 0; x < mapWidth/32;x++){
-			for(int y = 0; y < mapHeight/64;y++){
+		for(int y = 0; y < mapHeight/64;y++){
+			for(int x = 0; x < mapWidth/32;x++){
 				if((level.map[x][y][3] < 200)){//&&(level.map[x][y][3]>=0)
 					
 					if(level.map[x][y][3] !=666){
@@ -124,14 +129,14 @@ public class GamePanel extends Canvas implements Runnable{
 						int z = y%2;
 						switch(z){
 							case(0):
-								g.drawImage(i, x*32,y*8-8,null);//g.drawImage(i, x*64,y*16-16,null);
+								g.drawImage(i, x*32,y*8+8,null);//g.drawImage(i, x*64,y*16-16,null);
 //									}else{
-								i=null;
+//								i=null;
 								break;
 							case(1):
-								g.drawImage(i, x*32 -16, y*8-8,null);//g.drawImage(i, x*64 +32, y*16-16,null);
+								g.drawImage(i, x*32 +16, y*8+8,null);//g.drawImage(i, x*64 +32, y*16-16,null);
 //					}
-								i =null;
+//								i =null;
 								break;
 						}
 					}
@@ -165,14 +170,17 @@ public class GamePanel extends Canvas implements Runnable{
 		}else{
 			g.drawString("Spieler waere jetzt tot, Energie: "+ player.energy,50 ,50 );
 		}
-		
+		g.drawString("Spieler an position map[x][y]:"+ player.posX/32 +", "+ player.posY/48,50,70);
 		int index =0;
 		for(Enemy e : enemylist){
 			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 100 + (index*20));
 			index++;
 		}
 		g.drawString("[Q]uit", 50,10);
-		
+		for(Point p: level.collisionpoints){
+			g.setColor(Color.RED);
+			g.fillRect(p.x, p.y, 1, 1);
+		}
 	}
 	@Override
 	public synchronized void run() {
