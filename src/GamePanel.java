@@ -61,7 +61,7 @@ public class GamePanel extends Canvas implements Runnable{
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
 		GraphicsConfiguration gc = gd.getDefaultConfiguration();
 		
-		bi = gc.createCompatibleImage(1920,1080);
+		bi = gc.createCompatibleImage(gc.getBounds().width,gc.getBounds().height);
 		panelwidth = gc.getBounds().width;
 		panelheight = gc.getBounds().height;
 		bulletsInRoom = window.bulletsInRoom;
@@ -183,6 +183,19 @@ public class GamePanel extends Canvas implements Runnable{
 		}
 		g.drawPolygon(collision);
 	}
+	
+	public void drawItems(Graphics g){
+		for(Item i: level.itemsInLevel){
+			if(i != null){
+				g.drawImage(i.img, i.posX,i.posY,null);
+			}
+		}
+	}
+	
+	public void changeColorScheme(Graphics g){
+		
+	}
+	
 	@Override
 	public synchronized void run() {
 		

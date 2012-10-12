@@ -99,7 +99,7 @@ public class Enemy extends Entity{
 	}
 	
 	public void updateBounds(){
-		enemyBounds.setBounds(this.posX+8, this.posY+8, 48, 80);
+		enemyBounds.setBounds(this.posX+4, this.posY+4, 24, 40);
 	}
 	
 	public void calcDirection(){

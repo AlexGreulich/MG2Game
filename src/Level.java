@@ -14,6 +14,7 @@ public class Level {
 	int[][][] map;
 	Polygon collisionshape; 
 	ArrayList<Point> collisionpoints;
+	ArrayList<Item> itemsInLevel;
 	
 	public Level(){
 		
@@ -26,6 +27,8 @@ public class Level {
 		}
 		
 		loadMap();
+		
+		itemsInLevel = new ArrayList<Item>(); 
 	}
 	public void  loadMap(){
 		int mapHeight =mapPic.getHeight();
@@ -113,6 +116,10 @@ public class Level {
 			}
 		}
 		//zum testen:
+		Point lowest = new Point(0,0);
+		Point middleLeft = new Point(0,0);
+		Point middleRight = new Point(0,0);
+		Point highest = new Point(0,0);
 		for(Point p: collisionpoints){
 			
 			if(p.y%2 ==0){
@@ -122,6 +129,7 @@ public class Level {
 				p.x = p.x*32 +32;
 				p.y = p.y*8 +32 ;
 			}
+			
 					collisionshape.addPoint(p.x, p.y);
 //					collisionshape = collisionshape.
 					

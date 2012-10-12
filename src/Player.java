@@ -1,6 +1,7 @@
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -15,6 +16,9 @@ public class Player {
 	float animation = 0.0f;
 	BufferedImage[] hoch_cycle,runter_cycle, links_cycle,rechts_cycle,hochlinks_cycle,hochrechts_cycle,runterlinks_cycle,runterrechts_cycle;
 	Rectangle playerBounds;
+	ArrayList<Item> equipment;
+	
+	int ammo;
 	
 	public Player(GameWindow w){//, int x, int y
 		
@@ -35,6 +39,8 @@ public class Player {
 		runterlinks_cycle = new BufferedImage[8];
 		runterrechts_cycle = new BufferedImage[8];
 		
+		equipment = new ArrayList<Item>();
+		ammo = 0;
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
 //			int count =0;
