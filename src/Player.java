@@ -1,7 +1,7 @@
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -16,9 +16,10 @@ public class Player {
 	float animation = 0.0f;
 	BufferedImage[] hoch_cycle,runter_cycle, links_cycle,rechts_cycle,hochlinks_cycle,hochrechts_cycle,runterlinks_cycle,runterrechts_cycle;
 	Rectangle playerBounds;
-	ArrayList<Item> equipment;
+	Item[] equipment;
 	
 	int ammo;
+	Point playermiddle = new Point(0,0);
 	
 	public Player(GameWindow w){//, int x, int y
 		
@@ -38,8 +39,9 @@ public class Player {
 		hochrechts_cycle = new BufferedImage[8];
 		runterlinks_cycle = new BufferedImage[8];
 		runterrechts_cycle = new BufferedImage[8];
+		getMiddle();
 		
-		equipment = new ArrayList<Item>();
+		equipment = new Item[4];
 		ammo = 0;
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
@@ -79,6 +81,10 @@ public class Player {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void getMiddle(){
+		playermiddle.move(posX+8, posY+16);
 	}
 	
 	public int getX(){

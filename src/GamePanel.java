@@ -92,17 +92,16 @@ public class GamePanel extends Canvas implements Runnable{
 					int z = y%2;
 					switch(z){
 					case(0):
-						g.drawImage(i, x*32,y*8,null);//g.drawImage(i, x*64,y*16-16,null);-16
+						g.drawImage(i, x*32,y*8,null);
+					//alternativ 64pixel:
+					//g.drawImage(i, x*64,y*16-16,null);-16
 					break;
 					case(1):
-						g.drawImage(i, x*32+16, y*8,null);//g.drawImage(i, x*64 +32, y*16-16,null);
+						g.drawImage(i, x*32+16, y*8,null);
+					//alternativ 64pixel:
+					//g.drawImage(i, x*64 +32, y*16-16,null);
 						break;
 					}
-//						if(y%2 == 0){
-//					}else{
-						
-						
-//					}
 				}
 				
 				//64 pixel:
@@ -129,14 +128,14 @@ public class GamePanel extends Canvas implements Runnable{
 						int z = y%2;
 						switch(z){
 							case(0):
-								g.drawImage(i, x*32,y*8+8,null);//g.drawImage(i, x*64,y*16-16,null);
-//									}else{
-//								i=null;
+								g.drawImage(i, x*32,y*8+8,null);
+							//alternativ 64pixel:
+							//g.drawImage(i, x*64,y*16-16,null);
 								break;
 							case(1):
-								g.drawImage(i, x*32 +16, y*8+8,null);//g.drawImage(i, x*64 +32, y*16-16,null);
-//					}
-//								i =null;
+								g.drawImage(i, x*32 +16, y*8+8,null);
+							//alternativ 64pixel:
+							//g.drawImage(i, x*64 +32, y*16-16,null);
 								break;
 						}
 					}

@@ -1,13 +1,17 @@
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -47,6 +51,10 @@ public class GameWindow extends JFrame{
 	static int option=0;
 	JWindow splashwindow;
 	JLabel inProgress;
+	
+	HashMap levels;
+	ArrayList<BufferedImage> allMapsFloors;
+	ArrayList<BufferedImage> allMapsWalls;
 	public GameWindow(int screenoption) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
 		
@@ -94,11 +102,17 @@ public class GameWindow extends JFrame{
 	public void startGame(){
 		splashwindow.dispose();
 		this.setVisible(true);
+		
+		allMapsFloors = new ArrayList<BufferedImage>();
+		allMapsWalls = new ArrayList<BufferedImage>();
+		
+		loadLevelPics();
 		controls = new Controls();
 		player = new Player(this);
 		enemylist = new ArrayList<Enemy>();
 		enemycontrol = new EnemyController(this);
-		level = new Level();
+		level = new Level(allMapsFloors.get(0), allMapsWalls.get(0));
+		
 		bulletsInRoom = new ArrayList<Bullet>();
 		
 		
@@ -124,12 +138,13 @@ public class GameWindow extends JFrame{
 				audioFormat.getSampleRate(), // frames per second 
 				false);
 		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(decoded, mp3audioInputStream);
-		
+		//	später alternative für soundprobleme:
 //		SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat); 
 //		sourceDataLine.open(audioFormat);
 		
 		
 			clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
 		 
 		} catch (UnsupportedAudioFileException e) {
 			e.printStackTrace();
@@ -140,9 +155,9 @@ public class GameWindow extends JFrame{
 		}
 		
 		
-		//clip.open(audioInputStream);
-//		clip.start();
-		//clip.loop(Clip.LOOP_CONTINUOUSLY);
+		
+		clip.start();
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
 	this.setIgnoreRepaint(true);
 		
@@ -155,5 +170,24 @@ public class GameWindow extends JFrame{
 		bulletthread.start();
 		enemythread.start();
 		pack();
+	}
+	
+	public void loadLevelPics(){
+		
+		URL path = getClass().getResource("maps/");
+		File f = new File(path.getPath());
+		File[] files = f.listFiles();
+		
+		for(int i =0; i< files.length; i++){
+			try {
+				if(files[i].getAbsolutePath().endsWith("walls.gif")){
+					allMapsWalls.add(ImageIO.read(files[i]));
+				}else{
+					allMapsFloors.add(ImageIO.read(files[i]));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

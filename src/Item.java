@@ -47,7 +47,7 @@ public class Item extends Entity{
 		isEquipped = true;
 		panel.level.itemsInLevel.remove(this);		//direkt in gamepanel oder so?
 		if(this.itemType == 0){
-			panel.player.equipment.add(0, this);
+			panel.player.equipment[0] = this;
 		}else if(this.itemType == 1){
 			panel.player.energy += healthPts;
 		}else if(this.itemType == 2){
