@@ -113,52 +113,66 @@ public class Enemy extends Entity{
 	Ankathete/Gegenkathete (also 1/tan(alpha)). Andersrum waere es der normal tangens
 	*/
 	if ((getXDistancePlayer()>0) && (getYDistancePlayer()<0)){ //spieler oben rechts vom gegner
-		float tmp = getXDistancePlayer()/(getYDistancePlayer()*-1);
-		if (tmp >= 2.42){
+		
+		if(getYDistancePlayer() != 0){
+			float tmp = getXDistancePlayer()/(getYDistancePlayer()*-1);
+			if (tmp >= 2.42){
 			enemyDirection=6;
+			}
+			else if (tmp<2.42 && tmp>=0.41){
+				enemyDirection=5;
+			}
+			else if (tmp<0.41){
+				enemyDirection=3;
+			}
 		}
-		else if (tmp<2.42 && tmp>=0.41){
-			enemyDirection=5;
-		}
-		else if (tmp<0.41){
-			enemyDirection=3;
-		}
+		
 	}
 	else if ( (getXDistancePlayer()>0) && (getYDistancePlayer()>0)){ //spieler unten rechts vom gegner
-		float tmp = getXDistancePlayer()/(getYDistancePlayer());
-		if (tmp >= 2.42){
-			enemyDirection=6;
-		}
-		else if (tmp<2.42 && tmp>=0.41){
-			enemyDirection=7;
-		}
-		else if (tmp<0.41){
-			enemyDirection=4;
-		}
+		if(getYDistancePlayer() != 0){
+			float tmp = getXDistancePlayer()/(getYDistancePlayer());
+			if (tmp >= 2.42){
+				enemyDirection=6;
+			}
+			else if (tmp<2.42 && tmp>=0.41){
+				enemyDirection=7;
+			}
+			else if (tmp<0.41){
+				enemyDirection=4;
+			}
+		}		
+		
 	}
 	else if ( (getXDistancePlayer()<0) && (getYDistancePlayer()>0)){ //spieler unten links vom gegner
-		float tmp = (getXDistancePlayer()*-1)/(getYDistancePlayer());
-		if (tmp >= 2.42){
-			enemyDirection=1;
+		
+		if(getYDistancePlayer() != 0){
+			float tmp = (getXDistancePlayer()*-1)/(getYDistancePlayer());
+			if (tmp >= 2.42){
+				enemyDirection=1;
+			}
+			else if (tmp<2.42 && tmp>=0.41){
+				enemyDirection=2;
+			}
+			else if (tmp<0.41){
+				enemyDirection=4;
+			}
 		}
-		else if (tmp<2.42 && tmp>=0.41){
-			enemyDirection=2;
-		}
-		else if (tmp<0.41){
-			enemyDirection=4;
-		}
+		
 	}
 	else if ( (getXDistancePlayer()<0) && (getYDistancePlayer()<0)){ //spieler oben links vom gegner
-		float tmp = (getXDistancePlayer()*-1)/(getYDistancePlayer()*-1);
-		if (tmp >= 2.42){
-			enemyDirection=1;
+		if(getYDistancePlayer() != 0){
+			float tmp = (getXDistancePlayer()*-1)/(getYDistancePlayer()*-1);
+			if (tmp >= 2.42){
+				enemyDirection=1;
+			}
+			else if (tmp<2.42 && tmp>=0.41){
+				enemyDirection=0;
+			}
+			else if (tmp<0.41){
+				enemyDirection=3;
+			}
 		}
-		else if (tmp<2.42 && tmp>=0.41){
-			enemyDirection=0;
-		}
-		else if (tmp<0.41){
-			enemyDirection=3;
-		}
+		
 	}
 	else if ((getXDistancePlayer()==0) || (getYDistancePlayer()==0)){
 		if (getXDistancePlayer()==0){

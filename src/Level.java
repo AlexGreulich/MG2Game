@@ -10,22 +10,24 @@ import javax.imageio.ImageIO;
 
 public class Level {
 
-	BufferedImage allTiles, mapPic,mapPicwalls;
+	BufferedImage allTiles, mapPic,mapPicwalls,mapPicItems;
 	int[][][] map;
 	Polygon collisionshape; 
 	ArrayList<Point> collisionpoints;
-	ArrayList<Item> itemsInLevel;
+	
 	ArrayList<Point> sortpoints;
 	Point p1,p2,p3,p4,p5,p6,p7,p8;
 
 	
-	public Level(BufferedImage mapimgfloor, BufferedImage mapimgwalls){
+	public Level(BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems){
 		
 		mapPic = mapimgfloor;
 		mapPicwalls = mapimgwalls;
+		mapPicItems = mapimgItems;
+		 
 		loadMap();
 		
-		itemsInLevel = new ArrayList<Item>(); 
+		
 	}
 	public void  loadMap(){
 		int mapHeight =mapPic.getHeight();
@@ -40,7 +42,7 @@ public class Level {
 		 * z=0 	-> tiles 0 bis ...
 		 * 1 	-> begehbar oder nicht (0 / 1)
 		 * 2	-> item vorhanden? 0/1
-		 * 3	-> noch nicht vergeben
+		 * 3	-> wände
 		 * 4	-> "	"	"
 		 * */
 		
@@ -75,13 +77,16 @@ public class Level {
 		Color wandlinks = new Color(0,150,100);
 		
 		Color invisibleCollisionWall = new Color(0,150,250);
-		
+	
+	//	ITEMS
+		Color itemColour = new Color(255,0,0);
 		
 		
 		for(int x = 0; x < mapWidth;x++){
 			for(int y = 0; y < mapHeight;y++){
 				Color c = new Color(mapPic.getRGB(x, y));
 				Color d =new Color(mapPicwalls.getRGB(x, y));
+				Color e = new Color(mapPicItems.getRGB(x, y));
 				
 			//bodentiles
 				
@@ -117,7 +122,11 @@ public class Level {
 				else{
 					map[x][y][3]=666;
 				}
+			//items auslesen
 				
+				if(e.equals(itemColour)){
+					map[x][y][2] = 1;
+				}
 				
 				
 				

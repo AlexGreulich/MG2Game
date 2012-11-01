@@ -36,10 +36,16 @@ public class GamePanel extends Canvas implements Runnable{
 	
 	ArrayList<Bullet> bulletsInRoom;
 	ArrayList<Enemy> enemylist;
+	ArrayList<Item> itemsInLevel;
 	
 	Polygon collision;
+	double transformModifier; 
 	
-	public GamePanel(GameWindow w){
+	public GamePanel(GameWindow w, int scrsizeopt){
+		
+		
+		transformModifier = scrsizeopt;
+		
 		
 		window = w;
 		level = window.level;
@@ -52,6 +58,7 @@ public class GamePanel extends Canvas implements Runnable{
 		map = level.map;
 		player = window.player;
 		enemylist = window.enemylist;
+//		itemsInLevel = new ArrayList<Item>();
 		
 		this.setIgnoreRepaint(true);
 		
@@ -165,28 +172,32 @@ public class GamePanel extends Canvas implements Runnable{
 		//erstmal nur anzeige der lebensenergie und sowas zum debuggen
 		g.setColor(Color.WHITE);
 		if(player.energy >0){
-			g.drawString("Lebensenergie: "+ (int)player.energy,50 ,50);
+			
+			g.drawString("Lebensenergie: "+ (int)player.energy,50 ,150);
 		}else{
-			g.drawString("Spieler waere jetzt tot, Energie: "+ player.energy,50 ,50 );
+			g.drawString("Spieler waere jetzt tot, Energie: "+ player.energy,50 ,150 );
 		}
-		g.drawString("Spieler an position map[x][y]:"+ player.posX/32 +", "+ player.posY/48,50,70);
+		
+		g.drawString("Item 1(Waffe): "+player.equipment[0]+ " Item 2: "+player.equipment[1]+ " Item 3: "+ player.equipment[2]+ " Item 4: " + player.equipment[3], 50,50);
+		
+		g.drawString("Spieler an position map[x][y]:"+ player.posX/32 +", "+ player.posY/48,50,170);
 		int index =0;
 		for(Enemy e : enemylist){
-			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 100 + (index*20));
+			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 200 + (index*20));
 			index++;
 		}
-		g.drawString("[Q]uit", 50,10);
-		for(Point p: level.collisionpoints){
-			g.setColor(Color.RED);
-			g.fillRect(p.x, p.y, 1, 1);
-		}
-		g.drawPolygon(collision);
+		g.drawString("[Q]uit", 50,110);
+//		for(Point p: level.collisionpoints){
+//			g.setColor(Color.RED);
+//			g.fillRect(p.x, p.y, 1, 1);
+//		}
+//		g.drawPolygon(collision);
 	}
 	
 	public void drawItems(Graphics g){
-		for(Item i: level.itemsInLevel){
+		for(Item i: window.itemHandler.itemsInLevel){
 			if(i != null){
-				g.drawImage(i.img, i.posX,i.posY,null);
+				g.drawImage(i.getImage(), i.posX,i.posY,null);
 			}
 		}
 	}
@@ -216,6 +227,7 @@ public class GamePanel extends Canvas implements Runnable{
 				
 				drawLevelWalls(g2d);
 				drawLevelFloor(g2d);
+				drawItems(g2d);
 				drawPlayer(g2d);
 				drawBullets(g2d);
 				drawEnemies(g2d);
@@ -224,7 +236,15 @@ public class GamePanel extends Canvas implements Runnable{
 				graphics = buffer.getDrawGraphics();
 				
 				AffineTransform at = new AffineTransform();
+				
+//				if(window.screenoption == 1){
+//					at.scale(1.25,1.25);
+//				}
+//				if(window.screenoption == 2){
+//					at.scale(2,2);
+//				}
 				at.scale(2,2);
+				
 				Graphics2D gr2d = (Graphics2D)graphics;
 				gr2d.setTransform(at);
 			

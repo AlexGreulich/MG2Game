@@ -7,6 +7,19 @@ public class Controls implements KeyListener{
 	int direction=0;
 	boolean up = false,down = false, left = false, right = false, isMoving = false;
 	boolean fireUP, fireDOWN, fireLEFT, fireRIGHT;
+	boolean equip =false;
+	
+	/*
+	 * WASD - bewegen
+	 * Pfeiltasten - schiessen
+	 * E - equip
+	 * Space - benutzen/ sprechen/ öffnen
+	 *  TAB oder so - inventar durchlaufen
+	 *  1-5 - itemslots anwählen
+	 * 
+	 * */
+	
+	
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -38,6 +51,9 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_D:
 				isMoving = true;
 				right=true;
+				break;
+			case KeyEvent.VK_E:
+				equip = true;
 				break;
 				
 		}
@@ -76,6 +92,9 @@ public class Controls implements KeyListener{
 				break;
 			case KeyEvent.VK_Q:
 				System.exit(0);
+			case KeyEvent.VK_E:
+				equip = false;
+				break;
 				
 		}
 	}

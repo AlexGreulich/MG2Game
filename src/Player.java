@@ -41,7 +41,9 @@ public class Player {
 		runterrechts_cycle = new BufferedImage[8];
 		getMiddle();
 		
+		//slots für items:
 		equipment = new Item[4];
+				
 		ammo = 0;
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
@@ -84,7 +86,7 @@ public class Player {
 	}
 	
 	public void getMiddle(){
-		playermiddle.move(posX+8, posY+16);
+		playermiddle.setLocation(posX+8, posY+16);
 	}
 	
 	public int getX(){
