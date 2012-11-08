@@ -14,7 +14,7 @@ public class Level {
 	int[][][] map;
 	Polygon collisionshape; 
 	ArrayList<Point> collisionpoints;
-	
+	ArrayList<Point> doorPoints;
 	ArrayList<Point> sortpoints;
 	Point p1,p2,p3,p4,p5,p6,p7,p8;
 
@@ -32,9 +32,10 @@ public class Level {
 	public void  loadMap(){
 		int mapHeight =mapPic.getHeight();
 		int mapWidth = mapPic.getWidth();
-		map = new int[mapWidth][mapHeight][4];
+		map = new int[mapWidth][mapHeight][5];
 		collisionshape = new Polygon();
 		collisionpoints = new ArrayList<Point>();
+		doorPoints = new ArrayList<Point>();
 		sortpoints = new ArrayList<Point>();
 		/* legende:
 		 * [x][y][z]
@@ -43,7 +44,7 @@ public class Level {
 		 * 1 	-> begehbar oder nicht (0 / 1)
 		 * 2	-> item vorhanden? 0/1
 		 * 3	-> wände
-		 * 4	-> "	"	"
+		 * 4	-> türen
 		 * */
 		
 		
@@ -76,10 +77,16 @@ public class Level {
 		Color wandrechts = new Color(0,150,0);
 		Color wandlinks = new Color(0,150,100);
 		
+		Color firstDoor = new Color(0,150,150);
 		Color invisibleCollisionWall = new Color(0,150,250);
 	
 	//	ITEMS
-		Color itemColour = new Color(255,0,0);
+		Color itemColour1 = new Color(255,0,0);
+		Color itemColour2 = new Color(255,0,10);
+		Color itemColour3 = new Color(255,0,20);
+		Color itemColour4 = new Color(255,0,30);
+		Color itemColour5 = new Color(255,0,40);
+		Color itemColour6 = new Color(255,0,50);
 		
 		
 		for(int x = 0; x < mapWidth;x++){
@@ -116,21 +123,33 @@ public class Level {
 															collisionpoints.add(new Point(x,y));
 				}
 				else if (d.equals(invisibleCollisionWall)){
-															
 															collisionpoints.add(new Point(x,y));
+				}
+				else if(d.equals(firstDoor)){
+															//map[x][y][3]=1;
+															map[x][y][1]=0;
+															collisionpoints.add(new Point(x,y));
+															doorPoints.add(new Point(x,y));
+															map[x][y][4]=1;
 				}
 				else{
 					map[x][y][3]=666;
 				}
 			//items auslesen
 				
-				if(e.equals(itemColour)){
+				if(e.equals(itemColour1)){
 					map[x][y][2] = 1;
+				}else if(e.equals(itemColour2)){
+					map[x][y][2] = 2;
+				}else if(e.equals(itemColour3)){
+					map[x][y][2] = 3;
+				}else if(e.equals(itemColour4)){
+					map[x][y][2] = 4;
+				}else if(e.equals(itemColour5)){
+					map[x][y][2] = 5;
+				}else if(e.equals(itemColour6)){
+					map[x][y][2] = 6;
 				}
-				
-				
-				
-				
 			}
 		}
 		//zum testen:
@@ -147,11 +166,7 @@ public class Level {
 				p.x = p.x*32 +32;
 				p.y = p.y*8 +32 ;
 			}
-			
-//					collisionshape.addPoint(p.x, p.y);
 					sortpoints.add(p);
-//					collisionshape = collisionshape.
-					
 		}
 		generatePolygon(sortpoints.get(0));//Testweise <--- waende sollten dann aber auch durchgaengig sein und nicht irgendwo aufhoeren
 		
@@ -181,33 +196,24 @@ public class Level {
 			else if (sortpoints.contains(p5)||sortpoints.contains(p6)||sortpoints.contains(p7)||sortpoints.contains(p8)){
 				if (sortpoints.contains(p5)){
 					generatePolygon(p5);
-				}
-				else if (sortpoints.contains(p6)){
+				}else if (sortpoints.contains(p6)){
 					generatePolygon(p6);
-				}
-				else if (sortpoints.contains(p7)){
+				}else if (sortpoints.contains(p7)){
 					generatePolygon(p7);
-				}
-				else if (sortpoints.contains(p8)){
+				}else if (sortpoints.contains(p8)){
 					generatePolygon(p8);
 				}
 			}
 			else if (sortpoints.contains(p1)||sortpoints.contains(p2)||sortpoints.contains(p3)||sortpoints.contains(p4)){
 				if (sortpoints.contains(p1)){
 					generatePolygon(p1);
-				}
-				else if (sortpoints.contains(p2)){
+				}else if (sortpoints.contains(p2)){
 					generatePolygon(p2);
-				}
-				else if (sortpoints.contains(p3)){
+				}else if (sortpoints.contains(p3)){
 					generatePolygon(p3);
-				}
-				else if (sortpoints.contains(p4)){
+				}else if (sortpoints.contains(p4)){
 					generatePolygon(p4);
 				}
 			}
 		}
-
-		
-	
 }

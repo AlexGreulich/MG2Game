@@ -18,9 +18,6 @@ public class Controls implements KeyListener{
 	 *  1-5 - itemslots anwählen
 	 * 
 	 * */
-	
-	
-	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
@@ -55,7 +52,6 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_E:
 				equip = true;
 				break;
-				
 		}
 	}
 
@@ -95,7 +91,6 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_E:
 				equip = false;
 				break;
-				
 		}
 	}
 
@@ -103,6 +98,4 @@ public class Controls implements KeyListener{
 	public void keyTyped(KeyEvent e) {
 		
 	}
-
-	
 }

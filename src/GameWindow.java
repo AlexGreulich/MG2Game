@@ -1,6 +1,7 @@
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,8 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
@@ -58,15 +59,15 @@ public class GameWindow extends JFrame{
 	ArrayList<BufferedImage> allMapsFloors;
 	ArrayList<BufferedImage> allMapsWalls;
 	ArrayList<BufferedImage> allMapsItems;
+	
+	Polygon doorShape;
+	
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
-		
 		
 		screen = Toolkit.getDefaultToolkit().getScreenSize();
 		int scrx = (int) (screen.getWidth()/2)-250;
 		int scry = (int) (screen.getHeight()/2)-150;
-		
-		
 		splashwindow = new JWindow();
 		splashwindow.setLayout(new GridLayout(4,1));
 		splashwindow.setSize(500, 300);
@@ -94,8 +95,20 @@ public class GameWindow extends JFrame{
 				}else{
 					screenoption =2;
 				}
-				startGame();
+				/*
+				 * der splashscreen wird geschlossen,
+				 * und es können alle dinge fürs spiel geladen werden
+				 * */
 				
+				allMapsFloors = new ArrayList<BufferedImage>();
+				allMapsWalls = new ArrayList<BufferedImage>();
+				allMapsItems = new ArrayList<BufferedImage>();
+				loadLevelPics();
+				
+				
+				splashwindow.dispose();
+				startGame(0);	//startraum
+				startMusic();
 			}
 		});
 		splashwindow.getContentPane().add(inProgress);
@@ -106,53 +119,39 @@ public class GameWindow extends JFrame{
 		
 		setResizable(false);
 		setUndecorated(true);
-		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 		this.setIgnoreRepaint(true);
 		
 		pack();
 	}
 	
 	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
-		
 		new GameWindow();
-		
 	}
 	
-	public void startGame(){
+	public void startGame(int roomNumber){
 		
-		/*
-		 * der splashscreen wird geschlossen,
-		 * und es können alle dinge fürs spiel geladen werden
-		 * */
-		splashwindow.dispose();
+		
 		this.setVisible(true);
-		
-		
 		
 		/*
 		 * arrays mit allen karten anlegen,
 		 * werden mit loadlevelpics() geladen
 		 * */
-		allMapsFloors = new ArrayList<BufferedImage>();
-		allMapsWalls = new ArrayList<BufferedImage>();
-		allMapsItems = new ArrayList<BufferedImage>();
-		loadLevelPics();
+		
+		
 		
 		controls = new Controls();
 		player = new Player(this);
 		enemylist = new ArrayList<Enemy>();
 		enemycontrol = new EnemyController(this);
-		level = new Level(allMapsFloors.get(0), allMapsWalls.get(0), allMapsItems.get(0));
-		
-		
+		level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
 		bulletsInRoom = new ArrayList<Bullet>();
 		
 		panel = new GamePanel(this, screenoption);
 		gameloop = new Gameloop(this);
 		itemHandler = new ItemHandler(this);
-		loadItems();
+		loadSpecificRoomStuff();
 //		panel.itemsInLevel = itemHandler
 		addKeyListener(controls);
 		
@@ -160,39 +159,7 @@ public class GameWindow extends JFrame{
 		
 		bullethandler = new BulletHandler(this);
 		
-		AudioInputStream mp3audioInputStream;
-		try {
-			mp3audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource("audio/test_track_01.mp3"));
-			AudioFormat audioFormat = mp3audioInputStream.getFormat();
-			AudioFormat decoded = new AudioFormat( 
-				AudioFormat.Encoding.PCM_SIGNED, // encoding 
-				audioFormat.getSampleRate(), // sample rate 
-				16, // bits per sample 
-				audioFormat.getChannels(), // number of channels 
-				audioFormat.getChannels() * 2, // bytes per frame 
-				audioFormat.getSampleRate(), // frames per second 
-				false);
-		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(decoded, mp3audioInputStream);
-		//	später alternative für soundprobleme:
-//		SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat); 
-//		sourceDataLine.open(audioFormat);
 		
-		
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-		 
-		} catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-		
-		
-		
-		clip.start();
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
 	this.setIgnoreRepaint(true);
 		
@@ -209,6 +176,37 @@ public class GameWindow extends JFrame{
 		pack();
 	}
 	
+	public void startMusic(){
+		AudioInputStream mp3audioInputStream;
+		try {
+			mp3audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource("audio/test_track_01.mp3"));
+			AudioFormat audioFormat = mp3audioInputStream.getFormat();
+			AudioFormat decoded = new AudioFormat( 
+				AudioFormat.Encoding.PCM_SIGNED, // encoding 
+				audioFormat.getSampleRate(), // sample rate 
+				16, // bits per sample 
+				audioFormat.getChannels(), // number of channels 
+				audioFormat.getChannels() * 2, // bytes per frame 
+				audioFormat.getSampleRate(), // frames per second 
+				false);
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(decoded, mp3audioInputStream);
+		//	später alternative für soundprobleme:
+//		SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat); 
+//		sourceDataLine.open(audioFormat);
+			clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+		 
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		clip.start();
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	
 	public void loadLevelPics(){
 		/*
 		 * Um alle karten zu laden
@@ -221,7 +219,7 @@ public class GameWindow extends JFrame{
 		URL path = getClass().getResource("maps/");
 		File f = new File(path.getPath());
 		File[] files = f.listFiles();
-		
+		Arrays.sort(files);
 		for(int i =0; i< files.length; i++){
 			try {
 				if(files[i].getAbsolutePath().endsWith("walls.gif")){
@@ -235,9 +233,8 @@ public class GameWindow extends JFrame{
 				e.printStackTrace();
 			}
 		}
-		
 	}
-	public void loadItems(){
+	public void loadSpecificRoomStuff(){
 		/*
 		 * es gibt neben floor- und wall- map auch eine itemmap,
 		 * z.b. 5 verschiedene farben für 5 verschiedene typen von items
@@ -250,16 +247,52 @@ public class GameWindow extends JFrame{
 		 * -> extramethode um item in truhe zu erstellen
 		 *  
 		 * */
+		doorShape = new Polygon();
 		for(int x = 0; x < level.mapPic.getWidth(); x++){
 			for(int y = 0; y< level.mapPic.getHeight(); y++){
-				if(level.map[x][y][2] == 1){
-					
-					int rdm = (int)Math.random()*5;
-					Item it = new Item(this,x*32,y*8,rdm);
+			//items laden	
+				//if(level.map[x][y][2] == 1){
+					//int rdm = (int)Math.random()*5;
+				//}
+				int itemtypee = level.map[x][y][2];
+				if(itemtypee != 0){
+					Item it = new Item(this,x*32,y*8,itemtypee-1);
 					itemHandler.itemsInLevel.add(it);
 				}
+			//türen laden
+				if(level.map[x][y][4] == 1){
+					doorShape = new Polygon();
+					if(y%2 == 0){
+						doorShape.addPoint((x*32),(y*8+8));
+						doorShape.addPoint((x*32)+32,(y*8+8));
+						doorShape.addPoint((x*32)+16,(y*8));
+						doorShape.addPoint((x*32)+16,(y*8+16));
+					}else if(y%2 == 1){
+						doorShape.addPoint((x*32 +14),(y*4+8));
+						doorShape.addPoint((x*32 +15),(y*5+8));
+						doorShape.addPoint((x*32 +16),(y*6+8));
+						doorShape.addPoint((x*32 +17),(y*8+8));
+					}
+					
+				}
+				
+				
 			}
 		}
+	}
+	
+	public void levelChanging(){
 		
+		//zunächst die alten threads sterben lassen
+		try {
+			panelThread.join();
+			gameloopthread.join();
+			bulletthread.join();
+			enemythread.join();
+			itemthread.join();
+		} catch (InterruptedException e) {e.printStackTrace();}
+	
+		
+		startGame(1);
 	}
 }

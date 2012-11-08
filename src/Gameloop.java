@@ -60,8 +60,6 @@ public class Gameloop implements Runnable{
 					controls.direction = 7;
 					player.getMiddle();
 				}
-				
-				
 			}else if((controls.up) && (controls.right)){
 				if(collisionshape.contains(player.playermiddle)){
 					player.posX = player.posX + speed;
@@ -119,11 +117,6 @@ public class Gameloop implements Runnable{
 				player.posY = altePos.y-16;
 			}
 			
-			
-			
-			
-			
-			
 			float onEnd = System.currentTimeMillis()- onStart;
 			if(gamespeed > onEnd){
 				try {
@@ -133,7 +126,5 @@ public class Gameloop implements Runnable{
 				}
 			}
 		}
-		
 	}
-
-	}
+}

@@ -66,6 +66,7 @@ public class BulletHandler implements Runnable{
 					for(Enemy e: enemylist){
 						if(b.bounds.intersects(e.enemyBounds)){
 							e.energy = e.energy - 0.1f;
+							panel.actionMessages.add(new ActionMessage("Enemy hit"));
 						//	bulletsInRoom.remove(b);
 							
 						/*-> kugel soll entfernt werden wenn getroffen, das

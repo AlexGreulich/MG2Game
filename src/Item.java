@@ -32,14 +32,16 @@ public class Item extends Entity{
 			case(0):			//Waffe
 				damage = 1;
 				name = "Waffe";
+				
 				break;
 			case(1):			//medikit, nahrung
 				healthPts = 10;
-			name = "Medikit";
+				name = "Medikit";
+				
 				break;
 			case(2):			//ammo
 				shots = 5;
-			name = "ammo";
+				name = "Ammo";
 				break;
 			case(3):			//div objekt
 				name = "nul";
@@ -47,8 +49,17 @@ public class Item extends Entity{
 			case(4):
 				name = "nul";
 				break;
+			case(5):
+				name = "nul";
+				break;
 		}
 		img = window.itemHandler.allItems[itemType];
+	}
+	
+	public void createActionMessage(){
+		ActionMessage am = new ActionMessage("Picked up " + name);
+		//return "Picked up " + name ;
+		panel.actionMessages.add(am);
 	}
 	
 	public BufferedImage getImage(){
@@ -57,13 +68,16 @@ public class Item extends Entity{
 	public void equip(){
 		isEquipped = true;
 		window.itemHandler.itemsInLevel.remove(this);		//direkt in gamepanel oder so?
+		createActionMessage();
 		if(this.itemType == 0){
 			panel.player.equipment[0] = this;
+			//panel.actionMessages.add(s);
 		}else if(this.itemType == 1){
 			panel.player.energy += healthPts;
+			//panel.actionMessages.add(s);
 		}else if(this.itemType == 2){
 			panel.player.ammo += shots;
+			//panel.actionMessages.add(s);
 		}
-		
 	}
 }

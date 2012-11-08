@@ -6,14 +6,17 @@ public class EnemyController implements Runnable{
 	
 	int gamespeed = 5;
 	GameWindow window;
+	GamePanel panel;
 	ArrayList<Enemy> enemylist;
 	Enemy enemy1;
 	Player player;
+	
 	public EnemyController(GameWindow w){
 		window = w;
+		panel = window.panel;
 		player = window.player;
 		enemylist = window.enemylist;
-		enemy1 = new Enemy(window,100,100);
+		enemy1 = new Enemy(window,100,100,2);
 		enemylist.add(enemy1);
 	}
 	
@@ -21,7 +24,14 @@ public class EnemyController implements Runnable{
 		for(Enemy e:enemylist){
 			e.updateBounds();
 			if(e.enemyBounds.intersects(player.playerBounds)){
-				player.energy = player.energy - 0.1f;
+				if(e.countToNextAttack ==0){
+					e.canAttack = true;
+				}
+				if(!e.canAttack){
+					e.countToNextAttack--;
+				}else{
+					e.dealDamage();
+				}
 			}
 		}
 	}

@@ -33,5 +33,4 @@ public class Bullet extends Entity{
 	public int getDirection(){
 		return this.direction;
 	}
-
 }

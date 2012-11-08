@@ -27,7 +27,7 @@ public class Player {
 		controls = w.controls;
 		
 		posX =500;
-		posY = 300;
+		posY = 200;
 		energy = 100f;
 		image = null;
 		playerBounds = new Rectangle(this.posX+8, this.posY+8, 48, 80);
@@ -82,7 +82,6 @@ public class Player {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public void getMiddle(){
@@ -115,8 +114,6 @@ public class Player {
 		if((int)animation == 8){
 			animation =0.0f;
 		}
-		
-		
 		switch(controls.direction){
 			case(0):
 				image = runter_cycle[(int)animation];
@@ -144,6 +141,5 @@ public class Player {
 				break;
 		}
 		return image;
-		
 	}
 }

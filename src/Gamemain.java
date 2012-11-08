@@ -32,7 +32,7 @@ public class Gamemain extends JWindow{
 						
 						
 						dispose();
-						new GameWindow(option);
+						new GameWindow();
 					} catch (UnsupportedAudioFileException e1) {e1.printStackTrace();} catch (IOException e1) {e1.printStackTrace();} catch (LineUnavailableException e1) {e1.printStackTrace();}
 					
 				}else if(!fullscreen.isEnabled() && windowed.isEnabled()){
@@ -58,7 +58,7 @@ public class Gamemain extends JWindow{
 	public void startGame(){
 		this.dispose();
 			try {
-			new GameWindow(option);
+			new GameWindow();
 		} catch (UnsupportedAudioFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

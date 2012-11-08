@@ -13,10 +13,8 @@ public class ItemHandler implements Runnable{
 	Player player;
 	Controls controls;
 	Level level;
-	
 	BufferedImage[] allItems;
 	ArrayList<Item> itemsInLevel;
-	
 	
 	public ItemHandler(GameWindow w){
 		
@@ -25,7 +23,6 @@ public class ItemHandler implements Runnable{
 		player = window.player;
 		controls = window.controls;
 		level = window.level;
-		
 		
 		//Bilder des Itemsets in array laden:
 		allItems = new BufferedImage[100];
@@ -39,12 +36,8 @@ public class ItemHandler implements Runnable{
 					count++;
 				}
 			}
-			
 		} catch (IOException e) {e.printStackTrace();}
 		itemsInLevel = new ArrayList<Item>();
-		
-		
-		
 	}
 	
 	public synchronized void run(){
@@ -56,14 +49,11 @@ public class ItemHandler implements Runnable{
 			if(controls.equip){
 				
 				for(int i =0; i< itemsInLevel.size(); i++){//Item i: itemsInLevel){
-					
-				
 					if(itemsInLevel.get(i).bounds.contains(player.playermiddle)){
 						itemsInLevel.get(i).equip();
 					}
 				}
 			}
-			
 			
 			float onEnd = System.currentTimeMillis() - onStart;
 			if( gamespeed> onEnd){
@@ -77,6 +67,4 @@ public class ItemHandler implements Runnable{
 			}
 		}
 	}
-	
-
 }
