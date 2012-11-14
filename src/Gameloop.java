@@ -3,7 +3,7 @@ import java.awt.Polygon;
 
 
 public class Gameloop implements Runnable{
-
+	boolean running = true;
 	GameWindow window;
 	Player player;
 	Controls controls;
@@ -23,17 +23,25 @@ public class Gameloop implements Runnable{
 		window = w;
 		player = window.player;
 //		enemy = window.enemy;
-		controls = window.controls;
-		panel = window.panel;
-		map = panel.level.map;
+		initLoop();
+		//vorher stand hier:
+				controls = window.controls;
+		//		panel = window.panel;
+		//		map = panel.level.map;
 		collisionshape = panel.collision;
 		player.getMiddle();
 		altePos = new Point(player.playermiddle.x,player.playermiddle.y);
 	}
 	
+	public void initLoop(){
+		panel = window.panel;
+		map = panel.level.map;
+		collisionshape = panel.collision;
+	}
+	
 	@Override
 	public synchronized void run() {
-		while (true){
+		while (running){
 			float onStart = System.currentTimeMillis();
 			
 			player.updateBounds();
@@ -116,6 +124,15 @@ public class Gameloop implements Runnable{
 				player.posX = altePos.x-8;
 				player.posY = altePos.y-16;
 			}
+			
+			for(int i = 0; i< window.level.doorShapes.length;i++){
+				if(window.level.doorShapes[i].contains(player.playermiddle)){
+					if(controls.levelChange){
+						window.levelChanging();
+					}
+				}
+			}
+			
 			
 			float onEnd = System.currentTimeMillis()- onStart;
 			if(gamespeed > onEnd){

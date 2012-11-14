@@ -17,7 +17,9 @@ public class Level {
 	ArrayList<Point> doorPoints;
 	ArrayList<Point> sortpoints;
 	Point p1,p2,p3,p4,p5,p6,p7,p8;
-
+	Polygon[] doorShapes;
+	
+	
 	
 	public Level(BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems){
 		
@@ -77,7 +79,11 @@ public class Level {
 		Color wandrechts = new Color(0,150,0);
 		Color wandlinks = new Color(0,150,100);
 		
-		Color firstDoor = new Color(0,150,150);
+		Color doorToRight = new Color(0,150,150);
+		Color doorToLeft = new Color(0,150,160);
+		Color doorToTop = new Color(0,150,170);
+		Color doorToBottom = new Color(0,150,180);
+		
 		Color invisibleCollisionWall = new Color(0,150,250);
 	
 	//	ITEMS
@@ -125,13 +131,28 @@ public class Level {
 				else if (d.equals(invisibleCollisionWall)){
 															collisionpoints.add(new Point(x,y));
 				}
-				else if(d.equals(firstDoor)){
-															//map[x][y][3]=1;
-															map[x][y][1]=0;
+				else if(d.equals(doorToRight)){
+															map[x][y][3]=666;
+															collisionpoints.add(new Point(x,y));
+															doorPoints.add(new Point(x,y));
+															map[x][y][4]=1;
+				}else if(d.equals(doorToLeft)){
+															map[x][y][3]=666;
+															collisionpoints.add(new Point(x,y));
+															doorPoints.add(new Point(x,y));
+															map[x][y][4]=1;
+				}else if(d.equals(doorToTop)){
+															map[x][y][3]=666;
+															collisionpoints.add(new Point(x,y));
+															doorPoints.add(new Point(x,y));
+															map[x][y][4]=1;
+				}else if(d.equals(doorToBottom)){
+															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
 															doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
 				}
+				
 				else{
 					map[x][y][3]=666;
 				}
@@ -169,8 +190,42 @@ public class Level {
 					sortpoints.add(p);
 		}
 		generatePolygon(sortpoints.get(0));//Testweise <--- waende sollten dann aber auch durchgaengig sein und nicht irgendwo aufhoeren
-		
+		createDoors();
 	}
+	
+	public void createDoors(){
+	
+		doorShapes = new Polygon[doorPoints.size()];
+		for(int i =0; i < doorShapes.length;i++){
+			Polygon p = new Polygon();
+			//y%2 implementieren für korrekte position im türrahmen
+			p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
+			p.addPoint(doorPoints.get(i).x * 32+48, doorPoints.get(i).y * 8+16);
+			p.addPoint(doorPoints.get(i).x * 32+48, doorPoints.get(i).y * 8+64);
+			p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
+			doorShapes[i] = p;
+		}
+		
+		
+		
+		//türen laden
+//		if(level.map[x][y][4] == 1){
+//			doorShape = new Polygon();
+//			if(y%2 == 0){
+//				doorShape.addPoint((x*32),(y*8+8));
+//				doorShape.addPoint((x*32)+32,(y*8+8));
+//				doorShape.addPoint((x*32)+16,(y*8));
+//				doorShape.addPoint((x*32)+16,(y*8+16));
+//			}else if(y%2 == 1){
+//				doorShape.addPoint((x*32 +14),(y*4+8));
+//				doorShape.addPoint((x*32 +15),(y*5+8));
+//				doorShape.addPoint((x*32 +16),(y*6+8));
+//				doorShape.addPoint((x*32 +17),(y*8+8));
+//			}
+//			
+//		}
+	}
+	
 	public void generatePolygon(Point p){
 			p1 = new Point();
 			p2 = new Point();

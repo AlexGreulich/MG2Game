@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 
 public class BulletHandler implements Runnable{
-
+	boolean running = true;
 	int gamespeed =5;
 	GameWindow window;
 	GamePanel panel;
@@ -24,13 +24,15 @@ public class BulletHandler implements Runnable{
 	
 	public BulletHandler(GameWindow w){
 		
-		window = w;
+		window = w;	
 		panel = window.panel;
-		bulletsInRoom = window.bulletsInRoom;
+		initBulletHandler();
 		enemylist = window.enemylist;
+		bulletsInRoom = window.bulletsInRoom;
+		
 		controls = window.controls;
 		player = window.player;
-		levelBorders = new Rectangle(0,0,panel.mapWidth,panel.mapHeight);
+		
 		firerate =0;
 		
 		try{
@@ -51,6 +53,12 @@ public class BulletHandler implements Runnable{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+	}
+	
+	public void initBulletHandler(){
+	
+		
+		levelBorders = new Rectangle(0,0,panel.mapWidth,panel.mapHeight);
 	}
 	
 	public void setImage(Bullet b){
@@ -85,7 +93,7 @@ public class BulletHandler implements Runnable{
 	
 	@Override
 	public synchronized void run() {
-		while(true){
+		while(running){
 			float onStart = System.currentTimeMillis();
 			if(firerate == 50){
 				fired = false;

@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -62,6 +63,10 @@ public class GameWindow extends JFrame{
 	
 	Polygon doorShape;
 	
+	//JWindow loadingScreen;
+	
+	ArrayDeque<Integer> roomsEntered = new ArrayDeque<Integer>();
+	
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
 		
@@ -88,6 +93,7 @@ public class GameWindow extends JFrame{
 //			}
 //		});
 		inProgress = new JLabel("Just click Start to play! Screenmode is set to fullscreen by default");
+		
 		start.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				if(windowed.isEnabled()){
@@ -99,16 +105,11 @@ public class GameWindow extends JFrame{
 				 * der splashscreen wird geschlossen,
 				 * und es können alle dinge fürs spiel geladen werden
 				 * */
-				
-				allMapsFloors = new ArrayList<BufferedImage>();
-				allMapsWalls = new ArrayList<BufferedImage>();
-				allMapsItems = new ArrayList<BufferedImage>();
-				loadLevelPics();
-				
-				
+				//reInitWindow();
 				splashwindow.dispose();
-				startGame(0);	//startraum
 				startMusic();
+				startGame(0);	//startraum
+				
 			}
 		});
 		splashwindow.getContentPane().add(inProgress);
@@ -116,6 +117,9 @@ public class GameWindow extends JFrame{
 		splashwindow.getContentPane().add(windowed);
 		splashwindow.getContentPane().add(start);
 		splashwindow.setVisible(true);
+		
+		
+		
 		
 		setResizable(false);
 		setUndecorated(true);
@@ -129,39 +133,45 @@ public class GameWindow extends JFrame{
 		new GameWindow();
 	}
 	
+	public void reInitWindow(int roomNumber){
+		
+		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+		panel.initPanel();	//panel neu initialisiert mit level, level.map, enemylist 
+		gameloop.initLoop();
+		bullethandler.initBulletHandler();
+		this.bulletsInRoom.clear();
+		this.enemylist.clear();
+		
+		
+	}
+	
 	public void startGame(int roomNumber){
 		
+		allMapsFloors = new ArrayList<BufferedImage>();
+		allMapsWalls = new ArrayList<BufferedImage>();
+		allMapsItems = new ArrayList<BufferedImage>();
 		
+		loadLevelPics();
+		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+		this.controls = new Controls();
+		
+		this.player = new Player(this);
+		this.bulletsInRoom = new ArrayList<Bullet>();
+		this.enemylist = new ArrayList<Enemy>();
+		this.panel = new GamePanel(this, screenoption);
+		
+		this.gameloop = new Gameloop(this);
+		this.itemHandler = new ItemHandler(this);
+		this.enemycontrol = new EnemyController(this);
+		this.bullethandler = new BulletHandler(this);
+		loadSpecificRoomStuff();
+		addKeyListener(controls);
+		add(panel);
 		this.setVisible(true);
 		
-		/*
-		 * arrays mit allen karten anlegen,
-		 * werden mit loadlevelpics() geladen
-		 * */
-		
-		
-		
-		controls = new Controls();
-		player = new Player(this);
-		enemylist = new ArrayList<Enemy>();
-		enemycontrol = new EnemyController(this);
-		level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
-		bulletsInRoom = new ArrayList<Bullet>();
-		
-		panel = new GamePanel(this, screenoption);
-		gameloop = new Gameloop(this);
-		itemHandler = new ItemHandler(this);
-		loadSpecificRoomStuff();
 //		panel.itemsInLevel = itemHandler
-		addKeyListener(controls);
 		
-		add(panel);
-		
-		bullethandler = new BulletHandler(this);
-		
-		
-		
-	this.setIgnoreRepaint(true);
+		this.setIgnoreRepaint(true);
 		
 		panelThread = new Thread(panel);
 		gameloopthread = new Thread(gameloop);
@@ -173,6 +183,11 @@ public class GameWindow extends JFrame{
 		bulletthread.start();
 		enemythread.start();
 		itemthread.start();
+		panel.running = true;
+		gameloop.running = true;
+		bullethandler.running = true;
+		enemycontrol.running = true;
+		itemHandler.running = true;
 		pack();
 	}
 	
@@ -211,7 +226,7 @@ public class GameWindow extends JFrame{
 		/*
 		 * Um alle karten zu laden
 		 * - floor, walls und items getrennt
-		 * - dateien heissen z.b. 001walls.gif, 001walls und 001items
+		 * - dateien heissen z.b. 001walls.gif, 001floors und 001items
 		 * 		würden dann ja in der richtigen reihenfolge ausgelesen
 		 * 		und können in der reihenfolge in die arrays gespeichert werden.
 		 * 		dann kann ein neuer level mit den parametern (floors[index],walls[index],items[index]) erstellt werden
@@ -259,40 +274,34 @@ public class GameWindow extends JFrame{
 					Item it = new Item(this,x*32,y*8,itemtypee-1);
 					itemHandler.itemsInLevel.add(it);
 				}
-			//türen laden
-				if(level.map[x][y][4] == 1){
-					doorShape = new Polygon();
-					if(y%2 == 0){
-						doorShape.addPoint((x*32),(y*8+8));
-						doorShape.addPoint((x*32)+32,(y*8+8));
-						doorShape.addPoint((x*32)+16,(y*8));
-						doorShape.addPoint((x*32)+16,(y*8+16));
-					}else if(y%2 == 1){
-						doorShape.addPoint((x*32 +14),(y*4+8));
-						doorShape.addPoint((x*32 +15),(y*5+8));
-						doorShape.addPoint((x*32 +16),(y*6+8));
-						doorShape.addPoint((x*32 +17),(y*8+8));
-					}
-					
-				}
-				
-				
 			}
 		}
 	}
 	
 	public void levelChanging(){
 		
-		//zunächst die alten threads sterben lassen
-		try {
-			panelThread.join();
-			gameloopthread.join();
-			bulletthread.join();
-			enemythread.join();
-			itemthread.join();
-		} catch (InterruptedException e) {e.printStackTrace();}
-	
 		
-		startGame(1);
+		panel.running = false;
+		gameloop.running = false;
+		bullethandler.running = false;
+		enemycontrol.running = false;
+		itemHandler.running = false;
+		//this.setVisible(false);
+		
+		int nextRoom = (int) (Math.random() * 4 );
+		roomsEntered.addLast(nextRoom);
+		reInitWindow(nextRoom);
+		panel.running = true;
+		gameloop.running = true;
+		bullethandler.running = true;
+		enemycontrol.running = true;
+		itemHandler.running = true;
+		
+		//loadingScreen.dispose();
+		//this.setVisible(true);
+	}
+	
+	public void createDungeon(){
+		
 	}
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 
 public class GamePanel extends Canvas implements Runnable{
-
+	boolean running = true;
 	GameWindow window;
 	
 	Graphics graphics;
@@ -45,16 +45,25 @@ public class GamePanel extends Canvas implements Runnable{
 	public GamePanel(GameWindow w, int scrsizeopt){
 		transformModifier = scrsizeopt;
 		window = w;
-		level = window.level;
-		mapWidth = level.mapPic.getWidth()*32;
-		mapHeight = level.mapPic.getHeight()*64;
 		
+		/*hier stand:
+		 * 
+		 * level = window.level;
+		mapWidth = level.mapPic.getWidth()*32;//
+		mapHeight = level.mapPic.getHeight()*64;//vllt raus? lvl hat ja immer selbe größe
+		 * */
+		initPanel();
 		tileset = new Tileset();
 		tilesetfloor = tileset.tilesetfloor;
 		tilesetwalls = tileset.tilesetwalls;
-		map = level.map;
+		
+		/*
+		 * map = level.map;
+		 * */
+		
+		
 		player = window.player;
-		enemylist = window.enemylist;
+		// hier stand: enemylist = window.enemylist;
 //		itemsInLevel = new ArrayList<Item>();
 		
 		this.setIgnoreRepaint(true);
@@ -68,8 +77,17 @@ public class GamePanel extends Canvas implements Runnable{
 		bi = gc.createCompatibleImage(gc.getBounds().width,gc.getBounds().height);
 		panelwidth = gc.getBounds().width;
 		panelheight = gc.getBounds().height;
-		bulletsInRoom = window.bulletsInRoom;
-		collision = level.collisionshape;
+		
+	}
+	
+	public void initPanel(){
+		level = window.level;
+		mapWidth = level.mapPic.getWidth()*32;//
+		mapHeight = level.mapPic.getHeight()*64;//vllt raus? lvl hat ja immer selbe größe
+		map = level.map;
+		enemylist = window.enemylist;
+		bulletsInRoom = window.bulletsInRoom;//
+		collision = level.collisionshape;//
 	}
 	
 	public Dimension getPreferredSize(){
@@ -165,16 +183,17 @@ public class GamePanel extends Canvas implements Runnable{
 		for(ActionMessage m : actionMessages){
 			if(m.lifetime >0){
 				if((m.lifetime <=40) && (m.lifetime >30)){
-					g.setColor(new Color(200,200,200));
+					
+					g.setColor(new Color(200,200,200,200));
 				}
 				if((m.lifetime <=30) && (m.lifetime >20)){
-					g.setColor(new Color(150,150,150));
+					g.setColor(new Color(150,150,150,150));
 				}
 				if((m.lifetime <=20) && (m.lifetime >10)){
-					g.setColor(new Color(100,100,100));
+					g.setColor(new Color(100,100,100,100));
 				}
-				if((m.lifetime <=10) && (m.lifetime >0)){
-					g.setColor(new Color(50,50,50));
+				if((m.lifetime <=10) && (m.lifetime >=0)){
+					g.setColor(new Color(50,50,50,50));
 				}
 				g.drawString(m.getText(), panelwidth/4-(m.getText().length()*2), panelheight/4 + (b * 10));
 				b++;
@@ -237,7 +256,10 @@ public class GamePanel extends Canvas implements Runnable{
 		}
 		g.drawPolygon(collision);
 		//türen funktionieren noch nicht
-		//g.drawPolygon(window.doorShape);
+		for(int i=0; i< level.doorShapes.length;i++){
+			g.drawPolygon(level.doorShapes[i]);
+		}
+		
 	}
 	
 	public void drawItems(Graphics g){
@@ -258,7 +280,7 @@ public class GamePanel extends Canvas implements Runnable{
 		this.createBufferStrategy(2);	//Bufferstrategie setzen, 2= double buffer, 3=triple buffer
 		buffer = this.getBufferStrategy();
 		
-		while(true){
+		while(running){
 			float onStart = System.currentTimeMillis();
 			try{
 				g2d = bi.createGraphics();

@@ -8,6 +8,7 @@ public class Controls implements KeyListener{
 	boolean up = false,down = false, left = false, right = false, isMoving = false;
 	boolean fireUP, fireDOWN, fireLEFT, fireRIGHT;
 	boolean equip =false;
+	boolean levelChange = false;
 	
 	/*
 	 * WASD - bewegen
@@ -52,6 +53,9 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_E:
 				equip = true;
 				break;
+			case KeyEvent.VK_C:
+				levelChange = true;
+				break;
 		}
 	}
 
@@ -90,6 +94,9 @@ public class Controls implements KeyListener{
 				System.exit(0);
 			case KeyEvent.VK_E:
 				equip = false;
+				break;
+			case KeyEvent.VK_C:
+				levelChange = false;
 				break;
 		}
 	}

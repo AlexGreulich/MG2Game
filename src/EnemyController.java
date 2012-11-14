@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class EnemyController implements Runnable{
 
-	
+	boolean running= true;
 	int gamespeed = 5;
 	GameWindow window;
 	GamePanel panel;
@@ -16,8 +16,15 @@ public class EnemyController implements Runnable{
 		panel = window.panel;
 		player = window.player;
 		enemylist = window.enemylist;
-		enemy1 = new Enemy(window,100,100,2);
-		enemylist.add(enemy1);
+		
+		
+	//test levelwechsel, gegner disabled	
+		//enemy1 = new Enemy(window,100,100,2);
+		//enemylist.add(enemy1);
+	}
+	
+	public void initEnemyController(){
+		
 	}
 	
 	public void collisionDetect(){
@@ -27,9 +34,7 @@ public class EnemyController implements Runnable{
 				if(e.countToNextAttack ==0){
 					e.canAttack = true;
 				}
-				if(!e.canAttack){
-					e.countToNextAttack--;
-				}else{
+				if(e.canAttack){
 					e.dealDamage();
 				}
 			}
@@ -38,14 +43,17 @@ public class EnemyController implements Runnable{
 	
 	@Override
 	public void run() {
-		while(true){
+		while(running){
 			float onStart = System.currentTimeMillis();
-			
+			collisionDetect();
 			for(Enemy e : enemylist){
 				e.move();
+				if(!e.canAttack){
+					e.countToNextAttack--;
+				}
 			}
 			
-			collisionDetect();
+			
 			
 			float onEnd = System.currentTimeMillis()-onStart;
 			if(gamespeed > onEnd){

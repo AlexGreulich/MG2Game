@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 
 
 public class ItemHandler implements Runnable{
-	
+	boolean running = true;
 	public int gamespeed = 5;
 	GameWindow window;
 	GamePanel panel;
@@ -22,7 +22,7 @@ public class ItemHandler implements Runnable{
 		panel = window.panel;
 		player = window.player;
 		controls = window.controls;
-		level = window.level;
+		initItemHandler();
 		
 		//Bilder des Itemsets in array laden:
 		allItems = new BufferedImage[100];
@@ -40,9 +40,13 @@ public class ItemHandler implements Runnable{
 		itemsInLevel = new ArrayList<Item>();
 	}
 	
+	public void initItemHandler(){
+		level = window.level;
+	}
+	
 	public synchronized void run(){
 		
-		while(true){
+		while(running){
 			float onStart = System.currentTimeMillis();
 //			ArrayList<Item> l = panel.itemsInLevel;
 			//Items aufheben
