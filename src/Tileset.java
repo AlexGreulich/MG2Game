@@ -26,13 +26,13 @@ public class Tileset {
 				tilesetfloor.add(i);
 			}
 		}
-		int index =0;
+		//int index =0;
 		for(int y =0; y<tilesetimgwalls.getHeight()/64; y++){
 			for(int x =0; x<tilesetimgwalls.getWidth()/32; x++){
 				BufferedImage i = tilesetimgwalls.getSubimage(x*32, y*64, 32, 64);
 				tilesetwalls.add(i);
 //				tilesetwalls..set(index,i);
-				index++;
+				//index++;
 			}
 		}
 	}

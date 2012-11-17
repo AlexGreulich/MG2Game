@@ -46,7 +46,7 @@ public class Enemy extends Entity{
 
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
-			int count =0;
+			//int count =0;
 			for(int a = 0; a< img.getHeight()/48; a++){
 				for(int b =0; b<img.getWidth()/32;b++){
 		//

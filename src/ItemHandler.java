@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class ItemHandler implements Runnable{
 	boolean running = true;
-	public int gamespeed = 5;
+	public int gamespeed = 16;
 	GameWindow window;
 	GamePanel panel;
 	Player player;
@@ -22,6 +22,7 @@ public class ItemHandler implements Runnable{
 		panel = window.panel;
 		player = window.player;
 		controls = window.controls;
+		itemsInLevel = new ArrayList<Item>();
 		initItemHandler();
 		
 		//Bilder des Itemsets in array laden:
@@ -37,11 +38,15 @@ public class ItemHandler implements Runnable{
 				}
 			}
 		} catch (IOException e) {e.printStackTrace();}
-		itemsInLevel = new ArrayList<Item>();
+		
 	}
 	
 	public void initItemHandler(){
 		level = window.level;
+		if(itemsInLevel.size() !=0){
+			itemsInLevel.clear();
+		}
+		
 	}
 	
 	public synchronized void run(){
@@ -50,10 +55,10 @@ public class ItemHandler implements Runnable{
 			float onStart = System.currentTimeMillis();
 //			ArrayList<Item> l = panel.itemsInLevel;
 			//Items aufheben
+			
 			if(controls.equip){
-				
 				for(int i =0; i< itemsInLevel.size(); i++){//Item i: itemsInLevel){
-					if(itemsInLevel.get(i).bounds.contains(player.playermiddle)){
+					if(itemsInLevel.get(i).bounds.intersects(player.playerBounds)){						//contains(player.playermiddle)){
 						itemsInLevel.get(i).equip();
 					}
 				}

@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("serial")
 public class GamePanel extends Canvas implements Runnable{
 	boolean running = true;
 	GameWindow window;
@@ -32,7 +33,7 @@ public class GamePanel extends Canvas implements Runnable{
 	
 	Player player;
 	Enemy enemy;
-	int gamespeed =5;
+	int gamespeed =16;
 	
 	ArrayList<Bullet> bulletsInRoom;
 	ArrayList<Enemy> enemylist;
@@ -45,7 +46,8 @@ public class GamePanel extends Canvas implements Runnable{
 	public GamePanel(GameWindow w, int scrsizeopt){
 		transformModifier = scrsizeopt;
 		window = w;
-		
+		enemylist = window.enemylist;
+		bulletsInRoom = window.bulletsInRoom;//
 		/*hier stand:
 		 * 
 		 * level = window.level;
@@ -56,11 +58,6 @@ public class GamePanel extends Canvas implements Runnable{
 		tileset = new Tileset();
 		tilesetfloor = tileset.tilesetfloor;
 		tilesetwalls = tileset.tilesetwalls;
-		
-		/*
-		 * map = level.map;
-		 * */
-		
 		
 		player = window.player;
 		// hier stand: enemylist = window.enemylist;
@@ -77,7 +74,6 @@ public class GamePanel extends Canvas implements Runnable{
 		bi = gc.createCompatibleImage(gc.getBounds().width,gc.getBounds().height);
 		panelwidth = gc.getBounds().width;
 		panelheight = gc.getBounds().height;
-		
 	}
 	
 	public void initPanel(){
@@ -85,9 +81,8 @@ public class GamePanel extends Canvas implements Runnable{
 		mapWidth = level.mapPic.getWidth()*32;//
 		mapHeight = level.mapPic.getHeight()*64;//vllt raus? lvl hat ja immer selbe größe
 		map = level.map;
-		enemylist = window.enemylist;
-		bulletsInRoom = window.bulletsInRoom;//
 		collision = level.collisionshape;//
+		
 	}
 	
 	public Dimension getPreferredSize(){
@@ -162,7 +157,7 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	public void drawPlayer(Graphics g){
-		g.drawImage(player.getImage(),player.getX(),player.getY()-16,32,48,null);
+		g.drawImage(player.getImage(),player.getX(),player.getY(),32,48,null);
 	}
 	
 	public void drawBullets (Graphics g){
@@ -250,23 +245,46 @@ public class GamePanel extends Canvas implements Runnable{
 			index++;
 		}
 		g.drawString("[Q]uit", 50,30);
-		for(Point p: level.collisionpoints){
-			g.setColor(Color.RED);
-			g.fillRect(p.x, p.y, 1, 1);
-		}
-		g.drawPolygon(collision);
+				//		for(Point p: level.collisionpoints){
+				//			g.setColor(Color.RED);
+				//			g.fillRect(p.x, p.y, 1, 1);
+				//		}
+//		g.drawPolygon(collision);
 		//türen funktionieren noch nicht
 		for(int i=0; i< level.doorShapes.length;i++){
 			g.drawPolygon(level.doorShapes[i]);
 		}
 		
+				//		g.setColor(Color.GREEN);
+				//		g.drawRect(player.playerBounds.x,player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
+				//		g.drawRect(player.playermiddle.x, player.playermiddle.y, 1,1);
 	}
 	
 	public void drawItems(Graphics g){
+		//window.itemHandler.
+		
 		for(Item i: window.itemHandler.itemsInLevel){
 			if(i != null){
 				g.drawImage(i.getImage(), i.posX,i.posY,null);
 			}
+		}
+	}
+	
+	public void drawSpecialeffects(Graphics g){
+		for(SpecialEffect se : window.specialEffects){
+			BufferedImage i = se.getEffectImage();
+			int z = se.yPos%2;
+			switch(z){
+				case(0):
+					g.drawImage(i, se.xPos*32,se.yPos*8+8,null);
+					break;
+				case(1):
+					g.drawImage(i, se.xPos*32 +16, se.yPos*8+8,null);
+					break;
+			}
+			
+			
+			//g.drawImage(i, se.xPos, se.yPos, 32,64,null);
 		}
 	}
 	
@@ -289,8 +307,10 @@ public class GamePanel extends Canvas implements Runnable{
 				
 				//hier dinge zeichnen
 				
-				drawLevelWalls(g2d);
+				
 				drawLevelFloor(g2d);
+				drawLevelWalls(g2d);
+				drawSpecialeffects(g2d);
 				drawItems(g2d);
 				drawPlayer(g2d);
 				drawBullets(g2d);

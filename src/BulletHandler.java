@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class BulletHandler implements Runnable{
 	boolean running = true;
-	int gamespeed =5;
+	int gamespeed =16;
 	GameWindow window;
 	GamePanel panel;
 	ArrayList<Bullet> bulletsInRoom;
@@ -27,8 +27,6 @@ public class BulletHandler implements Runnable{
 		window = w;	
 		panel = window.panel;
 		initBulletHandler();
-		enemylist = window.enemylist;
-		bulletsInRoom = window.bulletsInRoom;
 		
 		controls = window.controls;
 		player = window.player;
@@ -57,7 +55,8 @@ public class BulletHandler implements Runnable{
 	
 	public void initBulletHandler(){
 	
-		
+		enemylist = window.enemylist;
+		bulletsInRoom = window.bulletsInRoom;
 		levelBorders = new Rectangle(0,0,panel.mapWidth,panel.mapHeight);
 	}
 	
@@ -86,7 +85,6 @@ public class BulletHandler implements Runnable{
 						}
 					}
 				}
-				
 			}
 		}
 	}
@@ -213,8 +211,8 @@ public class BulletHandler implements Runnable{
 						}
 					}
 				}
-				
 			}
+			
 			float onEnd = System.currentTimeMillis() - onStart;
 			if( gamespeed> onEnd){
 				try{

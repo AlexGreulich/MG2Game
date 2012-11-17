@@ -30,7 +30,7 @@ public class Player {
 		posY = 200;
 		energy = 100f;
 		image = null;
-		playerBounds = new Rectangle(this.posX+8, this.posY+8, 48, 80);
+		playerBounds = new Rectangle(this.posX+8, this.posY, 48, 80);
 		hoch_cycle = new BufferedImage[8];
 		runter_cycle  = new BufferedImage[8];
 		links_cycle = new BufferedImage[8];
@@ -85,7 +85,7 @@ public class Player {
 	}
 	
 	public void getMiddle(){
-		playermiddle.setLocation(posX+8, posY+16);
+		playermiddle.setLocation(posX+16, posY+16);
 	}
 	
 	public int getX(){

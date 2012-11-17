@@ -12,7 +12,8 @@ import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+//import java.util.HashMap;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
@@ -30,6 +31,7 @@ import javax.swing.JWindow;
 //import org.omg.IOP.Encoding;
 
 
+@SuppressWarnings("serial")
 public class GameWindow extends JFrame{
 
 	GamePanel panel;
@@ -44,6 +46,9 @@ public class GameWindow extends JFrame{
 	ItemHandler itemHandler;
 	ArrayList<Bullet> bulletsInRoom;
 	ArrayList<Enemy> enemylist;
+	ArrayList<SpecialEffect> specialEffects;
+	
+	
 	Clip clip;
 	int framePosition;
 	
@@ -56,7 +61,7 @@ public class GameWindow extends JFrame{
 	JWindow splashwindow;
 	JLabel inProgress;
 	
-	HashMap levels;
+	//HashMap levels;
 	ArrayList<BufferedImage> allMapsFloors;
 	ArrayList<BufferedImage> allMapsWalls;
 	ArrayList<BufferedImage> allMapsItems;
@@ -66,6 +71,7 @@ public class GameWindow extends JFrame{
 	//JWindow loadingScreen;
 	
 	ArrayDeque<Integer> roomsEntered = new ArrayDeque<Integer>();
+	Random rdm = new Random();
 	
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
@@ -107,7 +113,7 @@ public class GameWindow extends JFrame{
 				 * */
 				//reInitWindow();
 				splashwindow.dispose();
-				startMusic();
+				//startMusic();
 				startGame(0);	//startraum
 				
 			}
@@ -117,9 +123,6 @@ public class GameWindow extends JFrame{
 		splashwindow.getContentPane().add(windowed);
 		splashwindow.getContentPane().add(start);
 		splashwindow.setVisible(true);
-		
-		
-		
 		
 		setResizable(false);
 		setUndecorated(true);
@@ -141,8 +144,9 @@ public class GameWindow extends JFrame{
 		bullethandler.initBulletHandler();
 		this.bulletsInRoom.clear();
 		this.enemylist.clear();
-		
-		
+		this.specialEffects.clear();
+		itemHandler.initItemHandler();
+		loadSpecificRoomStuff();
 	}
 	
 	public void startGame(int roomNumber){
@@ -158,6 +162,7 @@ public class GameWindow extends JFrame{
 		this.player = new Player(this);
 		this.bulletsInRoom = new ArrayList<Bullet>();
 		this.enemylist = new ArrayList<Enemy>();
+		this.specialEffects = new ArrayList<SpecialEffect>();
 		this.panel = new GamePanel(this, screenoption);
 		
 		this.gameloop = new Gameloop(this);
@@ -262,7 +267,7 @@ public class GameWindow extends JFrame{
 		 * -> extramethode um item in truhe zu erstellen
 		 *  
 		 * */
-		doorShape = new Polygon();
+		//doorShape = new Polygon();
 		for(int x = 0; x < level.mapPic.getWidth(); x++){
 			for(int y = 0; y< level.mapPic.getHeight(); y++){
 			//items laden	
@@ -274,6 +279,12 @@ public class GameWindow extends JFrame{
 					Item it = new Item(this,x*32,y*8,itemtypee-1);
 					itemHandler.itemsInLevel.add(it);
 				}
+				
+				if(level.map[x][y][5] < 666){
+					SpecialEffect sE = new SpecialEffect(level.map[x][y][5]);
+					sE.setPos(x,y);
+					specialEffects.add(sE);
+				}
 			}
 		}
 	}
@@ -281,22 +292,22 @@ public class GameWindow extends JFrame{
 	public void levelChanging(){
 		
 		
-		panel.running = false;
-		gameloop.running = false;
-		bullethandler.running = false;
-		enemycontrol.running = false;
-		itemHandler.running = false;
+//		panel.running = false;
+//		//gameloop.running = false;
+//		bullethandler.running = false;
+//		enemycontrol.running = false;
+//		itemHandler.running = false;
 		//this.setVisible(false);
+		int nextRoom = rdm.nextInt(4);//(int) (Math.random() *4);
 		
-		int nextRoom = (int) (Math.random() * 4 );
-		roomsEntered.addLast(nextRoom);
+		//roomsEntered.addLast(nextRoom);
 		reInitWindow(nextRoom);
+		
 		panel.running = true;
 		gameloop.running = true;
 		bullethandler.running = true;
 		enemycontrol.running = true;
 		itemHandler.running = true;
-		
 		//loadingScreen.dispose();
 		//this.setVisible(true);
 	}

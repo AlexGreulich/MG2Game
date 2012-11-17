@@ -13,7 +13,7 @@ public class Gameloop implements Runnable{
 	
 	int[][][] map;
 	int speed = 2;
-	int gamespeed =5;
+	int gamespeed =16;
 	Point playermiddle;
 	Point altePos;
 	Polygon collisionshape;
@@ -23,6 +23,7 @@ public class Gameloop implements Runnable{
 		window = w;
 		player = window.player;
 //		enemy = window.enemy;
+		panel = window.panel;
 		initLoop();
 		//vorher stand hier:
 				controls = window.controls;
@@ -34,7 +35,7 @@ public class Gameloop implements Runnable{
 	}
 	
 	public void initLoop(){
-		panel = window.panel;
+		
 		map = panel.level.map;
 		collisionshape = panel.collision;
 	}
@@ -121,19 +122,20 @@ public class Gameloop implements Runnable{
 			}
 			
 			if(!collisionshape.contains(player.playermiddle)){
-				player.posX = altePos.x-8;
+				player.posX = altePos.x-16;
 				player.posY = altePos.y-16;
 			}
 			
 			for(int i = 0; i< window.level.doorShapes.length;i++){
-				if(window.level.doorShapes[i].contains(player.playermiddle)){
+				if(window.level.doorShapes[i].intersects(player.playerBounds)){		//contains(player.playermiddle)){
 					if(controls.levelChange){
+						Thread.yield();
 						window.levelChanging();
 					}
 				}
 			}
 			
-			
+			//Thread.yield();
 			float onEnd = System.currentTimeMillis()- onStart;
 			if(gamespeed > onEnd){
 				try {

@@ -2,10 +2,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 
 public class Level {
@@ -19,8 +16,6 @@ public class Level {
 	Point p1,p2,p3,p4,p5,p6,p7,p8;
 	Polygon[] doorShapes;
 	
-	
-	
 	public Level(BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems){
 		
 		mapPic = mapimgfloor;
@@ -28,13 +23,11 @@ public class Level {
 		mapPicItems = mapimgItems;
 		 
 		loadMap();
-		
-		
 	}
 	public void  loadMap(){
 		int mapHeight =mapPic.getHeight();
 		int mapWidth = mapPic.getWidth();
-		map = new int[mapWidth][mapHeight][5];
+		map = new int[mapWidth][mapHeight][6];
 		collisionshape = new Polygon();
 		collisionpoints = new ArrayList<Point>();
 		doorPoints = new ArrayList<Point>();
@@ -47,7 +40,8 @@ public class Level {
 		 * 2	-> item vorhanden? 0/1
 		 * 3	-> wände
 		 * 4	-> türen
-		 * */
+		 * 5	-> special effect -> 1 -> effect 1 usw 
+ 		 * */
 		
 		
 		/*
@@ -66,33 +60,49 @@ public class Level {
 		
 	//	BODEN	
 		Color schotter = Color.BLACK;
-		Color schottergrob = new Color(0,0,50);
-		Color steinplatten = new Color(0,0,100);
-		Color steinplatten2 = new Color(0,0,150);
-		Color plattenriss = new Color(0,0,200);
-		Color plattenriss2 = new Color(0,0,250);
+		Color schottergrob = 		new Color(0,	0,		50);
+		Color steinplatten = 		new Color(0,	0,		100);
+		Color steinplatten2 = 		new Color(0,	0,		150);
+		Color plattenriss = 		new Color(0,	0,		200);
+		Color plattenriss2 = 		new Color(0,	0,		250);
+		Color stroh1 = 				new Color(50,	0,		10);
+		Color stroh2 = 				new Color(50,	0,		20);
+		Color schlacke1 = 			new Color(50,	0,		30);
+		Color schlacke2 = 			new Color(50,	0,		40);
+		Color bodenplatte = 		new Color(50,	0,		50);
+		Color schlackeuebergang1 = 	new Color(50,	0,		60);
+		Color schlackeuebergang2 = 	new Color(50,	0,		70);
+		Color schlackeende1 = 		new Color(50,	0,		80);
+		Color schlackeende2 = 		new Color(50,	0,		90);
 		
-		Color tuer01 = new Color(50,50,50);
+		Color tuer01 = 				new Color(250,	50,		50);
 		
 		
 	//	WAENDE
-		Color wandrechts = new Color(0,150,0);
-		Color wandlinks = new Color(0,150,100);
+		Color wandrechts = 			new Color(0,	150,	0);
+		Color wandlinks = 			new Color(0,	150,	100);
+		Color wandrohrrechts = 		new Color(0,	150,	110);
+		Color wandrohrlinks = 		new Color(0,	150,	120);
+		Color wandlichtrechts = 	new Color(0,	150,	130);
+		Color wandlichtlinks = 		new Color(0,	150,	140);
+		Color wandkabel1rechts = 	new Color(0,	150,	150);
+		Color wandkabel1links = 	new Color(0,	150,	160);
+		Color eckeoben = 			new Color(0,	150,	170);
 		
-		Color doorToRight = new Color(0,150,150);
-		Color doorToLeft = new Color(0,150,160);
-		Color doorToTop = new Color(0,150,170);
-		Color doorToBottom = new Color(0,150,180);
+		Color doorToRight = 		new Color(0,	250,	150);
+		Color doorToLeft = 			new Color(0,	250,	160);
+		Color doorToTop = 			new Color(0,	250,	170);
+		Color doorToBottom = 		new Color(0,	250,	180);
 		
-		Color invisibleCollisionWall = new Color(0,150,250);
+		Color invisibleCollisionWall=new Color(0,	150,	250);
 	
 	//	ITEMS
-		Color itemColour1 = new Color(255,0,0);
-		Color itemColour2 = new Color(255,0,10);
-		Color itemColour3 = new Color(255,0,20);
-		Color itemColour4 = new Color(255,0,30);
-		Color itemColour5 = new Color(255,0,40);
-		Color itemColour6 = new Color(255,0,50);
+		Color itemColour1 = 		new Color(255,	0,		0);
+		Color itemColour2 = 		new Color(255,	0,		10);
+		Color itemColour3 = 		new Color(255,	0,		20);
+		Color itemColour4 = 		new Color(255,	0,		30);
+		Color itemColour5 = 		new Color(255,	0,		40);
+		Color itemColour6 = 		new Color(255,	0,		50);
 		
 		
 		for(int x = 0; x < mapWidth;x++){
@@ -109,7 +119,18 @@ public class Level {
 				else if(c.equals(steinplatten2	)){		map[x][y][0]=3;}
 				else if(c.equals(plattenriss	)){		map[x][y][0]=4;}
 				else if(c.equals(plattenriss2	)){		map[x][y][0]=5;}
-				else if(c.equals(tuer01	)){				map[x][y][0]=5;}
+				else if(c.equals(tuer01	)){				map[x][y][0]=30;}
+				else if(c.equals(stroh1	)){				map[x][y][0]=6;}
+				else if(c.equals(stroh2	)){				map[x][y][0]=7;}
+				else if(c.equals(schlacke1)){			map[x][y][0]=5;}
+				else if(c.equals(schlacke2)){			map[x][y][0]=11;}
+				else if(c.equals(bodenplatte)){			map[x][y][0]=9;}
+				else if(c.equals(schlackeuebergang1	)){	map[x][y][0]=10;}
+				else if(c.equals(schlackeuebergang2	)){	map[x][y][0]=16;}
+				else if(c.equals(schlackeende1	)){		map[x][y][0]=17;}
+				else if(c.equals(schlackeende2	)){		map[x][y][0]=23;}
+				
+				//else if(c.equals()){				map[x][y][0]=5;}
 				
 				else if(c.equals(Color.WHITE)){				map[x][y][3]=666;
 															map[x][y][0]=666;
@@ -122,39 +143,88 @@ public class Level {
 				
 				if(d.equals(wandrechts)){					map[x][y][3]=1;
 															map[x][y][1]=1;
+															map[x][y][5]=666;
 															collisionpoints.add(new Point(x,y));
 															//collisionshape.addPoint(x*32, y*32);
 				}else if(d.equals(wandlinks)){				map[x][y][3]=0;
 															map[x][y][1]=1;
+															map[x][y][5]=666;
 															collisionpoints.add(new Point(x,y));
+				}
+				else if(d.equals(wandrohrrechts)){			map[x][y][3]=2;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+					
+				}
+				else if(d.equals(wandrohrlinks)){			map[x][y][3]=3;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+					
+				}
+				else if(d.equals(wandlichtrechts)){			map[x][y][3]=4;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+					
+				}
+				else if(d.equals(wandlichtlinks)){			map[x][y][3]=5;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+	
+				}
+				else if(d.equals(wandkabel1rechts)){		map[x][y][3]=6;
+															map[x][y][1]=1;
+															map[x][y][5]=0;
+															collisionpoints.add(new Point(x,y));
+															
+				}
+				else if(d.equals(wandkabel1links)){			map[x][y][3]=7;
+															map[x][y][1]=1;
+															map[x][y][5]=1;
+															collisionpoints.add(new Point(x,y));
+															
+				}
+				else if(d.equals(eckeoben)){
+															map[x][y][3] = 10;
+															map[x][y][1] = 1;
+															collisionpoints.add(new Point(x,y));	
+															map[x][y][5]=666;
 				}
 				else if (d.equals(invisibleCollisionWall)){
 															collisionpoints.add(new Point(x,y));
+															map[x][y][3]=666;
+															map[x][y][5]=666;
 				}
 				else if(d.equals(doorToRight)){
 															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
 															doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
+															map[x][y][5]=666;
 				}else if(d.equals(doorToLeft)){
 															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
 															doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
+															map[x][y][5]=666;
 				}else if(d.equals(doorToTop)){
 															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
 															doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
+															map[x][y][5]=666;
 				}else if(d.equals(doorToBottom)){
 															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
 															doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
-				}
-				
-				else{
+															map[x][y][5]=666;
+				}else{
 					map[x][y][3]=666;
+					map[x][y][5]=666;
 				}
 			//items auslesen
 				
@@ -199,31 +269,13 @@ public class Level {
 		for(int i =0; i < doorShapes.length;i++){
 			Polygon p = new Polygon();
 			//y%2 implementieren für korrekte position im türrahmen
+			//if()
 			p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
-			p.addPoint(doorPoints.get(i).x * 32+48, doorPoints.get(i).y * 8+16);
-			p.addPoint(doorPoints.get(i).x * 32+48, doorPoints.get(i).y * 8+64);
+			p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);
+			p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+56);
 			p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
 			doorShapes[i] = p;
 		}
-		
-		
-		
-		//türen laden
-//		if(level.map[x][y][4] == 1){
-//			doorShape = new Polygon();
-//			if(y%2 == 0){
-//				doorShape.addPoint((x*32),(y*8+8));
-//				doorShape.addPoint((x*32)+32,(y*8+8));
-//				doorShape.addPoint((x*32)+16,(y*8));
-//				doorShape.addPoint((x*32)+16,(y*8+16));
-//			}else if(y%2 == 1){
-//				doorShape.addPoint((x*32 +14),(y*4+8));
-//				doorShape.addPoint((x*32 +15),(y*5+8));
-//				doorShape.addPoint((x*32 +16),(y*6+8));
-//				doorShape.addPoint((x*32 +17),(y*8+8));
-//			}
-//			
-//		}
 	}
 	
 	public void generatePolygon(Point p){

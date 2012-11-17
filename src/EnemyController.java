@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class EnemyController implements Runnable{
 
 	boolean running= true;
-	int gamespeed = 5;
+	int gamespeed = 16;
 	GameWindow window;
 	GamePanel panel;
 	ArrayList<Enemy> enemylist;
@@ -52,9 +52,6 @@ public class EnemyController implements Runnable{
 					e.countToNextAttack--;
 				}
 			}
-			
-			
-			
 			float onEnd = System.currentTimeMillis()-onStart;
 			if(gamespeed > onEnd){
 				try {
