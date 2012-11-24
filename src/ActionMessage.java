@@ -2,7 +2,7 @@
 public class ActionMessage {
 
 	String text;
-	int lifetime = 50;
+	int lifetime = 100;
 	
 	public ActionMessage(String s){
 		text = s;
@@ -12,6 +12,6 @@ public class ActionMessage {
 		return text;
 	}
 	void reduceLife(){
-		lifetime--;
+		lifetime = lifetime -3;
 	}
 }

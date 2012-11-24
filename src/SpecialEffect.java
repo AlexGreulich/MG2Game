@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 public class SpecialEffect {
 
 	BufferedImage img;
-	BufferedImage[] animImages = new BufferedImage[3];
+	BufferedImage[] animImages = new BufferedImage[8];
 	float animation = 0.0f;
 	//GameWindow window;
 	int xPos;
@@ -16,7 +16,7 @@ public class SpecialEffect {
 	public SpecialEffect(int nr){
 		try {
 			BufferedImage srcImage = ImageIO.read(getClass().getResource("resources/effects.gif"));
-			for(int i = 0;i<3;i++){
+			for(int i = 0;i<=7;i++){
 				animImages[i]= srcImage.getSubimage(i * 32, nr * 64, 32, 64);
 			}
 		} catch (IOException e) {e.printStackTrace();}

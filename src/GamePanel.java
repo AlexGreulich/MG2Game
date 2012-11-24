@@ -6,12 +6,12 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 @SuppressWarnings("serial")
@@ -36,9 +36,12 @@ public class GamePanel extends Canvas implements Runnable{
 	int gamespeed =16;
 	
 	ArrayList<Bullet> bulletsInRoom;
-	ArrayList<Enemy> enemylist;
+	ArrayList<Enemy> enemylist, corpses;
 	ArrayList<Item> itemsInLevel;
 	ArrayList<ActionMessage> actionMessages= new ArrayList<ActionMessage>();
+	ArrayList<ActionMessage> tempmessages;
+	
+	CopyOnWriteArrayList<Enemy> enemiesToDraw, corpsesToDraw;
 	
 	Polygon collision;
 	double transformModifier; 
@@ -47,6 +50,7 @@ public class GamePanel extends Canvas implements Runnable{
 		transformModifier = scrsizeopt;
 		window = w;
 		enemylist = window.enemylist;
+		corpses = window.corpses;
 		bulletsInRoom = window.bulletsInRoom;//
 		/*hier stand:
 		 * 
@@ -91,8 +95,16 @@ public class GamePanel extends Canvas implements Runnable{
 	
 	public void drawEnemies(Graphics g){
 		if(enemylist.size() > 0){
-			for (Enemy e : enemylist){
+			enemiesToDraw = new CopyOnWriteArrayList<Enemy>(enemylist);
+			for (Enemy e : enemiesToDraw){
 				g.drawImage(e.getImage(),e.getX(),e.getY()-16,32,48,null);
+			}
+		}
+		
+		if(corpses.size() >0){
+			corpsesToDraw = new CopyOnWriteArrayList<Enemy>(corpses);
+			for(Enemy e: corpsesToDraw){
+				g.drawImage(e.corpseImage,e.getX(),e.getY()-16,48,32,null);
 			}
 		}
 	}
@@ -173,23 +185,26 @@ public class GamePanel extends Canvas implements Runnable{
 	
 	public void drawLatestActionMessage(Graphics g){
 		g.setColor(Color.WHITE);
+		//actionMessages = tempmessages;
 		int b=0;
-		ArrayList<ActionMessage> tempmessages = new ArrayList<ActionMessage>();
+		tempmessages = new ArrayList<ActionMessage>();
 		for(ActionMessage m : actionMessages){
 			if(m.lifetime >0){
-				if((m.lifetime <=40) && (m.lifetime >30)){
-					
-					g.setColor(new Color(200,200,200,200));
-				}
-				if((m.lifetime <=30) && (m.lifetime >20)){
-					g.setColor(new Color(150,150,150,150));
-				}
-				if((m.lifetime <=20) && (m.lifetime >10)){
-					g.setColor(new Color(100,100,100,100));
-				}
-				if((m.lifetime <=10) && (m.lifetime >=0)){
-					g.setColor(new Color(50,50,50,50));
-				}
+//				if((m.lifetime <=40) && (m.lifetime >30)){
+//					
+//					g.setColor(new Color(200,200,200,200));
+//				}
+//				if((m.lifetime <=30) && (m.lifetime >20)){
+//					g.setColor(new Color(150,150,150,150));
+//				}
+//				if((m.lifetime <=20) && (m.lifetime >10)){
+//					g.setColor(new Color(100,100,100,100));
+//				}
+//				if((m.lifetime <=10) && (m.lifetime >=0)){
+//					g.setColor(new Color(50,50,50,50));
+//				}
+				
+				g.setColor(new Color(255,50,50,200 - (2*m.lifetime)));
 				g.drawString(m.getText(), panelwidth/4-(m.getText().length()*2), panelheight/4 + (b * 10));
 				b++;
 				m.reduceLife();
@@ -205,15 +220,16 @@ public class GamePanel extends Canvas implements Runnable{
 		//erstmal nur anzeige der lebensenergie und sowas zum debuggen
 		g.setColor(Color.WHITE);
 		if(player.energy >0){
-			g.drawString("Lebensenergie: ",50 ,150);
+			g.drawString("Lebensenergie: " + player.energy,50 ,150);
 			int a = (int)player.energy/10;
 			for(int b =0; b<a;b++){
 				if((int)player.energy < 40){
 					g.setColor(Color.RED);
 				}
-				g.fillRect(150 + b*4,140,2,10);
+				g.fillRect(180 + b*4,140,2,10);
 				g.setColor(Color.WHITE);
 			}
+			
 		}else{
 			g.drawString("Spieler waere jetzt tot, Energie: "+ player.energy,50 ,150 );
 		}
@@ -240,7 +256,8 @@ public class GamePanel extends Canvas implements Runnable{
 		
 		g.drawString("Spieler an position map[x][y]: "+ player.posX/32 +", "+ player.posY/48,50,180);
 		int index =0;
-		for(Enemy e : enemylist){
+		CopyOnWriteArrayList<Enemy> enemies = new CopyOnWriteArrayList<Enemy>(enemylist);
+		for(Enemy e : enemies){
 			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 200 + (index*20));
 			index++;
 		}
@@ -262,8 +279,8 @@ public class GamePanel extends Canvas implements Runnable{
 	
 	public void drawItems(Graphics g){
 		//window.itemHandler.
-		
-		for(Item i: window.itemHandler.itemsInLevel){
+		CopyOnWriteArrayList<Item> itemList = new CopyOnWriteArrayList<Item>(window.itemHandler.itemsInLevel); 
+		for(Item i: itemList){
 			if(i != null){
 				g.drawImage(i.getImage(), i.posX,i.posY,null);
 			}
@@ -271,7 +288,8 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	public void drawSpecialeffects(Graphics g){
-		for(SpecialEffect se : window.specialEffects){
+		CopyOnWriteArrayList<SpecialEffect> seList = new CopyOnWriteArrayList<SpecialEffect>(window.specialEffects); 
+		for(SpecialEffect se : seList){
 			BufferedImage i = se.getEffectImage();
 			int z = se.yPos%2;
 			switch(z){
@@ -310,12 +328,15 @@ public class GamePanel extends Canvas implements Runnable{
 				
 				drawLevelFloor(g2d);
 				drawLevelWalls(g2d);
-				drawSpecialeffects(g2d);
+				
 				drawItems(g2d);
-				drawPlayer(g2d);
-				drawBullets(g2d);
 				drawEnemies(g2d);
+				drawPlayer(g2d);
+				drawSpecialeffects(g2d);
+				drawBullets(g2d);
+				
 				drawGUI(g2d);
+				
 				drawLatestActionMessage(g2d);
 				graphics = buffer.getDrawGraphics();
 				

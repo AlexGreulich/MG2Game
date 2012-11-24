@@ -20,6 +20,10 @@ public class Player {
 	
 	int ammo;
 	Point playermiddle = new Point(0,0);
+	boolean isDead = false;
+	boolean isInjured =false;
+	boolean isOkay = true;
+	float speed = 2;
 	
 	public Player(GameWindow w){//, int x, int y
 		
@@ -103,6 +107,24 @@ public class Player {
 	
 	public void updateBounds(){
 		playerBounds.setBounds(this.posX+4, this.posY+4, 24, 40);
+	}
+	
+	public void changeState(int option){
+		switch(option){
+		case 0:
+			this.isOkay = true;
+			break;
+		case 1:
+			this.isInjured = true;
+			this.isOkay = false;
+			break;
+		case 2:
+			this.isInjured =false;
+			this.isDead = true;
+			break;
+			
+			
+		}
 	}
 	
 	public BufferedImage getImage(){

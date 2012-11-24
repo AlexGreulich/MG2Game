@@ -2,6 +2,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -21,6 +22,9 @@ public class BulletHandler implements Runnable{
 	
 	int firerate; 
 	boolean fired;
+	
+	CopyOnWriteArrayList<Bullet> bullets;
+	CopyOnWriteArrayList<Enemy> enemies;
 	
 	public BulletHandler(GameWindow w){
 		
@@ -67,14 +71,16 @@ public class BulletHandler implements Runnable{
 	
 	public void collisionCheck(){
 		if(bulletsInRoom.size() >0){
-			for(Bullet b: bulletsInRoom){
+			bullets = new CopyOnWriteArrayList<Bullet>(bulletsInRoom);
+			for(Bullet b: bullets){
 				b.updateBounds();
 				if(enemylist.size()>0){
-					for(Enemy e: enemylist){
+					enemies = new CopyOnWriteArrayList<Enemy>(enemylist);
+					for(Enemy e: enemies){
 						if(b.bounds.intersects(e.enemyBounds)){
-							e.energy = e.energy - 0.1f;
+							e.energy = e.energy - b.dealDamage();
 							panel.actionMessages.add(new ActionMessage("Enemy hit"));
-						//	bulletsInRoom.remove(b);
+							bulletsInRoom.remove(b);
 							
 						/*-> kugel soll entfernt werden wenn getroffen, das
 						 * gibt aber einen thread konflikt, daher 
@@ -103,7 +109,7 @@ public class BulletHandler implements Runnable{
 					// pfeiltasten abfragen um neue kugeln zu erzeugen
 				if((controls.fireUP) && (controls.fireLEFT)){
 					
-					Bullet b = new Bullet(player.posX + 16, player.posY+24, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(0);
 					setImage(b);
 					bulletsInRoom.add(b);
@@ -111,49 +117,49 @@ public class BulletHandler implements Runnable{
 					fired = true;
 					
 				}else if((controls.fireUP) && (controls.fireRIGHT)){
-					Bullet b = new Bullet(player.posX + 16, player.posY+8, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(5);
 					setImage(b);
 					bulletsInRoom.add(b);
 					fired = true;
 					
 				}else if((controls.fireDOWN) && (controls.fireLEFT)){
-					Bullet b = new Bullet(player.posX + 16, player.posY+8, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(2);
 					setImage(b);
 					bulletsInRoom.add(b);
 					fired = true;
 					
 				}else if((controls.fireDOWN) && (controls.fireRIGHT)){
-					Bullet b = new Bullet(player.posX + 16, player.posY+8, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(7);
 					setImage(b);
 					bulletsInRoom.add(b);
 					fired = true;
 					
 				}else if(controls.fireUP){
-					Bullet b = new Bullet(player.posX + 16, player.posY+8, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(3);
 					setImage(b);
 					bulletsInRoom.add(b);
 					fired = true;
 					
 				}else if(controls.fireDOWN){
-					Bullet b = new Bullet(player.posX + 16, player.posY+8, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(4);
 					setImage(b);
 					bulletsInRoom.add(b);
 					fired = true;
 					
 				}else if(controls.fireLEFT){
-					Bullet b = new Bullet(player.posX + 16, player.posY+8, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(1);
 					setImage(b);
 					bulletsInRoom.add(b);
 					fired = true;
 					
 				}else if(controls.fireRIGHT){
-					Bullet b = new Bullet(player.posX + 16, player.posY+8, 5);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 					b.setDirection(6);
 					setImage(b);
 					bulletsInRoom.add(b);

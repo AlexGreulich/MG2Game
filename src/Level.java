@@ -23,6 +23,7 @@ public class Level {
 		mapPicItems = mapimgItems;
 		 
 		loadMap();
+		
 	}
 	public void  loadMap(){
 		int mapHeight =mapPic.getHeight();

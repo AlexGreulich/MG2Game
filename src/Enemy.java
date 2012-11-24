@@ -1,4 +1,7 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -15,12 +18,14 @@ public class Enemy extends Entity{
 	int enemyDirection;
 	GameWindow window;
 	Player player;
-	BufferedImage img,image;
+	BufferedImage img,image, corpseImage;
+	
 	float animation = 0.0f;
 	BufferedImage[] hoch_cycle,runter_cycle, links_cycle,rechts_cycle,hochlinks_cycle,hochrechts_cycle,runterlinks_cycle,runterrechts_cycle;
 	Rectangle enemyBounds;
 	int countToNextAttack =0;	//wenn schaden ausgeteilt, warte etwas bis zum nächsten schaden
 	boolean canAttack = true;
+	boolean isDead = false;
 	
 	public Enemy(GameWindow w, int x, int y, int type){//
 		window = w;
@@ -43,8 +48,10 @@ public class Enemy extends Entity{
 		hochrechts_cycle = new BufferedImage[8];
 		runterlinks_cycle = new BufferedImage[8];
 		runterrechts_cycle = new BufferedImage[8];
-
+		
+		
 		try{
+			corpseImage = ImageIO.read(getClass().getResource("resources/corpse.gif"));
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
 			//int count =0;
 			for(int a = 0; a< img.getHeight()/48; a++){
@@ -79,9 +86,25 @@ public class Enemy extends Entity{
 				}
 			}
 		}catch(IOException e){e.printStackTrace();}
-	
+		
+		//corpseImage = rechts_cycle[0].createGraphics();
+		//AffineTransform affine = AffineTransform.getRotateInstance(Math.toRadians(90.0),16,32);
+		//corpseImage = new BufferedImage(rechts_cycle[0].getWidth(),rechts_cycle[0].getHeight(),rechts_cycle[0].getType());
+		
+		
+		
+		
 	}
-	
+//	public BufferedImage createDeadPic(){
+//		AffineTransform affine = AffineTransform.getRotateInstance(Math.toRadians(90.0),24,16);
+//		BufferedImage rotated = new BufferedImage(rechts_cycle[0].getWidth(),rechts_cycle[0].getHeight(),rechts_cycle[0].getType());
+//		Graphics2D g2 = (Graphics2D) rotated.getGraphics();
+//		
+//		g2.setTransform(affine);
+//		
+//		g2.drawImage(rechts_cycle[0], 0,0,new Color(255,255,255,0),null);
+//		return rotated;
+//	}
 	public int getX(){
 		return posX;
 	}
@@ -374,7 +397,7 @@ public class Enemy extends Entity{
 	
 	}
 	public void dealDamage(){
-		player.energy = player.energy - 0.1f;
+		player.energy = player.energy - 0.5f;
 		window.panel.actionMessages.add(new ActionMessage("Player hit"));
 		canAttack = false;
 		countToNextAttack =10;

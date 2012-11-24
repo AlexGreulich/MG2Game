@@ -7,7 +7,6 @@ public class Bullet extends Entity{
 	int speed;
 	int damageOnHit;
 	int direction;
-	Player player;
 	Rectangle bounds;
 	BufferedImage image;
 	
@@ -22,6 +21,11 @@ public class Bullet extends Entity{
 		damageOnHit = d;
 		
 	}
+	
+	public int dealDamage(){
+		return damageOnHit;
+	}
+	
 	public void setDirection(int d){
 		direction = d;
 	}

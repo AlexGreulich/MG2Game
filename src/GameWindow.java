@@ -5,6 +5,7 @@ import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-//import java.util.HashMap;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -27,6 +27,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JWindow;
+//import java.util.HashMap;
 
 //import org.omg.IOP.Encoding;
 
@@ -45,7 +46,7 @@ public class GameWindow extends JFrame{
 	EnemyController enemycontrol;
 	ItemHandler itemHandler;
 	ArrayList<Bullet> bulletsInRoom;
-	ArrayList<Enemy> enemylist;
+	ArrayList<Enemy> enemylist, corpses;
 	ArrayList<SpecialEffect> specialEffects;
 	
 	
@@ -162,6 +163,7 @@ public class GameWindow extends JFrame{
 		this.player = new Player(this);
 		this.bulletsInRoom = new ArrayList<Bullet>();
 		this.enemylist = new ArrayList<Enemy>();
+		this.corpses = new ArrayList<Enemy>();
 		this.specialEffects = new ArrayList<SpecialEffect>();
 		this.panel = new GamePanel(this, screenoption);
 		
@@ -169,6 +171,8 @@ public class GameWindow extends JFrame{
 		this.itemHandler = new ItemHandler(this);
 		this.enemycontrol = new EnemyController(this);
 		this.bullethandler = new BulletHandler(this);
+		
+		level.map[10][20][5]=2;
 		loadSpecificRoomStuff();
 		addKeyListener(controls);
 		add(panel);
