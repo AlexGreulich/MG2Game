@@ -1,11 +1,10 @@
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -22,10 +22,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JWindow;
 //import java.util.HashMap;
 
@@ -37,7 +35,6 @@ public class GameWindow extends JFrame{
 
 	GamePanel panel;
 	Player player;
-	//Enemy enemy;
 	Controls controls;
 	Thread panelThread, gameloopthread, bulletthread, enemythread, itemthread;
 	Level level;
@@ -49,18 +46,17 @@ public class GameWindow extends JFrame{
 	ArrayList<Enemy> enemylist, corpses;
 	ArrayList<SpecialEffect> specialEffects;
 	
-	
-	Clip clip;
+	Clip clip1,clip2,clip3,clip4;
+	Clip tempClip ;
 	int framePosition;
 	
 	Point cameraPosition = new Point(0,0);
 	Dimension screen;
 	
-	JCheckBox fullscreen, windowed;
-	JButton start;
 	int screenoption=0;
 	JWindow splashwindow;
-	JLabel inProgress;
+	BufferedImage startupBckgrd;
+	BufferedImage[] startupMenuPics;
 	
 	//HashMap levels;
 	ArrayList<BufferedImage> allMapsFloors;
@@ -71,59 +67,84 @@ public class GameWindow extends JFrame{
 	
 	//JWindow loadingScreen;
 	
-	ArrayDeque<Integer> roomsEntered = new ArrayDeque<Integer>();
 	Random rdm = new Random();
+	PathCreator pathCreate = new PathCreator();
+	@SuppressWarnings("static-access")
+	HashMap<Integer,int[]> dungeon = pathCreate.map;
+	int startingRoom;
+	ArrayList<Level> allPossibleRooms = new ArrayList<Level>();
+	
+	
 	
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
 		
+		//aufwaendige dinge laden
+		clip1 = loadMusic("test_track_01.mp3");
+		clip2 = loadMusic("test_track_01.mp3");
+		
 		screen = Toolkit.getDefaultToolkit().getScreenSize();
-		int scrx = (int) (screen.getWidth()/2)-250;
-		int scry = (int) (screen.getHeight()/2)-150;
+		int scrx = (int) (screen.getWidth()/2)-500;
+		int scry = (int) (screen.getHeight()/2)-375;
 		splashwindow = new JWindow();
-		splashwindow.setLayout(new GridLayout(4,1));
-		splashwindow.setSize(500, 300);
+		splashwindow.setSize(1000, 750);
 		splashwindow.setLocation(scrx, scry);
-		start = new JButton("Come get some");
-		
-		fullscreen = new JCheckBox("Play in fullscreen mode");
-		windowed = new JCheckBox("Play in windowed mode");
-//		fullscreen.addActionListener(new ActionListener(){
-//			public void actionPerformed(ActionEvent e){
-//				windowed.setEnabled(false);
-//				
-//			}
-//		});
-//		windowed.addActionListener(new ActionListener(){
-//			public void actionPerformed(ActionEvent e){
-//				fullscreen.setEnabled(false);
-//			}
-//		});
-		inProgress = new JLabel("Just click Start to play! Screenmode is set to fullscreen by default");
-		
-		start.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				if(windowed.isEnabled()){
-					screenoption =1;
-				}else{
-					screenoption =2;
-				}
-				/*
-				 * der splashscreen wird geschlossen,
-				 * und es können alle dinge fürs spiel geladen werden
-				 * */
-				//reInitWindow();
-				splashwindow.dispose();
-				//startMusic();
-				startGame(0);	//startraum
-				
+		startupBckgrd = ImageIO.read(getClass().getResource("resources/cybermood2small.gif"));
+		startupMenuPics = new BufferedImage[4];
+		for(int i =0; i<=3;i++){
+			startupMenuPics[i] = startupBckgrd.getSubimage(i* 1000, 0, 1000, 750);
+		}
+		startupBckgrd = startupMenuPics[0];
+		splashwindow.getContentPane().add(new JPanel(){
+			public void paintComponent(Graphics g){
+				g.drawImage(startupBckgrd,0,0,null);
 			}
 		});
-		splashwindow.getContentPane().add(inProgress);
-		splashwindow.getContentPane().add(fullscreen);
-		splashwindow.getContentPane().add(windowed);
-		splashwindow.getContentPane().add(start);
+		
+		MouseAdapter ma = new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+					int x = e.getX();
+					int y = e.getY();
+					
+					if((x > 70) && (x <= 270)){
+						if((y > 550) && (y <=600)){
+							splashwindow.dispose();
+							//startMusic("audio/test_track_01.mp3");
+							clip1.stop();
+							clip2.start();
+							startGame(0);	
+						}else if((y > 650) && (y <= 700)){
+							System.exit(0);
+						}
+					}
+			}
+			public void mouseMoved(MouseEvent ev){
+				int x = ev.getX();
+				int y = ev.getY();
+				
+				if((x > 70) && (x <= 270)){
+					if((y > 550) && (y <=600)){
+						startupBckgrd = startupMenuPics[1]; 
+						splashwindow.repaint();
+					}else if((y > 600) && (y <= 650)){
+						startupBckgrd = startupMenuPics[2]; 
+						splashwindow.repaint();
+					}else if((y > 650) && (y <= 700)){
+						startupBckgrd = startupMenuPics[3]; 
+						splashwindow.repaint();
+					}else{
+						startupBckgrd = startupMenuPics[0]; 
+						splashwindow.repaint();
+					}
+				}
+			}
+		};
+		splashwindow.addMouseMotionListener(ma);
+		splashwindow.addMouseListener(ma);
 		splashwindow.setVisible(true);
+		splashwindow.repaint();
+		//startMusic("audio/introtest.mp3");
+		clip1.start();
 		
 		setResizable(false);
 		setUndecorated(true);
@@ -139,12 +160,14 @@ public class GameWindow extends JFrame{
 	
 	public void reInitWindow(int roomNumber){
 		
-		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+//		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+		
 		panel.initPanel();	//panel neu initialisiert mit level, level.map, enemylist 
 		gameloop.initLoop();
 		bullethandler.initBulletHandler();
 		this.bulletsInRoom.clear();
 		this.enemylist.clear();
+		this.corpses.clear();
 		this.specialEffects.clear();
 		itemHandler.initItemHandler();
 		loadSpecificRoomStuff();
@@ -157,7 +180,9 @@ public class GameWindow extends JFrame{
 		allMapsItems = new ArrayList<BufferedImage>();
 		
 		loadLevelPics();
-		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+		createDungeon();
+//		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+		this.level = allPossibleRooms.get(0);
 		this.controls = new Controls();
 		
 		this.player = new Player(this);
@@ -200,10 +225,11 @@ public class GameWindow extends JFrame{
 		pack();
 	}
 	
-	public void startMusic(){
+	public Clip loadMusic(String mp3Name){
+
 		AudioInputStream mp3audioInputStream;
 		try {
-			mp3audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource("audio/test_track_01.mp3"));
+			mp3audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(mp3Name));
 			AudioFormat audioFormat = mp3audioInputStream.getFormat();
 			AudioFormat decoded = new AudioFormat( 
 				AudioFormat.Encoding.PCM_SIGNED, // encoding 
@@ -217,9 +243,9 @@ public class GameWindow extends JFrame{
 		//	später alternative für soundprobleme:
 //		SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat); 
 //		sourceDataLine.open(audioFormat);
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-		 
+			tempClip = AudioSystem.getClip();
+			tempClip.open(audioInputStream);
+			
 		} catch (UnsupportedAudioFileException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -227,8 +253,10 @@ public class GameWindow extends JFrame{
 		}catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-		clip.start();
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
+//		clip.start();
+//		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		
+			return tempClip;
 	}
 	
 	public void loadLevelPics(){
@@ -271,7 +299,6 @@ public class GameWindow extends JFrame{
 		 * -> extramethode um item in truhe zu erstellen
 		 *  
 		 * */
-		//doorShape = new Polygon();
 		for(int x = 0; x < level.mapPic.getWidth(); x++){
 			for(int y = 0; y< level.mapPic.getHeight(); y++){
 			//items laden	
@@ -295,28 +322,32 @@ public class GameWindow extends JFrame{
 	
 	public void levelChanging(){
 		
-		
-//		panel.running = false;
-//		//gameloop.running = false;
-//		bullethandler.running = false;
-//		enemycontrol.running = false;
-//		itemHandler.running = false;
-		//this.setVisible(false);
-		int nextRoom = rdm.nextInt(4);//(int) (Math.random() *4);
+		//int nextRoom = rdm.nextInt(4);//(int) (Math.random() *4);
 		
 		//roomsEntered.addLast(nextRoom);
-		reInitWindow(nextRoom);
+		//reInitWindow(nextRoom);
 		
-		panel.running = true;
-		gameloop.running = true;
-		bullethandler.running = true;
-		enemycontrol.running = true;
-		itemHandler.running = true;
-		//loadingScreen.dispose();
-		//this.setVisible(true);
+//		panel.running = true;
+//		gameloop.running = true;
+//		bullethandler.running = true;
+//		enemycontrol.running = true;
+//		itemHandler.running = true;
 	}
 	
 	public void createDungeon(){
+		for(int i= 0; i< dungeon.size();i++){
 		
+			if(dungeon.get(i)[0] == 1){	//ersten gueltigen raum gefunden
+				startingRoom = i;
+				int type = dungeon.get(i)[1];
+				Level lvl = new Level(allMapsFloors.get(type), allMapsWalls.get(type), allMapsItems.get(type),type , i, dungeon.get(i));
+				allPossibleRooms.add(lvl);
+			}	
+			
+			
+			
+		}
+//		int[] roomZ = dungeon.keySet();
+//		for(int roomcnt =roomZ[0];)dungeon.
 	}
 }

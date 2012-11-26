@@ -3,6 +3,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Level {
@@ -16,23 +17,119 @@ public class Level {
 	Point p1,p2,p3,p4,p5,p6,p7,p8;
 	Polygon[] doorShapes;
 	
-	public Level(BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems){
+	Level links, rechts,oben,unten;
+	int nr;
+	int[] neighbors = new int[4];
+	int roomtype;
+	HashMap<Integer,Point[]> doorsAssignment; 
+	/* türkoordinaten
+	 * für jeden raumtypen ein paar koordinaten wo die türen hinsollen
+	 * 
+	 * */
+	public Level(BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems,int type, int roomNumber, int[] nextrooms){
 		
 		mapPic = mapimgfloor;
 		mapPicwalls = mapimgwalls;
 		mapPicItems = mapimgItems;
-		 
+		nr = roomNumber;
+		roomtype = type;
+		neighbors[0] = nextrooms[2];//oben
+		neighbors[1] = nextrooms[3];//rechts
+		neighbors[2] = nextrooms[4];//unten
+		neighbors[3] = nextrooms[5];//links
+		
+		assignDoors(roomtype);
+//		if(roomtype == 0){
+//			
+//		}else if (roomtype == 1){
+//			
+//		}else if(roomtype == 2){
+//			
+//		}else(roomtype == 3){
+//			
+//		}
+//		for(int i =0; i<=3;i++){
+//			
+//		}
+//		doorsAssignment.put(0,new Point[]{});
+		
+		
 		loadMap();
 		
 	}
+	public void assignDoors(int t){
+		doorPoints = new ArrayList<Point>();
+		switch(t){
+				
+		case 0:
+			if(neighbors[0] != (-1)){
+				doorPoints.add(new Point(7,22));
+			}
+			if(neighbors[1] != (-1)){
+				doorPoints.add(new Point(22,22));
+			}	
+			if(neighbors[2] != (-1)){
+				doorPoints.add(new Point(23,44));
+			}
+			if(neighbors[3] != (-1)){
+				doorPoints.add(new Point(6,46));
+			}	
+			break;
+		case 1:
+			if(neighbors[0] != (-1)){
+				doorPoints.add(new Point(4,27));
+			}
+			if(neighbors[1] != (-1)){
+				doorPoints.add(new Point(21,20));
+			}	
+			if(neighbors[2] != (-1)){
+				doorPoints.add(new Point(26,39));
+			}
+			if(neighbors[3] != (-1)){
+				doorPoints.add(new Point(3,41));
+			}	
+			break;
+		case 2:
+			if(neighbors[0] != (-1)){
+				doorPoints.add(new Point(6,24));
+			}
+			if(neighbors[1] != (-1)){
+				doorPoints.add(new Point(24,27));
+			}	
+			if(neighbors[2] != (-1)){
+				doorPoints.add(new Point(23,44));
+			}
+			if(neighbors[3] != (-1)){
+				doorPoints.add(new Point(5,44));
+			}	
+			break;
+		case 3:
+			if(neighbors[0] != (-1)){
+				doorPoints.add(new Point(8,31));
+			}
+			if(neighbors[1] != (-1)){
+				doorPoints.add(new Point(21,21));
+			}	
+			if(neighbors[2] != (-1)){
+				doorPoints.add(new Point(22,34));
+			}
+			if(neighbors[3] != (-1)){
+				doorPoints.add(new Point(7,48));
+			}	
+			break;
+		}
+	}
+	
 	public void  loadMap(){
 		int mapHeight =mapPic.getHeight();
 		int mapWidth = mapPic.getWidth();
 		map = new int[mapWidth][mapHeight][6];
 		collisionshape = new Polygon();
 		collisionpoints = new ArrayList<Point>();
-		doorPoints = new ArrayList<Point>();
+		
 		sortpoints = new ArrayList<Point>();
+		
+		
 		/* legende:
 		 * [x][y][z]
 		 * 
@@ -202,25 +299,25 @@ public class Level {
 				else if(d.equals(doorToRight)){
 															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
-															doorPoints.add(new Point(x,y));
+															//doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
 															map[x][y][5]=666;
 				}else if(d.equals(doorToLeft)){
 															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
-															doorPoints.add(new Point(x,y));
+															//doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
 															map[x][y][5]=666;
 				}else if(d.equals(doorToTop)){
 															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
-															doorPoints.add(new Point(x,y));
+															//doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
 															map[x][y][5]=666;
 				}else if(d.equals(doorToBottom)){
 															map[x][y][3]=666;
 															collisionpoints.add(new Point(x,y));
-															doorPoints.add(new Point(x,y));
+															//doorPoints.add(new Point(x,y));
 															map[x][y][4]=1;
 															map[x][y][5]=666;
 				}else{
