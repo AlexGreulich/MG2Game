@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
@@ -25,7 +26,7 @@ public class GamePanel extends Canvas implements Runnable{
 	BufferedImage bi;
 	int panelwidth,panelheight; 
 	Level level;
-	int mapHeight, mapWidth;
+	int mapHeight=0, mapWidth =0;
 	ArrayList<BufferedImage> tilesetfloor, tilesetwalls;
 	int[][][]map;
 	
@@ -42,12 +43,13 @@ public class GamePanel extends Canvas implements Runnable{
 	ArrayList<ActionMessage> tempmessages;
 	
 	CopyOnWriteArrayList<Enemy> enemiesToDraw, corpsesToDraw;
+	CopyOnWriteArrayList<ActionMessage> messagesToDraw;
 	
 	Polygon collision;
 	double transformModifier; 
 	
-	public GamePanel(GameWindow w, int scrsizeopt){
-		transformModifier = scrsizeopt;
+	public GamePanel(GameWindow w ){//int scrsizeopt
+		//transformModifier = scrsizeopt;
 		window = w;
 		enemylist = window.enemylist;
 		corpses = window.corpses;
@@ -81,11 +83,15 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	public void initPanel(){
-		level = window.level;
-		mapWidth = level.mapPic.getWidth()*32;//
-		mapHeight = level.mapPic.getHeight()*64;//vllt raus? lvl hat ja immer selbe größe
+		level = window.activeLevel;
+		mapWidth = window.activeLevel.mapwidth*32;
+		mapHeight = level.mapheight*64;//vllt raus? lvl hat ja immer selbe größe
 		map = level.map;
 		collision = level.collisionshape;//
+		System.out.println("raumtyp: "+ level.roomtype + " floor[x]: "+ window.allMapsFloors.indexOf(level.mapPic)+ " walls[y]: "+ window.allMapsWalls.indexOf(level.mapPicwalls));
+//		for(int i=0;i< collision.npoints; i++){
+//			System.out.println("Collisionshape x[]:"+ collision.xpoints[i]+" collisionshape y[]: " + collision.ypoints[i]);
+//		}
 		
 	}
 	
@@ -187,8 +193,9 @@ public class GamePanel extends Canvas implements Runnable{
 		g.setColor(Color.WHITE);
 		//actionMessages = tempmessages;
 		int b=0;
-		tempmessages = new ArrayList<ActionMessage>();
-		for(ActionMessage m : actionMessages){
+		//tempmessages = new ArrayList<ActionMessage>();
+		messagesToDraw = new CopyOnWriteArrayList<ActionMessage>(actionMessages);
+		for(ActionMessage m : messagesToDraw){
 			if(m.lifetime >0){
 //				if((m.lifetime <=40) && (m.lifetime >30)){
 //					
@@ -208,11 +215,14 @@ public class GamePanel extends Canvas implements Runnable{
 				g.drawString(m.getText(), panelwidth/4-(m.getText().length()*2), panelheight/4 + (b * 10));
 				b++;
 				m.reduceLife();
-				tempmessages.add(m);
+				if(m.lifetime ==0){
+					actionMessages.remove(m);
+				}
+				//tempmessages.add(m);
 			}
 		}
 		g.setColor(Color.WHITE);
-		actionMessages = tempmessages;
+		//actionMessages = tempmessages;
 	}
 	
 	public void drawGUI(Graphics g){
@@ -262,24 +272,33 @@ public class GamePanel extends Canvas implements Runnable{
 			index++;
 		}
 		g.drawString("[Q]uit", 50,30);
-				//		for(Point p: level.collisionpoints){
-				//			g.setColor(Color.RED);
-				//			g.fillRect(p.x, p.y, 1, 1);
-				//		}
-//		g.drawPolygon(collision);
-		//türen funktionieren noch nicht
+						for(Point p: level.collisionpoints){
+							g.setColor(Color.RED);
+							g.fillRect(p.x, p.y, 1, 1);
+						}
+		g.drawPolygon(collision);
 		for(int i=0; i< level.doorShapes.length;i++){
-			g.drawPolygon(level.doorShapes[i]);
+			if(level.doorPoints.get(i) != null){
+				g.drawPolygon(level.doorShapes[i]);
+//				System.out.println("tür "+i+": "+ level.doorPoints.get(i).x+" , "+level.doorPoints.get(i).y );
+			}
+		}
+		for(int i =0;i< level.doorShapes.length;i++){
+			if(level.doorShapes[i] != null){
+				if(level.doorShapes[i].intersects(player.playerBounds)){
+					System.out.println("neighbors[] -> tür führt zu:" + level.neighbors[i]);
+					//System.out.println(""+ level.);
+				}
+			}
 		}
 		
-				//		g.setColor(Color.GREEN);
-				//		g.drawRect(player.playerBounds.x,player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
-				//		g.drawRect(player.playermiddle.x, player.playermiddle.y, 1,1);
+						g.setColor(Color.GREEN);
+						g.drawRect(player.playerBounds.x,player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
+						g.drawRect(player.playermiddle.x, player.playermiddle.y, 1,1);
 	}
 	
 	public void drawItems(Graphics g){
-		//window.itemHandler.
-		CopyOnWriteArrayList<Item> itemList = new CopyOnWriteArrayList<Item>(window.itemHandler.itemsInLevel); 
+		CopyOnWriteArrayList<Item> itemList = new CopyOnWriteArrayList<Item>(window.activeLevel.thisLevelsItems); 
 		for(Item i: itemList){
 			if(i != null){
 				g.drawImage(i.getImage(), i.posX,i.posY,null);
@@ -288,7 +307,7 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	public void drawSpecialeffects(Graphics g){
-		CopyOnWriteArrayList<SpecialEffect> seList = new CopyOnWriteArrayList<SpecialEffect>(window.specialEffects); 
+		CopyOnWriteArrayList<SpecialEffect> seList = new CopyOnWriteArrayList<SpecialEffect>(window.activeLevel.specialEffects); 
 		for(SpecialEffect se : seList){
 			BufferedImage i = se.getEffectImage();
 			int z = se.yPos%2;
@@ -300,9 +319,6 @@ public class GamePanel extends Canvas implements Runnable{
 					g.drawImage(i, se.xPos*32 +16, se.yPos*8+8,null);
 					break;
 			}
-			
-			
-			//g.drawImage(i, se.xPos, se.yPos, 32,64,null);
 		}
 	}
 	

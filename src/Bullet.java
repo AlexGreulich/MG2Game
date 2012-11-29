@@ -27,7 +27,7 @@ public class Bullet extends Entity{
 	}
 	
 	public void setDirection(int d){
-		direction = d;
+		this.direction = d;
 	}
 	
 	public void updateBounds(){

@@ -8,7 +8,7 @@ import java.util.*;
 
 public class PathCreator{
 	
-	//File file = new File("raum.txt");
+	File file = new File("raum.txt");
 	int maxRooms=12;
 	int roomCounter;
 	static HashMap<Integer,int[]> map = new HashMap<Integer,int[]>(36);
@@ -18,29 +18,29 @@ public class PathCreator{
 	//Variablen fuer array auslesen/testen
 	int elementcounter=0;
 	
-//	public void printStuff(){
-//		try (PrintWriter writer1 = new PrintWriter(new FileWriter(file));){
-//		for(int i=1; i<=map.size(); i++){
-//			int[] tmp = new int[6];
-//			tmp = getValue(i-1);
-//			
-//			if(tmp[0]==1){
-//				writer1.print(tmp[0]+" ");
-//			}
-//			else if(tmp[0]==-1){
-//				writer1.print("x ");
-//			}
-//			elementcounter++;
-//			if(elementcounter==6){
-//				writer1.println();
-//				elementcounter=0;
-//			}
-//		}
-//		writer1.close();
-//		} catch (IOException f){
-//			//
-//		}
-//	}
+	public void printStuff(){
+		try (PrintWriter writer1 = new PrintWriter(new FileWriter(file));){
+		for(int i=1; i<=map.size(); i++){
+			int[] tmp = new int[6];
+			tmp = getValue(i-1);
+			
+			if(tmp[0]==1){
+				writer1.print(tmp[0]+" ");
+			}
+			else if(tmp[0]==-1){
+				writer1.print("x ");
+			}
+			elementcounter++;
+			if(elementcounter==6){
+				writer1.println();
+				elementcounter=0;
+			}
+		}
+		writer1.close();
+		} catch (IOException f){
+			//
+		}
+	}
 	
 	//dient zum gucken welche gueltigen Nachbarn man haben koennte/oben links in der ecke sollte man nur 2 nachbarn errechnen
 	public int[] roomNeighbour(int roomNumber){
@@ -146,7 +146,7 @@ public class PathCreator{
 	}
 	
 	public static int[] getValue(Integer key) {
-		
+
 		for (Integer i : map.keySet()) {
 			if (i==key) {
 				return map.get(i);
@@ -168,16 +168,15 @@ public class PathCreator{
 					int[] tmp2 = new int[6];
 					tmp2 = getValue(neighbours[x]);
 					if(tmp2[0]==1){//nachbarraum vorhanden
-						tmp[orientation]=1;//tuer wird gesetzt in tmp falls nachbar vorhanden
+						tmp[orientation]=neighbours[x];//tuer wird gesetzt in tmp falls nachbar vorhanden
 					}
 				}
 				orientation++;//naechste tuerstelle abfragen/eintragen
 			}//tueren in tmp alle gesetzt
-			
 			int rand = (int)(Math.random()*4);
 			tmp[1]=rand;
 			map.put(i,tmp);
-			//System.out.println(i+"raumgesetzt: "+tmp[0]+"  oben: "+tmp[2]+" rechts: "+tmp[3]+" unten: "+tmp[4]+" links: "+tmp[5]);
+			System.out.println(i+"raumgesetzt: "+tmp[0]+" raumtyp: "+tmp[1]+"  oben: "+tmp[2]+" rechts: "+tmp[3]+" unten: "+tmp[4]+" links: "+tmp[5]);
 		}
 	}
 	
@@ -189,7 +188,7 @@ public class PathCreator{
 			createRoom(x);
 		}
 		createDoors();
-		//printStuff();
+		printStuff();
 		
 	}
 	

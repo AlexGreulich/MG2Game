@@ -7,13 +7,16 @@ import java.util.HashMap;
 
 
 public class Level {
-
+	GameWindow window;
 	BufferedImage allTiles, mapPic,mapPicwalls,mapPicItems;
 	int[][][] map;
+	int mapwidth, mapheight;
 	Polygon collisionshape; 
-	ArrayList<Point> collisionpoints;
-	ArrayList<Point> doorPoints;
-	ArrayList<Point> sortpoints;
+	ArrayList<Point> collisionpoints, doorPoints, sortpoints;
+	ArrayList<Item> thisLevelsItems;
+	ArrayList<Enemy> thisLevelsEnemies;
+	ArrayList<Enemy> corpsesInThisLevel;
+	ArrayList<SpecialEffect> specialEffects;
 	Point p1,p2,p3,p4,p5,p6,p7,p8;
 	Polygon[] doorShapes;
 	
@@ -22,40 +25,66 @@ public class Level {
 	int[] neighbors = new int[4];
 	int roomtype;
 	HashMap<Integer,Point[]> doorsAssignment; 
-	/* türkoordinaten
-	 * für jeden raumtypen ein paar koordinaten wo die türen hinsollen
-	 * 
-	 * */
-	public Level(BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems,int type, int roomNumber, int[] nextrooms){
+	
+
+	
+	public Level(GameWindow w,BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems,int type, int roomNumber, int[] nextrooms){
+		if(roomNumber > (-1)){
+			window =w;
+			mapPic = mapimgfloor;
+			mapwidth = mapPic.getWidth();
+			mapheight = mapPic.getHeight();
+			
+			mapPicwalls = mapimgwalls;
+			mapPicItems = mapimgItems;
+			nr = roomNumber;
+			roomtype = type;
 		
-		mapPic = mapimgfloor;
-		mapPicwalls = mapimgwalls;
-		mapPicItems = mapimgItems;
-		nr = roomNumber;
-		roomtype = type;
-		neighbors[0] = nextrooms[2];//oben
-		neighbors[1] = nextrooms[3];//rechts
-		neighbors[2] = nextrooms[4];//unten
-		neighbors[3] = nextrooms[5];//links
+			neighbors[0] = nextrooms[2];//oben
+			neighbors[1] = nextrooms[3];//rechts
+			neighbors[2] = nextrooms[4];//unten
+			neighbors[3] = nextrooms[5];//links
+			assignDoors(roomtype);
+			thisLevelsEnemies = new ArrayList<Enemy>();
+			thisLevelsItems = new ArrayList<Item>();
+			corpsesInThisLevel = new ArrayList<Enemy>();
+			specialEffects = new ArrayList<SpecialEffect>();
+			
+
+			loadMap();
+		}
 		
-		assignDoors(roomtype);
-//		if(roomtype == 0){
-//			
-//		}else if (roomtype == 1){
-//			
-//		}else if(roomtype == 2){
-//			
-//		}else(roomtype == 3){
-//			
-//		}
-//		for(int i =0; i<=3;i++){
-//			
-//		}
-//		doorsAssignment.put(0,new Point[]{});
-		
-		
-		loadMap();
-		
+		//loadSpecificRoomStuff();
+	}
+	public void loadSpecificRoomStuff(){
+		/*
+		 * es gibt neben floor- und wall- map auch eine itemmap,
+		 * z.b. 5 verschiedene farben für 5 verschiedene typen von items
+		 * und dann per random, also typ 1 -> waffe; random 4 -> waffe nr 4 
+		 * so kann festgelegt werden an welcher stelle man etwas findet und es gibt trotzdem abwechslung
+		 * 
+		 * truhen/ spinde etc:
+		 * eine spawnfarbe für truhen, die truhe ist ein item
+		 * beim aufnehmen verschwindet die truhe nicht (ändert nur grafik in geöffnet)
+		 * -> extramethode um item in truhe zu erstellen
+		 *  
+		 * */
+		for(int x = 0; x < this.mapPic.getWidth(); x++){
+			for(int y = 0; y< this.mapPic.getHeight(); y++){
+			
+				int itemtypee = this.map[x][y][2];
+				if(itemtypee != 0){
+					Item it = new Item(window, x*32,y*8,itemtypee-1);
+					thisLevelsItems.add(it);
+				}
+				
+				if(this.map[x][y][5] < 666){
+					SpecialEffect sE = new SpecialEffect(this.map[x][y][5]);
+					sE.setPos(x,y);
+					specialEffects.add(sE);
+				}
+			}
+		}
 	}
 	public void assignDoors(int t){
 		doorPoints = new ArrayList<Point>();
@@ -64,57 +93,89 @@ public class Level {
 		case 0:
 			if(neighbors[0] != (-1)){
 				doorPoints.add(new Point(7,22));
+			}else{
+				doorPoints.add(null);
 			}
 			if(neighbors[1] != (-1)){
 				doorPoints.add(new Point(22,22));
+			}else{
+				doorPoints.add(null);
 			}	
 			if(neighbors[2] != (-1)){
 				doorPoints.add(new Point(23,44));
+			}else{
+				doorPoints.add(null);
 			}
 			if(neighbors[3] != (-1)){
 				doorPoints.add(new Point(6,46));
+			}else{
+				doorPoints.add(null);
 			}	
 			break;
 		case 1:
 			if(neighbors[0] != (-1)){
 				doorPoints.add(new Point(4,27));
+			}else{
+				doorPoints.add(null);
 			}
 			if(neighbors[1] != (-1)){
 				doorPoints.add(new Point(21,20));
+			}else{
+				doorPoints.add(null);
 			}	
 			if(neighbors[2] != (-1)){
 				doorPoints.add(new Point(26,39));
+			}else{
+				doorPoints.add(null);
 			}
 			if(neighbors[3] != (-1)){
 				doorPoints.add(new Point(3,41));
+			}else{
+				doorPoints.add(null);
 			}	
 			break;
 		case 2:
 			if(neighbors[0] != (-1)){
 				doorPoints.add(new Point(6,24));
+			}else{
+				doorPoints.add(null);
 			}
 			if(neighbors[1] != (-1)){
 				doorPoints.add(new Point(24,27));
+			}else{
+				doorPoints.add(null);
 			}	
 			if(neighbors[2] != (-1)){
 				doorPoints.add(new Point(23,44));
+			}else{
+				doorPoints.add(null);
 			}
 			if(neighbors[3] != (-1)){
 				doorPoints.add(new Point(5,44));
+			}else{
+				doorPoints.add(null);
 			}	
 			break;
 		case 3:
 			if(neighbors[0] != (-1)){
 				doorPoints.add(new Point(8,31));
+			}else{
+				doorPoints.add(null);
 			}
 			if(neighbors[1] != (-1)){
 				doorPoints.add(new Point(21,21));
+			}else{
+				doorPoints.add(null);
 			}	
 			if(neighbors[2] != (-1)){
 				doorPoints.add(new Point(22,34));
+			}else{
+				doorPoints.add(null);
 			}
 			if(neighbors[3] != (-1)){
 				doorPoints.add(new Point(7,48));
+			}else{
+				doorPoints.add(null);
 			}	
 			break;
 		}
@@ -341,11 +402,6 @@ public class Level {
 				}
 			}
 		}
-		//zum testen:
-//		Point lowest = new Point(0,0);
-//		Point middleLeft = new Point(0,0);
-//		Point middleRight = new Point(0,0);
-//		Point highest = new Point(0,0);
 		for(Point p: collisionpoints){
 			
 			if(p.y%2 ==0){
@@ -364,15 +420,17 @@ public class Level {
 	public void createDoors(){
 	
 		doorShapes = new Polygon[doorPoints.size()];
-		for(int i =0; i < doorShapes.length;i++){
-			Polygon p = new Polygon();
-			//y%2 implementieren für korrekte position im türrahmen
-			//if()
-			p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
-			p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);
-			p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+56);
-			p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
-			doorShapes[i] = p;
+		for(int i =0; i < doorPoints.size();i++){
+			if(doorPoints.get(i) != null){
+				Polygon p = new Polygon();
+				//y%2 implementieren für korrekte position im türrahmen
+				//if()
+				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
+				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);
+				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+56);
+				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
+				doorShapes[i] = p;
+			}
 		}
 	}
 	

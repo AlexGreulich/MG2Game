@@ -1,6 +1,7 @@
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -13,8 +14,14 @@ public class ItemHandler implements Runnable{
 	Player player;
 	Controls controls;
 	Level level;
-	BufferedImage[] allItems;
+	BufferedImage[] picturesOfAllItems;
 	ArrayList<Item> itemsInLevel;
+	HashMap<Integer, ArrayList<Item>> totalItems;
+	/*
+	 * totalitems:
+	 * alle items im kompletten dungeon sind hier gespeichert
+	 * muss das sein?
+	 * */
 	
 	public ItemHandler(GameWindow w){
 		
@@ -22,18 +29,18 @@ public class ItemHandler implements Runnable{
 		panel = window.panel;
 		player = window.player;
 		controls = window.controls;
-		itemsInLevel = new ArrayList<Item>();
+	//	itemsInLevel = window.activeLevel;
 		initItemHandler();
 		
 		//Bilder des Itemsets in array laden:
-		allItems = new BufferedImage[100];
+		picturesOfAllItems = new BufferedImage[100];
 		try {
 			BufferedImage itemset = ImageIO.read(getClass().getResource("resources/itemset.gif"));
 			int count =0;
 			for(int x =0; x < itemset.getWidth()/32; x++){
 				for(int y =0; y< itemset.getHeight()/32;y++){
 					BufferedImage i = itemset.getSubimage(x*32, y*32, 32, 32);
-					allItems[count] = i;
+					picturesOfAllItems[count] = i;
 					count++;
 				}
 			}
@@ -42,24 +49,19 @@ public class ItemHandler implements Runnable{
 	}
 	
 	public void initItemHandler(){
-		level = window.level;
-		if(itemsInLevel.size() !=0){
-			itemsInLevel.clear();
-		}
-		
+		level = window.activeLevel;
+		//itemsInLevel = window.activeLevel.thisLevelsItems; 
 	}
 	
 	public synchronized void run(){
 		
 		while(running){
 			float onStart = System.currentTimeMillis();
-//			ArrayList<Item> l = panel.itemsInLevel;
-			//Items aufheben
 			
 			if(controls.equip){
-				for(int i =0; i< itemsInLevel.size(); i++){//Item i: itemsInLevel){
-					if(itemsInLevel.get(i).bounds.intersects(player.playerBounds)){						//contains(player.playermiddle)){
-						itemsInLevel.get(i).equip();
+				for(int i =0; i< window.activeLevel.thisLevelsItems.size(); i++){//Item i: itemsInLevel){
+					if(window.activeLevel.thisLevelsItems.get(i).bounds.intersects(player.playerBounds)){						//contains(player.playermiddle)){
+						window.activeLevel.thisLevelsItems.get(i).equip();
 					}
 				}
 			}

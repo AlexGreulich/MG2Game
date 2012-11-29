@@ -31,7 +31,7 @@ public class Player {
 		controls = w.controls;
 		
 		posX =500;
-		posY = 200;
+		posY = 250;
 		energy = 100f;
 		image = null;
 		playerBounds = new Rectangle(this.posX+8, this.posY, 48, 80);

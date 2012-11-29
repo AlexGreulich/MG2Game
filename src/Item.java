@@ -52,7 +52,7 @@ public class Item extends Entity{
 				name = "nul";
 				break;
 		}
-		img = window.itemHandler.allItems[itemType];
+		img = window.itemHandler.picturesOfAllItems[itemType];
 	}
 	
 	public void createActionMessage(){
@@ -66,7 +66,7 @@ public class Item extends Entity{
 	}
 	public void equip(){
 		isEquipped = true;
-		window.itemHandler.itemsInLevel.remove(this);		//direkt in gamepanel oder so?
+		window.activeLevel.thisLevelsItems.remove(this);		//direkt in gamepanel oder so?
 		createActionMessage();
 		if(this.itemType == 0){
 			panel.player.equipment[0] = this;

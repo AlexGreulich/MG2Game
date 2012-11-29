@@ -6,7 +6,8 @@ public class Controls implements KeyListener{
 
 	int direction=0;
 	boolean up = false,down = false, left = false, right = false, isMoving = false;
-	boolean fireUP, fireDOWN, fireLEFT, fireRIGHT;
+	boolean fire;
+//	, fireDOWN, fireLEFT, fireRIGHT;
 	boolean equip =false;
 	boolean levelChange = false;
 	
@@ -23,17 +24,17 @@ public class Controls implements KeyListener{
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_UP:
-				fireUP = true;
+				fire = true;
 				break;
-			case KeyEvent.VK_DOWN:
-				fireDOWN = true;
-				break;
-			case KeyEvent.VK_LEFT:
-				fireLEFT = true;
-				break;
-			case KeyEvent.VK_RIGHT:
-				fireRIGHT = true;
-				break;
+//			case KeyEvent.VK_DOWN:
+//				fireDOWN = true;
+//				break;
+//			case KeyEvent.VK_LEFT:
+//				fireLEFT = true;
+//				break;
+//			case KeyEvent.VK_RIGHT:
+//				fireRIGHT = true;
+//				break;
 			case KeyEvent.VK_W:
 				isMoving = true;
 				up=true;
@@ -63,17 +64,17 @@ public class Controls implements KeyListener{
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_UP:
-				fireUP = false;
+				fire = false;
 				break;
-			case KeyEvent.VK_DOWN:
-				fireDOWN = false;
-				break;
-			case KeyEvent.VK_LEFT:
-				fireLEFT = false;
-				break;
-			case KeyEvent.VK_RIGHT:
-				fireRIGHT = false;
-				break;
+//			case KeyEvent.VK_DOWN:
+//				fireDOWN = false;
+//				break;
+//			case KeyEvent.VK_LEFT:
+//				fireLEFT = false;
+//				break;
+//			case KeyEvent.VK_RIGHT:
+//				fireRIGHT = false;
+//				break;
 			case KeyEvent.VK_W:
 				up = false;
 				isMoving = false;
@@ -100,7 +101,14 @@ public class Controls implements KeyListener{
 				break;
 		}
 	}
-
+	
+	public int getDirection(){
+		return this.direction;
+	}
+	public void setDirection(int z){
+		this.direction = z;
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		

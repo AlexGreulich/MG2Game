@@ -59,7 +59,7 @@ public class BulletHandler implements Runnable{
 	
 	public void initBulletHandler(){
 	
-		enemylist = window.enemylist;
+		enemylist = window.activeLevel.thisLevelsEnemies;
 		bulletsInRoom = window.bulletsInRoom;
 		levelBorders = new Rectangle(0,0,panel.mapWidth,panel.mapHeight);
 	}
@@ -81,13 +81,11 @@ public class BulletHandler implements Runnable{
 							e.energy = e.energy - b.dealDamage();
 							panel.actionMessages.add(new ActionMessage("Enemy hit"));
 							bulletsInRoom.remove(b);
-							
-						/*-> kugel soll entfernt werden wenn getroffen, das
-						 * gibt aber einen thread konflikt, daher 
-						 * muss es eine temporäre kopie der bulletlist geben,
-						 * mit der die eigentliche liste zum schluss 
-						 * überschrieben wird 
-						 * */
+//							if(window.pistolHit.isRunning()){
+//								window.pistolHit.stop();
+//								window.pistolHit.start();
+//							}
+							//window.pistolHit.start();
 						}
 					}
 				}
@@ -100,6 +98,7 @@ public class BulletHandler implements Runnable{
 		while(running){
 			float onStart = System.currentTimeMillis();
 			if(firerate == 50){
+//				window.pistolShot.stop();
 				fired = false;
 				firerate =0;
 			}
@@ -107,64 +106,72 @@ public class BulletHandler implements Runnable{
 			// es kann nur gefeuert werden wenn abgefeuert == false ist, sonst wird feuerrate bis 50 gewartet
 			if(!fired){
 					// pfeiltasten abfragen um neue kugeln zu erzeugen
-				if((controls.fireUP) && (controls.fireLEFT)){
+				if(controls.fire){ //&& (controls.fireLEFT)){
 					
 					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(0);
+//					if(window.pistolShot.isRunning()){
+//						window.pistolShot.stop();
+//						window.pistolShot.flush();
+//					}
+//						window.pistolShot.start();
+					
+					
+					b.setDirection(controls.getDirection());
 					setImage(b);
 					bulletsInRoom.add(b);
 					
 					fired = true;
-					
-				}else if((controls.fireUP) && (controls.fireRIGHT)){
-					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(5);
-					setImage(b);
-					bulletsInRoom.add(b);
-					fired = true;
-					
-				}else if((controls.fireDOWN) && (controls.fireLEFT)){
-					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(2);
-					setImage(b);
-					bulletsInRoom.add(b);
-					fired = true;
-					
-				}else if((controls.fireDOWN) && (controls.fireRIGHT)){
-					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(7);
-					setImage(b);
-					bulletsInRoom.add(b);
-					fired = true;
-					
-				}else if(controls.fireUP){
-					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(3);
-					setImage(b);
-					bulletsInRoom.add(b);
-					fired = true;
-					
-				}else if(controls.fireDOWN){
-					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(4);
-					setImage(b);
-					bulletsInRoom.add(b);
-					fired = true;
-					
-				}else if(controls.fireLEFT){
-					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(1);
-					setImage(b);
-					bulletsInRoom.add(b);
-					fired = true;
-					
-				}else if(controls.fireRIGHT){
-					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(6);
-					setImage(b);
-					bulletsInRoom.add(b);
-					fired = true;
+					//window.pistolShot.stop();
 				}
+//				else if((controls.fire) && (controls.fireRIGHT)){
+//					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+//					b.setDirection(5);
+//					setImage(b);
+//					bulletsInRoom.add(b);
+//					fired = true;
+//					
+//				}else if((controls.fireDOWN) && (controls.fireLEFT)){
+//					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+//					b.setDirection(2);
+//					setImage(b);
+//					bulletsInRoom.add(b);
+//					fired = true;
+//					
+//				}else if((controls.fireDOWN) && (controls.fireRIGHT)){
+//					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+//					b.setDirection(7);
+//					setImage(b);
+//					bulletsInRoom.add(b);
+//					fired = true;
+//					
+//				}else if(controls.fire){
+//					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+//					b.setDirection(3);
+//					setImage(b);
+//					bulletsInRoom.add(b);
+//					fired = true;
+//					
+//				}else if(controls.fireDOWN){
+//					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+//					b.setDirection(4);
+//					setImage(b);
+//					bulletsInRoom.add(b);
+//					fired = true;
+//					
+//				}else if(controls.fireLEFT){
+//					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+//					b.setDirection(1);
+//					setImage(b);
+//					bulletsInRoom.add(b);
+//					fired = true;
+//					
+//				}else if(controls.fireRIGHT){
+//					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+//					b.setDirection(6);
+//					setImage(b);
+//					bulletsInRoom.add(b);
+//					fired = true;
+//				}
 			}
 			firerate++;
 			//kugel-array durchgehen und bewegung/position durchfhren/aktualisieren

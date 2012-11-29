@@ -23,20 +23,15 @@ public class Gameloop implements Runnable{
 		window = w;
 		player = window.player;
 		
-//		enemy = window.enemy;
 		panel = window.panel;
 		initLoop();
-		//vorher stand hier:
-				controls = window.controls;
-		//		panel = window.panel;
-		//		map = panel.level.map;
+		controls = window.controls;
 		collisionshape = panel.collision;
 		player.getMiddle();
 		altePos = new Point(player.playermiddle.x,player.playermiddle.y);
 	}
 	
 	public void initLoop(){
-		
 		map = panel.level.map;
 		collisionshape = panel.collision;
 	}
@@ -49,7 +44,6 @@ public class Gameloop implements Runnable{
 				
 				player.updateBounds();
 				player.getMiddle();
-				
 				if(player.energy >50){
 					player.changeState(0);
 					player.speed=2;
@@ -79,14 +73,14 @@ public class Gameloop implements Runnable{
 					if(collisionshape.contains(player.playermiddle)){
 						player.posX = player.posX - (int)player.speed;
 						player.posY = player.posY - (int)player.speed;
-						controls.direction = 7;
+						controls.setDirection(7);
 						player.getMiddle();
 					}
 				}else if((controls.up) && (controls.right)){
 					if(collisionshape.contains(player.playermiddle)){
 						player.posX = player.posX + (int)player.speed;
 						player.posY = player.posY - (int)player.speed;
-						controls.direction = 6;
+						controls.setDirection(6);
 						player.getMiddle();
 					}
 					
@@ -94,7 +88,7 @@ public class Gameloop implements Runnable{
 					if(collisionshape.contains(player.playermiddle)){
 						player.posX = player.posX - (int)player.speed;
 						player.posY = player.posY + (int)player.speed;
-						controls.direction = 4;
+						controls.setDirection(4);
 						player.getMiddle();
 					}
 					
@@ -102,34 +96,34 @@ public class Gameloop implements Runnable{
 					if(collisionshape.contains(player.playermiddle)){
 						player.posX = player.posX + (int)player.speed;
 						player.posY = player.posY + (int)player.speed;
-						controls.direction = 5;
+						controls.setDirection(5);
 						player.getMiddle();
 					}
 				}else if(controls.up){
 					if(collisionshape.contains(player.playermiddle)){
 						player.posY = player.posY - (int)player.speed;
-						controls.direction = 3;
+						controls.setDirection(3);
 						player.getMiddle();
 					}
 					
 				}else if(controls.down){
 					if(collisionshape.contains(player.playermiddle)){
 						player.posY = player.posY + (int)player.speed;
-						controls.direction = 0;
+						controls.setDirection(0);
 						player.getMiddle();
 					}
 					
 				}else if(controls.left){
 					if(collisionshape.contains(player.playermiddle)){
 						player.posX = player.posX - (int)player.speed;
-						controls.direction = 1;
+						controls.setDirection(1);
 						player.getMiddle();
 					}
 					
 				}else if(controls.right){
 					if(collisionshape.contains(player.playermiddle)){
 						player.posX = player.posX + (int)player.speed;
-						controls.direction = 2;
+						controls.setDirection(2);
 						player.getMiddle();
 					}
 				}
@@ -139,18 +133,18 @@ public class Gameloop implements Runnable{
 					player.posY = altePos.y-16;
 				}
 				
-				for(int i = 0; i< window.level.doorShapes.length;i++){
-					if(window.level.doorShapes[i].intersects(player.playerBounds)){		//contains(player.playermiddle)){
-						if(controls.levelChange){
-							Thread.yield();
-							window.levelChanging();
+				for(int i = 0; i< window.activeLevel.doorShapes.length;i++){
+					if(window.activeLevel.doorPoints.get(i) != null){
+						if(window.activeLevel.doorShapes[i].intersects(player.playerBounds)){		//contains(player.playermiddle)){
+							if(controls.levelChange){
+								Thread.yield();	
+								int lastDoorEntered = i; 
+								window.levelChanging(window.activeLevel.neighbors[i], lastDoorEntered);
+							}
 						}
 					}
 				}
 			}
-			
-			
-			
 						
 			//Thread.yield();
 			float onEnd = System.currentTimeMillis()- onStart;

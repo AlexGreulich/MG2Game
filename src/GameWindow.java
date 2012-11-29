@@ -37,7 +37,7 @@ public class GameWindow extends JFrame{
 	Player player;
 	Controls controls;
 	Thread panelThread, gameloopthread, bulletthread, enemythread, itemthread;
-	Level level;
+	Level activeLevel;// = new Level(null,null,null,0,-1,null);
 	Gameloop gameloop;
 	BulletHandler bullethandler;
 	EnemyController enemycontrol;
@@ -46,7 +46,7 @@ public class GameWindow extends JFrame{
 	ArrayList<Enemy> enemylist, corpses;
 	ArrayList<SpecialEffect> specialEffects;
 	
-	Clip clip1,clip2,clip3,clip4;
+	Clip bckgrdTrack,pistolShot,pistolHit,clip4;
 	Clip tempClip ;
 	int framePosition;
 	
@@ -72,16 +72,18 @@ public class GameWindow extends JFrame{
 	@SuppressWarnings("static-access")
 	HashMap<Integer,int[]> dungeon = pathCreate.map;
 	int startingRoom;
-	ArrayList<Level> allPossibleRooms = new ArrayList<Level>();
-	
-	
+	//ArrayList<Level> allPossibleRooms = new ArrayList<Level>();
+	HashMap<Integer,Level> availableRooms = new HashMap<Integer, Level>();
+	//PicContainer allPicsRaw;
 	
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
 		
 		//aufwaendige dinge laden
-		clip1 = loadMusic("test_track_01.mp3");
-		clip2 = loadMusic("test_track_01.mp3");
+		bckgrdTrack = loadMusic("audio/test_track_01.mp3");
+		pistolShot = loadMusic("audio/pistolshot01.mp3");
+		pistolHit = loadMusic("audio/pistolhit01.mp3");
+		//allPicsRaw = new PicContainer();
 		
 		screen = Toolkit.getDefaultToolkit().getScreenSize();
 		int scrx = (int) (screen.getWidth()/2)-500;
@@ -110,9 +112,9 @@ public class GameWindow extends JFrame{
 						if((y > 550) && (y <=600)){
 							splashwindow.dispose();
 							//startMusic("audio/test_track_01.mp3");
-							clip1.stop();
-							clip2.start();
-							startGame(0);	
+							//clip1.stop();
+							bckgrdTrack.start();
+							startGame();	
 						}else if((y > 650) && (y <= 700)){
 							System.exit(0);
 						}
@@ -144,7 +146,7 @@ public class GameWindow extends JFrame{
 		splashwindow.setVisible(true);
 		splashwindow.repaint();
 		//startMusic("audio/introtest.mp3");
-		clip1.start();
+	//	clip1.start();
 		
 		setResizable(false);
 		setUndecorated(true);
@@ -160,50 +162,58 @@ public class GameWindow extends JFrame{
 	
 	public void reInitWindow(int roomNumber){
 		
-//		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+//vorher:		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+		this.activeLevel = availableRooms.get(roomNumber);//allPossibleRooms.get(roomNumber);
+	
 		
 		panel.initPanel();	//panel neu initialisiert mit level, level.map, enemylist 
 		gameloop.initLoop();
+//vorher:	this.activeLevel.loadSpecificRoomStuff();
 		bullethandler.initBulletHandler();
 		this.bulletsInRoom.clear();
-		this.enemylist.clear();
-		this.corpses.clear();
-		this.specialEffects.clear();
+	//this.enemylist.clear();
+		this.enemylist = this.activeLevel.thisLevelsEnemies;
+	//this.corpses.clear();
+		this.corpses = this.activeLevel.corpsesInThisLevel;
+	//this.specialEffects.clear();
+		this.specialEffects = this.activeLevel.specialEffects;
 		itemHandler.initItemHandler();
-		loadSpecificRoomStuff();
+		System.out.println("Akt. Raum nr.: "+ activeLevel.nr);
 	}
 	
-	public void startGame(int roomNumber){
+	public void startGame(){
 		
 		allMapsFloors = new ArrayList<BufferedImage>();
 		allMapsWalls = new ArrayList<BufferedImage>();
 		allMapsItems = new ArrayList<BufferedImage>();
+		this.controls = new Controls();
 		
 		loadLevelPics();
 		createDungeon();
-//		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
-		this.level = allPossibleRooms.get(0);
-		this.controls = new Controls();
-		
+//	this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
+		this.activeLevel = availableRooms.get(startingRoom);//allPossibleRooms.get(0);
 		this.player = new Player(this);
+		this.itemHandler = new ItemHandler(this);
+		
 		this.bulletsInRoom = new ArrayList<Bullet>();
 		this.enemylist = new ArrayList<Enemy>();
 		this.corpses = new ArrayList<Enemy>();
 		this.specialEffects = new ArrayList<SpecialEffect>();
-		this.panel = new GamePanel(this, screenoption);
+		this.panel = new GamePanel(this);//, screenoption
+		
+		for(Level l : availableRooms.values()){
+			l.loadSpecificRoomStuff();
+		}
 		
 		this.gameloop = new Gameloop(this);
-		this.itemHandler = new ItemHandler(this);
+		
 		this.enemycontrol = new EnemyController(this);
 		this.bullethandler = new BulletHandler(this);
 		
-		level.map[10][20][5]=2;
-		loadSpecificRoomStuff();
+		activeLevel.map[10][20][5]=2;
 		addKeyListener(controls);
 		add(panel);
 		this.setVisible(true);
-		
-//		panel.itemsInLevel = itemHandler
 		
 		this.setIgnoreRepaint(true);
 		
@@ -222,6 +232,8 @@ public class GameWindow extends JFrame{
 		bullethandler.running = true;
 		enemycontrol.running = true;
 		itemHandler.running = true;
+		System.out.println("Der startraum ist nr.: " + this.startingRoom);
+		System.out.println("und activeLevel nr: " + activeLevel.nr);
 		pack();
 	}
 	
@@ -260,14 +272,7 @@ public class GameWindow extends JFrame{
 	}
 	
 	public void loadLevelPics(){
-		/*
-		 * Um alle karten zu laden
-		 * - floor, walls und items getrennt
-		 * - dateien heissen z.b. 001walls.gif, 001floors und 001items
-		 * 		würden dann ja in der richtigen reihenfolge ausgelesen
-		 * 		und können in der reihenfolge in die arrays gespeichert werden.
-		 * 		dann kann ein neuer level mit den parametern (floors[index],walls[index],items[index]) erstellt werden
-		 * */
+		
 		URL path = getClass().getResource("maps/");
 		File f = new File(path.getPath());
 		File[] files = f.listFiles();
@@ -286,46 +291,27 @@ public class GameWindow extends JFrame{
 			}
 		}
 	}
-	public void loadSpecificRoomStuff(){
-		/*
-		 * es gibt neben floor- und wall- map auch eine itemmap,
-		 * z.b. 5 verschiedene farben für 5 verschiedene typen von items
-		 * und dann per random, also typ 1 -> waffe; random 4 -> waffe nr 4 
-		 * so kann festgelegt werden an welcher stelle man etwas findet und es gibt trotzdem abwechslung
-		 * 
-		 * truhen/ spinde etc:
-		 * eine spawnfarbe für truhen, die truhe ist ein item
-		 * beim aufnehmen verschwindet die truhe nicht (ändert nur grafik in geöffnet)
-		 * -> extramethode um item in truhe zu erstellen
-		 *  
-		 * */
-		for(int x = 0; x < level.mapPic.getWidth(); x++){
-			for(int y = 0; y< level.mapPic.getHeight(); y++){
-			//items laden	
-				//if(level.map[x][y][2] == 1){
-					//int rdm = (int)Math.random()*5;
-				//}
-				int itemtypee = level.map[x][y][2];
-				if(itemtypee != 0){
-					Item it = new Item(this,x*32,y*8,itemtypee-1);
-					itemHandler.itemsInLevel.add(it);
-				}
-				
-				if(level.map[x][y][5] < 666){
-					SpecialEffect sE = new SpecialEffect(level.map[x][y][5]);
-					sE.setPos(x,y);
-					specialEffects.add(sE);
-				}
-			}
-		}
-	}
 	
-	public void levelChanging(){
+	public void levelChanging(int whichRoomToChangeTo, int doorPlayerCameFrom){
 		
-		//int nextRoom = rdm.nextInt(4);//(int) (Math.random() *4);
-		
-		//roomsEntered.addLast(nextRoom);
-		//reInitWindow(nextRoom);
+		if(doorPlayerCameFrom == 0){
+			Point newXY = availableRooms.get(whichRoomToChangeTo).doorPoints.get(2);
+			player.posX = newXY.x *32- 30;
+			player.posY = newXY.y *8 -30;
+		}else if(doorPlayerCameFrom == 1){
+			Point newXY = availableRooms.get(whichRoomToChangeTo).doorPoints.get(3);
+			player.posX = newXY.x*32 +30;
+			player.posY = newXY.y*8 -30;
+		}else if(doorPlayerCameFrom == 2){
+			Point newXY = availableRooms.get(whichRoomToChangeTo).doorPoints.get(0);
+			player.posX = newXY.x*32 +30;
+			player.posY = newXY.y*8 +30;
+		}else if(doorPlayerCameFrom == 3){
+			Point newXY = availableRooms.get(whichRoomToChangeTo).doorPoints.get(1);
+			player.posX = newXY.x*32 -30;
+			player.posY = newXY.y*8 +30;
+		}
+		reInitWindow(whichRoomToChangeTo);
 		
 //		panel.running = true;
 //		gameloop.running = true;
@@ -335,19 +321,22 @@ public class GameWindow extends JFrame{
 	}
 	
 	public void createDungeon(){
+		ArrayList<Integer> temp = new ArrayList<Integer>();
 		for(int i= 0; i< dungeon.size();i++){
 		
 			if(dungeon.get(i)[0] == 1){	//ersten gueltigen raum gefunden
-				startingRoom = i;
-				int type = dungeon.get(i)[1];
-				Level lvl = new Level(allMapsFloors.get(type), allMapsWalls.get(type), allMapsItems.get(type),type , i, dungeon.get(i));
-				allPossibleRooms.add(lvl);
+				temp.add(i);
 			}	
-			
-			
-			
+			int type = dungeon.get(i)[1];
+				Level lvl = new Level(this, allMapsFloors.get(type), allMapsWalls.get(type), allMapsItems.get(type),type , i, dungeon.get(i));
+				availableRooms.put(i, lvl);
 		}
-//		int[] roomZ = dungeon.keySet();
-//		for(int roomcnt =roomZ[0];)dungeon.
+		for(int i=0; i< availableRooms.size();i++){
+			System.out.println("availablerooms; raum nr: "+ availableRooms.get(i).nr +" ; nachbarn:"+availableRooms.get(i).neighbors);
+		}
+		for(int i=0; i< dungeon.size();i++){
+			System.out.println("dungeon; raum nr: "+ i );
+		}
+		startingRoom = temp.get(0);
 	}
 }
