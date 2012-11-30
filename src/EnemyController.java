@@ -9,25 +9,22 @@ public class EnemyController implements Runnable{
 	GameWindow window;
 	GamePanel panel;
 	ArrayList<Enemy> enemylist, corpses;
-	Enemy enemy1;
+	//Enemy enemy1;
 	Player player;
 	CopyOnWriteArrayList<Enemy> theEnemies;
-	
+	Level level;
 	public EnemyController(GameWindow w){
 		window = w;
 		panel = window.panel;
 		player = window.player;
-		enemylist = window.enemylist;
-		corpses = window.corpses;
-		
-		
-	//test levelwechsel, gegner disabled	
-		enemy1 = new Enemy(window,100,100,1);
-		enemylist.add(enemy1);
+		level = window.activeLevel;
+		enemylist = level.thisLevelsEnemies;
+		corpses = level.corpsesInThisLevel;
 	}
 	
 	public void initEnemyController(){
-		
+		this.enemylist = window.activeLevel.thisLevelsEnemies;
+		this.corpses = window.activeLevel.corpsesInThisLevel;
 	}
 	
 	public void collisionDetect(){
@@ -64,14 +61,12 @@ public class EnemyController implements Runnable{
 					e.canAttack=true;
 					e.countToNextAttack =10;
 				}
-				
 				if(e.energy == 0){
 					e.isDead =true;
 					e.speed=0;
 					enemylist.remove(e);
 					corpses.add(e);
 					panel.actionMessages.add(new ActionMessage("Enemy killed"));
-					
 				}
 			}
 			float onEnd = System.currentTimeMillis()-onStart;
@@ -84,5 +79,4 @@ public class EnemyController implements Runnable{
 			}
 		}
 	}
-
 }

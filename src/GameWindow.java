@@ -43,7 +43,7 @@ public class GameWindow extends JFrame{
 	EnemyController enemycontrol;
 	ItemHandler itemHandler;
 	ArrayList<Bullet> bulletsInRoom;
-	ArrayList<Enemy> enemylist, corpses;
+	//ArrayList<Enemy> enemylist, corpses;
 	ArrayList<SpecialEffect> specialEffects;
 	
 	Clip bckgrdTrack,pistolShot,pistolHit,clip4;
@@ -172,12 +172,13 @@ public class GameWindow extends JFrame{
 		bullethandler.initBulletHandler();
 		this.bulletsInRoom.clear();
 	//this.enemylist.clear();
-		this.enemylist = this.activeLevel.thisLevelsEnemies;
+		//this.enemylist = this.activeLevel.thisLevelsEnemies;
 	//this.corpses.clear();
-		this.corpses = this.activeLevel.corpsesInThisLevel;
+		//this.corpses = this.activeLevel.corpsesInThisLevel;
 	//this.specialEffects.clear();
 		this.specialEffects = this.activeLevel.specialEffects;
 		itemHandler.initItemHandler();
+		enemycontrol.initEnemyController();
 		System.out.println("Akt. Raum nr.: "+ activeLevel.nr);
 	}
 	
@@ -189,15 +190,12 @@ public class GameWindow extends JFrame{
 		this.controls = new Controls();
 		
 		loadLevelPics();
-		createDungeon();
-//	this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
-		this.activeLevel = availableRooms.get(startingRoom);//allPossibleRooms.get(0);
 		this.player = new Player(this);
-		this.itemHandler = new ItemHandler(this);
+		createDungeon();
+		this.activeLevel = availableRooms.get(startingRoom);//allPossibleRooms.get(0);
 		
+		this.itemHandler = new ItemHandler(this);
 		this.bulletsInRoom = new ArrayList<Bullet>();
-		this.enemylist = new ArrayList<Enemy>();
-		this.corpses = new ArrayList<Enemy>();
 		this.specialEffects = new ArrayList<SpecialEffect>();
 		this.panel = new GamePanel(this);//, screenoption
 		
@@ -313,11 +311,6 @@ public class GameWindow extends JFrame{
 		}
 		reInitWindow(whichRoomToChangeTo);
 		
-//		panel.running = true;
-//		gameloop.running = true;
-//		bullethandler.running = true;
-//		enemycontrol.running = true;
-//		itemHandler.running = true;
 	}
 	
 	public void createDungeon(){

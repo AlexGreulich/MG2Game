@@ -11,8 +11,11 @@ import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.imageio.ImageIO;
 
 
 @SuppressWarnings("serial")
@@ -48,11 +51,13 @@ public class GamePanel extends Canvas implements Runnable{
 	Polygon collision;
 	double transformModifier; 
 	
+	BufferedImage hudImage;
+	Color hudColor = new Color(90,192,119);
 	public GamePanel(GameWindow w ){//int scrsizeopt
 		//transformModifier = scrsizeopt;
 		window = w;
-		enemylist = window.enemylist;
-		corpses = window.corpses;
+		enemylist = window.activeLevel.thisLevelsEnemies;
+		corpses = window.activeLevel.corpsesInThisLevel;
 		bulletsInRoom = window.bulletsInRoom;//
 		/*hier stand:
 		 * 
@@ -61,6 +66,13 @@ public class GamePanel extends Canvas implements Runnable{
 		mapHeight = level.mapPic.getHeight()*64;//vllt raus? lvl hat ja immer selbe größe
 		 * */
 		initPanel();
+		
+		try{
+			hudImage = ImageIO.read(getClass().getResource("resources/hudentwurf.gif"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
 		tileset = new Tileset();
 		tilesetfloor = tileset.tilesetfloor;
 		tilesetwalls = tileset.tilesetwalls;
@@ -92,7 +104,8 @@ public class GamePanel extends Canvas implements Runnable{
 //		for(int i=0;i< collision.npoints; i++){
 //			System.out.println("Collisionshape x[]:"+ collision.xpoints[i]+" collisionshape y[]: " + collision.ypoints[i]);
 //		}
-		
+		enemylist = window.activeLevel.thisLevelsEnemies;
+		corpses = window.activeLevel.corpsesInThisLevel;
 	}
 	
 	public Dimension getPreferredSize(){
@@ -191,25 +204,10 @@ public class GamePanel extends Canvas implements Runnable{
 	
 	public void drawLatestActionMessage(Graphics g){
 		g.setColor(Color.WHITE);
-		//actionMessages = tempmessages;
 		int b=0;
-		//tempmessages = new ArrayList<ActionMessage>();
 		messagesToDraw = new CopyOnWriteArrayList<ActionMessage>(actionMessages);
 		for(ActionMessage m : messagesToDraw){
 			if(m.lifetime >0){
-//				if((m.lifetime <=40) && (m.lifetime >30)){
-//					
-//					g.setColor(new Color(200,200,200,200));
-//				}
-//				if((m.lifetime <=30) && (m.lifetime >20)){
-//					g.setColor(new Color(150,150,150,150));
-//				}
-//				if((m.lifetime <=20) && (m.lifetime >10)){
-//					g.setColor(new Color(100,100,100,100));
-//				}
-//				if((m.lifetime <=10) && (m.lifetime >=0)){
-//					g.setColor(new Color(50,50,50,50));
-//				}
 				
 				g.setColor(new Color(255,50,50,200 - (2*m.lifetime)));
 				g.drawString(m.getText(), panelwidth/4-(m.getText().length()*2), panelheight/4 + (b * 10));
@@ -218,60 +216,61 @@ public class GamePanel extends Canvas implements Runnable{
 				if(m.lifetime ==0){
 					actionMessages.remove(m);
 				}
-				//tempmessages.add(m);
 			}
 		}
 		g.setColor(Color.WHITE);
-		//actionMessages = tempmessages;
 	}
 	
 	public void drawGUI(Graphics g){
-		//hier wird später noch ein schicker rahmen mit feldern für lebensenergie, inventar etc gezeichnet
-		//erstmal nur anzeige der lebensenergie und sowas zum debuggen
-		g.setColor(Color.WHITE);
+		g.drawImage(hudImage, 0,panelheight - 650,null);
+		g.setColor(hudColor);
 		if(player.energy >0){
-			g.drawString("Lebensenergie: " + player.energy,50 ,150);
+			g.drawString("Life ",65,panelheight - 615); 
 			int a = (int)player.energy/10;
 			for(int b =0; b<a;b++){
 				if((int)player.energy < 40){
 					g.setColor(Color.RED);
 				}
-				g.fillRect(180 + b*4,140,2,10);
-				g.setColor(Color.WHITE);
+				g.fillRect(90 + b*4,panelheight - 625,2,10);
+				g.setColor(hudColor);
 			}
-			
-		}else{
-			g.drawString("Spieler waere jetzt tot, Energie: "+ player.energy,50 ,150 );
+		}
+		g.drawImage(hudImage, 0,10,null);
+		
+		int cntX =0;
+		int cntY =0;
+		for(int i=0;i<window.dungeon.size();i++){
+			if(cntX == 6){
+				cntX = 0;
+				cntY++;
+			}
+			if(window.dungeon.get(i)[0] != (-1)){
+				g.drawRect(73 +(cntX*10), 35+(cntY*10), 5, 5);
+				if(level.nr == i){
+					g.setColor(Color.RED);
+					g.fillRect(74 +(cntX*10), 36 + (cntY*10), 4,4);
+					g.setColor(hudColor);
+				}
+			}else{
+				g.fillRect(73 +(cntX*10), 35+(cntY*10), 2, 2);
+			}
+			cntX++;
 		}
 		if(player.equipment[0] != null){
-			g.drawString("Itemslot 1: " + player.equipment[0].name, 50,50);
+			g.drawString("Weapon " + player.equipment[0].name, 65,panelheight - 595);//
 		}else{
-			g.drawString("No Equipment in Itemslot 1 ", 50, 50);
-		}
-		if(player.equipment[1] != null){
-			g.drawString("Itemslot 2: " + player.equipment[1], 50,70);
-		}else{
-			g.drawString("No Equipment in Itemslot 2 ", 50, 70);
-		}
-		if(player.equipment[2] != null){
-			g.drawString("Itemslot 3: " + player.equipment[2], 50,90);
-		}else{
-			g.drawString("No Equipment in Itemslot 3 ", 50, 90);
-		}
-		if(player.equipment[3] != null){
-			g.drawString("Itemslot 4: " + player.equipment[3], 50,110);
-		}else{
-			g.drawString("No Equipment in Itemslot 4 ", 50, 110);
+			g.drawString("Weapon " + " --- ", 65,panelheight - 595);
 		}
 		
-		g.drawString("Spieler an position map[x][y]: "+ player.posX/32 +", "+ player.posY/48,50,180);
-		int index =0;
-		CopyOnWriteArrayList<Enemy> enemies = new CopyOnWriteArrayList<Enemy>(enemylist);
-		for(Enemy e : enemies){
-			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 200 + (index*20));
-			index++;
-		}
-		g.drawString("[Q]uit", 50,30);
+		g.drawString("Ammo ", 65,panelheight - 575);
+//		g.drawString("Spieler an position map[x][y]: "+ player.posX/32 +", "+ player.posY/48,50,180);
+		
+//		CopyOnWriteArrayList<Enemy> enemies = new CopyOnWriteArrayList<Enemy>(enemylist);
+//		for(Enemy e : enemies){
+//			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 200 + (index*20));
+//			index++;
+//		}
+		g.drawString("[Q]uit", panelwidth - 20,30);
 						for(Point p: level.collisionpoints){
 							g.setColor(Color.RED);
 							g.fillRect(p.x, p.y, 1, 1);
@@ -287,14 +286,12 @@ public class GamePanel extends Canvas implements Runnable{
 			if(level.doorShapes[i] != null){
 				if(level.doorShapes[i].intersects(player.playerBounds)){
 					System.out.println("neighbors[] -> tür führt zu:" + level.neighbors[i]);
-					//System.out.println(""+ level.);
 				}
 			}
 		}
-		
-						g.setColor(Color.GREEN);
-						g.drawRect(player.playerBounds.x,player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
-						g.drawRect(player.playermiddle.x, player.playermiddle.y, 1,1);
+		g.setColor(Color.GREEN);
+		g.drawRect(player.playerBounds.x,player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
+		g.drawRect(player.playermiddle.x, player.playermiddle.y, 1,1);
 	}
 	
 	public void drawItems(Graphics g){
@@ -323,7 +320,6 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	public void changeColorScheme(Graphics g){
-		
 	}
 	
 	@Override
@@ -340,8 +336,6 @@ public class GamePanel extends Canvas implements Runnable{
 				g2d.fillRect(window.cameraPosition.x,window.cameraPosition.y,window.screen.width,window.screen.height);
 				
 				//hier dinge zeichnen
-				
-				
 				drawLevelFloor(g2d);
 				drawLevelWalls(g2d);
 				

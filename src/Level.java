@@ -26,8 +26,6 @@ public class Level {
 	int roomtype;
 	HashMap<Integer,Point[]> doorsAssignment; 
 	
-
-	
 	public Level(GameWindow w,BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems,int type, int roomNumber, int[] nextrooms){
 		if(roomNumber > (-1)){
 			window =w;
@@ -50,12 +48,12 @@ public class Level {
 			corpsesInThisLevel = new ArrayList<Enemy>();
 			specialEffects = new ArrayList<SpecialEffect>();
 			
-
 			loadMap();
 		}
-		
-		//loadSpecificRoomStuff();
+		Enemy enemy1 = new Enemy(window,100,100,1);
+			thisLevelsEnemies.add(enemy1);
 	}
+	
 	public void loadSpecificRoomStuff(){
 		/*
 		 * es gibt neben floor- und wall- map auch eine itemmap,
@@ -202,20 +200,6 @@ public class Level {
 		 * 5	-> special effect -> 1 -> effect 1 usw 
  		 * */
 		
-		
-		/*
-		 * Um karten zu zeichnen definieren wir bestimmte Farben, die später 
-		 * als ID gespeichert werden.
-		 * Da es viel Tiles werden, vorher fest definieren:
-		 * 
-		 * Color c001 = new Color(100,100,100);
-		 * Color c002 = new Color(110,110,110);
-		 * 
-		 * Color c015 = new Color(0,0,100);
-		 * usw ...
-		 * möglichst nach geländeart sortiert 
-		 * und später statt "c001" ruhig umschreibende namen nehmen wie gras oder steinlinksoben
-		 * */
 		
 	//	BODEN	
 		Color schotter = Color.BLACK;
@@ -415,6 +399,16 @@ public class Level {
 		}
 		generatePolygon(sortpoints.get(0));//Testweise <--- waende sollten dann aber auch durchgaengig sein und nicht irgendwo aufhoeren
 		createDoors();
+		for(int x =0; x<mapWidth;x++){
+			for(int y =0;y< mapHeight;y++){
+				
+			}
+		}
+		for(int i =0;i < doorPoints.size();i++){
+			if(doorPoints.get(i) != null){
+				map[doorPoints.get(i).x][doorPoints.get(i).y][3] = 666;
+			}
+		}
 	}
 	
 	public void createDoors(){

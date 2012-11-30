@@ -45,7 +45,6 @@ public class Player {
 		runterrechts_cycle = new BufferedImage[8];
 		getMiddle();
 		
-		//slots für items:
 		equipment = new Item[4];
 				
 		ammo = 0;
@@ -122,8 +121,6 @@ public class Player {
 			this.isInjured =false;
 			this.isDead = true;
 			break;
-			
-			
 		}
 	}
 	

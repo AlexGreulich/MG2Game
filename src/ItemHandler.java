@@ -45,12 +45,10 @@ public class ItemHandler implements Runnable{
 				}
 			}
 		} catch (IOException e) {e.printStackTrace();}
-		
 	}
 	
 	public void initItemHandler(){
 		level = window.activeLevel;
-		//itemsInLevel = window.activeLevel.thisLevelsItems; 
 	}
 	
 	public synchronized void run(){

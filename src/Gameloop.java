@@ -12,7 +12,6 @@ public class Gameloop implements Runnable{
 	GamePanel panel;
 	
 	int[][][] map;
-	//int speed;
 	int gamespeed =16;
 	Point playermiddle;
 	Point altePos;

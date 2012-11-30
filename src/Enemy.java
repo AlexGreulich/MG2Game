@@ -85,26 +85,8 @@ public class Enemy extends Entity{
 					}
 				}
 			}
-		}catch(IOException e){e.printStackTrace();}
-		
-		//corpseImage = rechts_cycle[0].createGraphics();
-		//AffineTransform affine = AffineTransform.getRotateInstance(Math.toRadians(90.0),16,32);
-		//corpseImage = new BufferedImage(rechts_cycle[0].getWidth(),rechts_cycle[0].getHeight(),rechts_cycle[0].getType());
-		
-		
-		
-		
+		}catch(IOException e){e.printStackTrace();}		
 	}
-//	public BufferedImage createDeadPic(){
-//		AffineTransform affine = AffineTransform.getRotateInstance(Math.toRadians(90.0),24,16);
-//		BufferedImage rotated = new BufferedImage(rechts_cycle[0].getWidth(),rechts_cycle[0].getHeight(),rechts_cycle[0].getType());
-//		Graphics2D g2 = (Graphics2D) rotated.getGraphics();
-//		
-//		g2.setTransform(affine);
-//		
-//		g2.drawImage(rechts_cycle[0], 0,0,new Color(255,255,255,0),null);
-//		return rotated;
-//	}
 	public int getX(){
 		return posX;
 	}
@@ -134,8 +116,8 @@ public class Enemy extends Entity{
 	
 	public void targetDistance(){
 		if (enemyType == 1){
-			targetX=player.getX();
-			targetY=player.getY();
+			this.targetX=player.getX();
+			this.targetY=player.getY();
 		}
 		else if (enemyType ==2){
 			int aX = player.getX();
