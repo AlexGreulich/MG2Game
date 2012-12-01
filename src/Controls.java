@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 public class Controls implements KeyListener{
 
 	int direction=0;
-	boolean up = false,down = false, left = false, right = false, isMoving = false;
+	boolean up = false,down = false, left = false, right = false, isMoving = false, reload = false;
 	boolean fire;
 //	, fireDOWN, fireLEFT, fireRIGHT;
 	boolean equip =false;
@@ -23,7 +23,7 @@ public class Controls implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
-			case KeyEvent.VK_UP:
+			case KeyEvent.VK_SPACE:
 				fire = true;
 				break;
 //			case KeyEvent.VK_DOWN:
@@ -54,8 +54,11 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_E:
 				equip = true;
 				break;
-			case KeyEvent.VK_C:
+			case KeyEvent.VK_UP:
 				levelChange = true;
+				break;
+			case KeyEvent.VK_R:
+				reload = true;
 				break;
 		}
 	}
@@ -63,7 +66,7 @@ public class Controls implements KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()){
-			case KeyEvent.VK_UP:
+			case KeyEvent.VK_SPACE:
 				fire = false;
 				break;
 //			case KeyEvent.VK_DOWN:
@@ -96,8 +99,11 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_E:
 				equip = false;
 				break;
-			case KeyEvent.VK_C:
+			case KeyEvent.VK_UP:
 				levelChange = false;
+				break;
+			case KeyEvent.VK_R:
+				reload = false;
 				break;
 		}
 	}

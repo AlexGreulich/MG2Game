@@ -105,7 +105,7 @@ public class BulletHandler implements Runnable{
 						if(b.bounds.intersects(e.enemyBounds)){
 							e.energy = e.energy - b.dealDamage();
 							window.pistolHit.start();
-							panel.actionMessages.add(new ActionMessage("Enemy hit"));
+							panel.actionMessages.add(new ActionMessage(panel,"Enemy hit"));
 							bulletsInRoom.remove(b);
 						}
 					}
@@ -136,13 +136,16 @@ public class BulletHandler implements Runnable{
 			if(!fired){
 					// pfeiltasten abfragen um neue kugeln zu erzeugen
 				if(controls.fire){ //&& (controls.fireLEFT)){
+					if((player.weapons[0] != null)&&(player.ammo >0)){
+						Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+						player.ammo--;
+						b.setDirection(controls.getDirection());
+						setImage(b);
+						bulletsInRoom.add(b);
+						window.pistolShot.start();
+						fired = true;
+					}
 					
-					Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
-					b.setDirection(controls.getDirection());
-					setImage(b);
-					bulletsInRoom.add(b);
-					window.pistolShot.start();
-					fired = true;
 					
 				}
 //				else if((controls.fire) && (controls.fireRIGHT)){

@@ -57,9 +57,24 @@ public class ItemHandler implements Runnable{
 			float onStart = System.currentTimeMillis();
 			
 			if(controls.equip){
-				for(int i =0; i< window.activeLevel.thisLevelsItems.size(); i++){//Item i: itemsInLevel){
+				for(int i =0; i< window.activeLevel.thisLevelsItems.size(); i++){
 					if(window.activeLevel.thisLevelsItems.get(i).bounds.intersects(player.playerBounds)){						//contains(player.playermiddle)){
-						window.activeLevel.thisLevelsItems.get(i).equip();
+						if(window.activeLevel.thisLevelsItems.get(i).itemType == 0){
+							//ACHTUNG: erstmal nur schusswaffe, später unterschieden ob melee oder distance-waffe (player.weapons[0/1])
+							player.weapons[0] = window.activeLevel.thisLevelsItems.get(i);
+							window.activeLevel.thisLevelsItems.remove(i);
+							break;
+						}
+						for(int j=0;j < player.equipment.length;j++){
+							
+							if(player.equipment[j] == null){
+								
+								player.equipment[j] = window.activeLevel.thisLevelsItems.get(i);
+								window.activeLevel.thisLevelsItems.remove(i);
+								break;
+							}
+						}
+						
 					}
 				}
 			}

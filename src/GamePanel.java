@@ -208,9 +208,12 @@ public class GamePanel extends Canvas implements Runnable{
 		messagesToDraw = new CopyOnWriteArrayList<ActionMessage>(actionMessages);
 		for(ActionMessage m : messagesToDraw){
 			if(m.lifetime >0){
-				
-				g.setColor(new Color(255,50,50,200 - (2*m.lifetime)));
-				g.drawString(m.getText(), panelwidth/4-(m.getText().length()*2), panelheight/4 + (b * 10));
+				g.setColor(new Color(0,0,0,2*m.lifetime));
+				g.fillRect(panelwidth/4-(m.getText().length()*2)-5, panelheight/4 + (b * 15) + m.lifetime/10 - 15, m.getText().length()*8-4,20);
+				g.setColor(new Color(255,255,255,2*m.lifetime));		// old: new Color(255,50,50,200- (2*m.lifetime)		new Color(hudColor.getRGB() )
+				g.drawRect(panelwidth/4-(m.getText().length()*2)-5, panelheight/4 + (b * 15) + m.lifetime/10 - 15, m.getText().length()*8-4,20);
+				g.drawString(m.getText(), panelwidth/4-(m.getText().length()*2 -2), panelheight/4 + (b * 15) +m.lifetime/10);//
+//				g.drawImage(m.producePicFromMessage(g),0,0,null );
 				b++;
 				m.reduceLife();
 				if(m.lifetime ==0){
@@ -262,7 +265,7 @@ public class GamePanel extends Canvas implements Runnable{
 			g.drawString("Weapon " + " --- ", 65,panelheight - 595);
 		}
 		
-		g.drawString("Ammo ", 65,panelheight - 575);
+		g.drawString("Ammo " + player.ammo, 65,panelheight - 575);
 //		g.drawString("Spieler an position map[x][y]: "+ player.posX/32 +", "+ player.posY/48,50,180);
 		
 //		CopyOnWriteArrayList<Enemy> enemies = new CopyOnWriteArrayList<Enemy>(enemylist);
@@ -275,7 +278,7 @@ public class GamePanel extends Canvas implements Runnable{
 							g.setColor(Color.RED);
 							g.fillRect(p.x, p.y, 1, 1);
 						}
-		g.drawPolygon(collision);
+//		g.drawPolygon(collision);
 		for(int i=0; i< level.doorShapes.length;i++){
 			if(level.doorPoints.get(i) != null){
 				g.drawPolygon(level.doorShapes[i]);

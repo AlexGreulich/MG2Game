@@ -4,6 +4,7 @@ import java.awt.Polygon;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 
 public class Level {
@@ -25,6 +26,7 @@ public class Level {
 	int[] neighbors = new int[4];
 	int roomtype;
 	HashMap<Integer,Point[]> doorsAssignment; 
+	Random random = new Random();
 	
 	public Level(GameWindow w,BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems,int type, int roomNumber, int[] nextrooms){
 		if(roomNumber > (-1)){
@@ -50,8 +52,7 @@ public class Level {
 			
 			loadMap();
 		}
-		Enemy enemy1 = new Enemy(window,100,100,1);
-			thisLevelsEnemies.add(enemy1);
+		
 	}
 	
 	public void loadSpecificRoomStuff(){
@@ -67,6 +68,8 @@ public class Level {
 		 * -> extramethode um item in truhe zu erstellen
 		 *  
 		 * */
+		int zombieCount =2;
+		
 		for(int x = 0; x < this.mapPic.getWidth(); x++){
 			for(int y = 0; y< this.mapPic.getHeight(); y++){
 			
@@ -80,6 +83,16 @@ public class Level {
 					SpecialEffect sE = new SpecialEffect(this.map[x][y][5]);
 					sE.setPos(x,y);
 					specialEffects.add(sE);
+				}
+				
+				if(map[x][y][0] < 666){
+					if(zombieCount >=0){
+						if(random.nextInt(420) == 1){
+							//Enemy enemy1 = new Enemy(window,x*16,y*8,1);
+							thisLevelsEnemies.add(new Enemy(window,x,y,1));
+							zombieCount--;
+						}
+					}
 				}
 			}
 		}
@@ -228,9 +241,23 @@ public class Level {
 		Color wandrohrlinks = 		new Color(0,	150,	120);
 		Color wandlichtrechts = 	new Color(0,	150,	130);
 		Color wandlichtlinks = 		new Color(0,	150,	140);
+		Color wandabwasserlinks = 	new Color(0,	150,	142);
+		Color wandabwasserrechts = 	new Color(0,	150,	144);
 		Color wandkabel1rechts = 	new Color(0,	150,	150);
 		Color wandkabel1links = 	new Color(0,	150,	160);
+		Color wandposterrechts = 	new Color(0,	150,	162);
+		Color wandposterlinks = 	new Color(0,	150,	164);
 		Color eckeoben = 			new Color(0,	150,	170);
+		Color wandmonitorre = 		new Color(0,	150,	172);
+		Color wandmonitorli = 		new Color(0,	150,	174);
+		Color wandbeton1re = 		new Color(0,	150,	176);
+		Color wandbeton1li = 		new Color(0,	150,	178);
+		Color wandbeton2re = 		new Color(0,	150,	180);
+		Color wandbeton2li = 		new Color(0,	150,	182);
+		Color wandbetonrohrre = 	new Color(0,	150,	184);
+		Color wandbetonrohrli = 	new Color(0,	150,	186);
+		Color wandbeton3re = 		new Color(0,	150,	188);
+		Color wandbeton3li = 		new Color(0,	150,	190);
 		
 		Color doorToRight = 		new Color(0,	250,	150);
 		Color doorToLeft = 			new Color(0,	250,	160);
@@ -318,18 +345,102 @@ public class Level {
 															collisionpoints.add(new Point(x,y));
 	
 				}
-				else if(d.equals(wandkabel1rechts)){		map[x][y][3]=6;
+				else if(d.equals(wandkabel1rechts)){		map[x][y][3]=8;
 															map[x][y][1]=1;
 															map[x][y][5]=0;
 															collisionpoints.add(new Point(x,y));
 															
 				}
-				else if(d.equals(wandkabel1links)){			map[x][y][3]=7;
+				else if(d.equals(wandkabel1links)){			map[x][y][3]=9;
 															map[x][y][1]=1;
 															map[x][y][5]=1;
 															collisionpoints.add(new Point(x,y));
 															
 				}
+				else if(d.equals(wandabwasserrechts)){		map[x][y][3]=6;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandabwasserlinks)){		map[x][y][3]=7;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandposterrechts)){		map[x][y][3]=10;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandposterlinks)){			map[x][y][3]=11;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandmonitorre)){			map[x][y][3]=14;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandmonitorli)){			map[x][y][3]=15;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandbeton1re)){			map[x][y][3]=16;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandbeton1li)){			map[x][y][3]=17;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandbeton2re)){			map[x][y][3]=18;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandbeton2li)){			map[x][y][3]=19;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandbetonrohrre)){			map[x][y][3]=20;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandbetonrohrli)){			map[x][y][3]=21;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandbeton3re)){			map[x][y][3]=22;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
+				else if(d.equals(wandbeton3li)){			map[x][y][3]=23;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));
+				
+}
 				else if(d.equals(eckeoben)){
 															map[x][y][3] = 10;
 															map[x][y][1] = 1;

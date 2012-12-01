@@ -66,7 +66,7 @@ public class EnemyController implements Runnable{
 					e.speed=0;
 					enemylist.remove(e);
 					corpses.add(e);
-					panel.actionMessages.add(new ActionMessage("Enemy killed"));
+					panel.actionMessages.add(new ActionMessage(panel,"Enemy killed"));
 				}
 			}
 			float onEnd = System.currentTimeMillis()-onStart;

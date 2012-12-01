@@ -25,6 +25,8 @@ public class Player {
 	boolean isOkay = true;
 	float speed = 2;
 	
+	Item[] weapons = new Item[2];	//0 - melee , 1 - distance
+	
 	public Player(GameWindow w){//, int x, int y
 		
 		window = w;
@@ -45,9 +47,9 @@ public class Player {
 		runterrechts_cycle = new BufferedImage[8];
 		getMiddle();
 		
-		equipment = new Item[4];
+		equipment = new Item[10];
 				
-		ammo = 0;
+		ammo = 10;
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
 //			int count =0;

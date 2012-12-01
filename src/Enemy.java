@@ -33,8 +33,8 @@ public class Enemy extends Entity{
 		enemyType=type;
 
 		speed=1;
-		posX =300;
-		posY = 300;
+		posX = x*32;//300;
+		posY = y*8;//300;
 		energy = 100f;
 		image = null;
 
@@ -380,7 +380,7 @@ public class Enemy extends Entity{
 	}
 	public void dealDamage(){
 		player.energy = player.energy - 0.5f;
-		window.panel.actionMessages.add(new ActionMessage("Player hit"));
+		window.panel.actionMessages.add(new ActionMessage(window.panel,"Player hit"));
 		canAttack = false;
 		countToNextAttack =10;
 	}

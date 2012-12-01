@@ -39,7 +39,7 @@ public class Item extends Entity{
 				
 				break;
 			case(2):			//ammo
-				shots = 5;
+				shots = 10;
 				name = "Ammo";
 				break;
 			case(3):			//div objekt
@@ -56,7 +56,7 @@ public class Item extends Entity{
 	}
 	
 	public void createActionMessage(){
-		ActionMessage am = new ActionMessage("Picked up " + name);
+		ActionMessage am = new ActionMessage(panel, "Picked up " + name);
 		//return "Picked up " + name ;
 		panel.actionMessages.add(am);
 	}
@@ -69,7 +69,7 @@ public class Item extends Entity{
 		window.activeLevel.thisLevelsItems.remove(this);		//direkt in gamepanel oder so?
 		createActionMessage();
 		if(this.itemType == 0){
-			panel.player.equipment[0] = this;
+			panel.player.weapons[0] = this;
 			//panel.actionMessages.add(s);
 		}else if(this.itemType == 1){
 			panel.player.energy += healthPts;

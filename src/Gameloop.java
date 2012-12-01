@@ -132,6 +132,20 @@ public class Gameloop implements Runnable{
 					player.posY = altePos.y-16;
 				}
 				
+				if(controls.reload){
+					for(int i=0; i< player.equipment.length;i++){
+						if(player.equipment[i] != null){
+							if(player.equipment[i].itemType == 2){
+							player.equipment[i] =null;
+							player.ammo += 10;
+							break;
+						}
+						}
+						
+					}
+					
+				}
+				
 				for(int i = 0; i< window.activeLevel.doorShapes.length;i++){
 					if(window.activeLevel.doorPoints.get(i) != null){
 						if(window.activeLevel.doorShapes[i].intersects(player.playerBounds)){		//contains(player.playermiddle)){
