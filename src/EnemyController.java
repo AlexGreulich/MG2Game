@@ -37,9 +37,10 @@ public class EnemyController implements Runnable{
 				}
 				if(e.canAttack){
 					e.dealDamage();
-					SpecialEffect se = new SpecialEffect(1);
-					se.setPos(e.getX(), e.getY());
-					window.specialEffects.add(se);
+					SpecialEffect se = new SpecialEffect(2);
+					se.setPos(player.getX()/32, player.getY()/8);
+					se.setNotLooping();
+					window.activeLevel.specialEffects.add(se);
 				}
 			}
 		}

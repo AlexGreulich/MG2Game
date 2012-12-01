@@ -105,6 +105,10 @@ public class BulletHandler implements Runnable{
 						if(b.bounds.intersects(e.enemyBounds)){
 							e.energy = e.energy - b.dealDamage();
 							window.pistolHit.start();
+							SpecialEffect se = new SpecialEffect(2);
+							se.setPos(e.getX()/32, e.getY()/8);
+							se.setNotLooping();
+							window.activeLevel.specialEffects.add(se);
 							panel.actionMessages.add(new ActionMessage(panel,"Enemy hit"));
 							bulletsInRoom.remove(b);
 						}

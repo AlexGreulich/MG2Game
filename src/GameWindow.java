@@ -263,9 +263,6 @@ public class GameWindow extends JFrame{
 		}catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-//		clip.start();
-//		clip.loop(Clip.LOOP_CONTINUOUSLY);
-		
 			return tempClip;
 	}
 	
@@ -310,7 +307,6 @@ public class GameWindow extends JFrame{
 			player.posY = newXY.y*8 +30;
 		}
 		reInitWindow(whichRoomToChangeTo);
-		
 	}
 	
 	public void createDungeon(){
