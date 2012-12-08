@@ -9,8 +9,9 @@ public class Bullet extends Entity{
 	int direction;
 	Rectangle bounds;
 	BufferedImage image;
+	boolean playerBullet;
 	
-	public Bullet(int x, int y, int d){//, int direction
+	public Bullet(int x, int y, int d, boolean f){//, int direction
 		
 		posX = x;
 		posY = y;
@@ -19,6 +20,7 @@ public class Bullet extends Entity{
 		
 		speed = 10;	
 		damageOnHit = d;
+		playerBullet = f;
 		
 	}
 	

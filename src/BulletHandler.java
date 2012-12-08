@@ -102,7 +102,7 @@ public class BulletHandler implements Runnable{
 				if(enemylist.size()>0){
 					enemies = new CopyOnWriteArrayList<Enemy>(enemylist);
 					for(Enemy e: enemies){
-						if(b.bounds.intersects(e.enemyBounds)){
+						if(b.bounds.intersects(e.enemyBounds)&&(b.playerBullet==true)){
 							e.energy = e.energy - b.dealDamage();
 							window.pistolHit.start();
 							SpecialEffect se = new SpecialEffect(2);
@@ -114,8 +114,35 @@ public class BulletHandler implements Runnable{
 						}
 					}
 				}
+				if(b.bounds.intersects(player.playerBounds)&&b.playerBullet==false){
+					player.energy = player.energy - 0.5f;
+					window.pistolHit.start();
+					SpecialEffect se = new SpecialEffect(2);
+					se.setPos(player.getX()/32, player.getY()/8);
+					se.setNotLooping();
+					window.activeLevel.specialEffects.add(se);
+					window.panel.actionMessages.add(new ActionMessage(window.panel,"Player hit"));
+					bulletsInRoom.remove(b);
+					
+				}
 			}
 		}
+	}
+	
+	public void createEnemyBullets(){
+		enemies = new CopyOnWriteArrayList<Enemy>(enemylist);
+		if(enemies.size()>0){
+			for(Enemy e: enemies){
+				if((e.enemyType==2)&&(e.canAttack==true)){
+					Bullet b = new Bullet(e.posX + 16, e.posY+16, 10, false);
+					b.setDirection(e.calcShotDirection());
+					setImage(b);
+					bulletsInRoom.add(b);
+					window.pistolShot.start();
+				}
+			}
+		}
+		
 	}
 	
 	@Override
@@ -136,12 +163,13 @@ public class BulletHandler implements Runnable{
 				window.pistolHit.setFramePosition(0);
 			}
 			collisionCheck();
+			createEnemyBullets();
 			// es kann nur gefeuert werden wenn abgefeuert == false ist, sonst wird feuerrate bis 50 gewartet
 			if(!fired){
 					// pfeiltasten abfragen um neue kugeln zu erzeugen
 				if(controls.fire){ //&& (controls.fireLEFT)){
 					if((player.weapons[0] != null)&&(player.ammo >0)){
-						Bullet b = new Bullet(player.posX + 16, player.posY+16, 10);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
+						Bullet b = new Bullet(player.posX + 16, player.posY+16, 10, true);	//spaeter fuer damageonhit: player.aktuelleWaffe.damage
 						player.ammo--;
 						b.setDirection(controls.getDirection());
 						setImage(b);

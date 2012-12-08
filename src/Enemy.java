@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -16,9 +18,14 @@ public class Enemy extends Entity{
 	int targetY;
 	int speed;
 	int enemyDirection;
+	int shootDirection;
 	GameWindow window;
 	Player player;
 	BufferedImage img,image, corpseImage;
+	GamePanel panel;
+	Point enemymiddle = new Point(posX,posY);
+	Point altePos;
+	Polygon collisionshape;
 	
 	float animation = 0.0f;
 	BufferedImage[] hoch_cycle,runter_cycle, links_cycle,rechts_cycle,hochlinks_cycle,hochrechts_cycle,runterlinks_cycle,runterrechts_cycle;
@@ -31,10 +38,14 @@ public class Enemy extends Entity{
 		window = w;
 		player = window.player;
 		enemyType=type;
+		panel = window.panel;
+		collisionshape = panel.collision;
 
 		speed=1;
 		posX = x*32;//300;
 		posY = y*8;//300;
+		getMiddle();
+		altePos = new Point(enemymiddle.x,enemymiddle.y);
 		energy = 100f;
 		image = null;
 
@@ -98,6 +109,9 @@ public class Enemy extends Entity{
 	}
 	public void setY(int y){
 		posY = y;
+	}
+	public void getMiddle(){
+		enemymiddle.setLocation(posX+16, posY+16);
 	}
 	public int getXDistancePlayer(){
 		//int x = player.getX() - posX;
@@ -298,48 +312,154 @@ public class Enemy extends Entity{
 			}
 		}
 	}
+	
+	
+	public int calcShotDirection(){
+		
+		int a = player.getX()-posX;
+		int b = player.getY()-posY;
+			if ((a>0) && (b<0)){ //spieler oben rechts vom gegner
+		
+				if(b != 0){
+					float tmp = a/(b*-1);
+					if (tmp >= 2.42){
+						shootDirection=2;
+					}
+					else if (tmp<2.42 && tmp>=0.41){
+						shootDirection=6;
+					}
+					else if (tmp<0.41){
+						shootDirection=3;
+					}
+				}
+			
+			}
+			else if ( (a>0) && (b>0)){ //spieler unten rechts vom gegner
+				if(b != 0){
+					float tmp = a/b;
+					if (tmp >= 2.42){
+						shootDirection=2;
+					}
+					else if (tmp<2.42 && tmp>=0.41){
+						shootDirection=5;
+					}
+					else if (tmp<0.41){
+						shootDirection=0;
+					}
+				}	
+			
+			}
+			else if ( (a<0) && (b>0)){ //spieler unten links vom gegner
+			
+				if(b != 0){
+					float tmp = (a*-1)/b;
+					if (tmp >= 2.42){
+						shootDirection=1;
+					}
+					else if (tmp<2.42 && tmp>=0.41){
+						shootDirection=4;
+					}
+					else if (tmp<0.41){
+						shootDirection=0;
+					}
+				}
+			
+			}
+			else if ( (a<0) && (b<0)){ //spieler oben links vom gegner
+				if(b != 0){
+					float tmp = (a*-1)/(b*-1);
+					if (tmp >= 2.42){
+						shootDirection=1;
+					}
+					else if (tmp<2.42 && tmp>=0.41){
+						shootDirection=7;
+					}
+					else if (tmp<0.41){
+						shootDirection=3;
+					}
+				}
+			
+			}
+			else if ((a==0) || (b==0)){
+				if (a==0){
+					if (b>0){
+						shootDirection=0;
+					}
+					else{
+						shootDirection=3;
+					}
+				}
+				else if (b==0){
+					if (a>0){
+						shootDirection=2;
+					}
+					else{
+						shootDirection=1;
+					}
+				}
+			}
+			canAttack = false;
+			countToNextAttack =100;
+			return shootDirection;
+		}
+	
+	
 	public void move(){
 		targetDistance();
 		calcDirection();
-		if(enemyDirection == 0){
+		getMiddle();
+		altePos.setLocation(enemymiddle.x,enemymiddle.y);
+		if((enemyDirection ==0)&&(collisionshape.contains(enemymiddle))){
 			int tmp = getX()-speed;
 			setX(tmp);
 			tmp = getY()-speed;
 			setY(tmp);
+			getMiddle();
 		}
-		else if(enemyDirection ==1){
+		else if((enemyDirection ==1)&&(collisionshape.contains(enemymiddle))){
 			int tmp = getX() -speed;
 			setX(tmp);
+			getMiddle();
 		}
-		else if(enemyDirection ==2){
+		else if((enemyDirection ==2)&&(collisionshape.contains(enemymiddle))){
 			int tmp = getX()-speed;
 			setX(tmp);
 			tmp = getY()+speed;
 			setY(tmp);
+			getMiddle();
 		}
-		else if(enemyDirection ==3){
+		else if((enemyDirection ==3)&&(collisionshape.contains(enemymiddle))){
 			int tmp = getY()-speed;
 			setY(tmp);
+			getMiddle();
 		}
-		else if(enemyDirection ==4){
+		else if((enemyDirection ==4)&&(collisionshape.contains(enemymiddle))){
 			int tmp = getY()+speed;
 			setY(tmp);
+			getMiddle();
 		}
-		else if(enemyDirection ==5){
+		else if((enemyDirection ==5)&&(collisionshape.contains(enemymiddle))){
 			int tmp = getX()+speed;
 			setX(tmp);
 			tmp = getY()-speed;
 			setY(tmp);
+			getMiddle();
 		}
-		else if(enemyDirection ==6){
+		else if((enemyDirection ==6)&&(collisionshape.contains(enemymiddle))){
 			int tmp = getX()+speed;
 			setX(tmp);
+			getMiddle();
 		}
-		else if(enemyDirection ==7){
+		else if((enemyDirection ==7)&&(collisionshape.contains(enemymiddle))){
 			int tmp = getX()+speed;
 			setX(tmp);
 			tmp = getY()+speed;
 			setY(tmp);
+			getMiddle();
+		}
+		if(!collisionshape.contains(enemymiddle)){
+			posX = altePos.x-16;
+			posY = altePos.y-16;
 		}
 	}
 	public BufferedImage getImage(){
@@ -350,28 +470,28 @@ public class Enemy extends Entity{
 	
 	
 		switch(enemyDirection){
-		case(0):
+		case(4):
 			image = runter_cycle[(int)animation];
 			break;
 		case(1):
 			image = links_cycle[(int)animation];
 		break;
-		case(2):
+		case(6):
 			image = rechts_cycle[(int)animation];
 		break;
 		case(3):
 			image = hoch_cycle[(int)animation];
 		break;
-		case(4):
+		case(2):
 			image = runterlinks_cycle[(int)animation];
 		break;
-		case(5):
+		case(7):
 			image = runterrechts_cycle[(int)animation];
 		break;
-		case(6):
+		case(5):
 			image = hochrechts_cycle[(int)animation];
 		break;
-		case(7):
+		case(0):
 			image = hochlinks_cycle[(int)animation];
 		break;
 		}

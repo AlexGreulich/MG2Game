@@ -58,13 +58,13 @@ public class Level {
 	public void loadSpecificRoomStuff(){
 		/*
 		 * es gibt neben floor- und wall- map auch eine itemmap,
-		 * z.b. 5 verschiedene farben für 5 verschiedene typen von items
+		 * z.b. 5 verschiedene farben f 5 verschiedene typen von items
 		 * und dann per random, also typ 1 -> waffe; random 4 -> waffe nr 4 
 		 * so kann festgelegt werden an welcher stelle man etwas findet und es gibt trotzdem abwechslung
 		 * 
 		 * truhen/ spinde etc:
-		 * eine spawnfarbe für truhen, die truhe ist ein item
-		 * beim aufnehmen verschwindet die truhe nicht (ändert nur grafik in geöffnet)
+		 * eine spawnfarbe f truhen, die truhe ist ein item
+		 * beim aufnehmen verschwindet die truhe nicht (dert nur grafik in gefnet)
 		 * -> extramethode um item in truhe zu erstellen
 		 *  
 		 * */
@@ -89,7 +89,8 @@ public class Level {
 					if(zombieCount >=0){
 						if(random.nextInt(420) == 1){
 							//Enemy enemy1 = new Enemy(window,x*16,y*8,1);
-							thisLevelsEnemies.add(new Enemy(window,x,y,1));
+							int rand = (int)(Math.random()*2)+1;
+							thisLevelsEnemies.add(new Enemy(window,x,y,rand));
 							zombieCount--;
 						}
 					}
@@ -208,8 +209,8 @@ public class Level {
 		 * z=0 	-> tiles 0 bis ...
 		 * 1 	-> begehbar oder nicht (0 / 1)
 		 * 2	-> item vorhanden? 0/1
-		 * 3	-> wände
-		 * 4	-> türen
+		 * 3	-> wde
+		 * 4	-> ten
 		 * 5	-> special effect -> 1 -> effect 1 usw 
  		 * */
 		
@@ -528,7 +529,7 @@ public class Level {
 		for(int i =0; i < doorPoints.size();i++){
 			if(doorPoints.get(i) != null){
 				Polygon p = new Polygon();
-				//y%2 implementieren für korrekte position im türrahmen
+				//y%2 implementieren fkorrekte position im trahmen
 				//if()
 				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
 				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);

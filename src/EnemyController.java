@@ -60,7 +60,7 @@ public class EnemyController implements Runnable{
 				}
 				if(e.countToNextAttack ==0){
 					e.canAttack=true;
-					e.countToNextAttack =10;
+					//e.countToNextAttack =10;
 				}
 				if(e.energy == 0){
 					e.isDead =true;
