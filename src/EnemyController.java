@@ -63,6 +63,13 @@ public class EnemyController implements Runnable{
 		}
 	}
 	
+	public void updateCollisionShape(Polygon col){
+		theEnemies = new CopyOnWriteArrayList<Enemy>(enemylist);
+		for(Enemy e : theEnemies){
+			e.collisionshape=col;
+		}
+	}
+	
 	@Override
 	public void run() {
 		while(running){

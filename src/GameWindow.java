@@ -168,13 +168,14 @@ public class GameWindow extends JFrame{
 	public void reInitWindow(int roomNumber){
 		
 		this.activeLevel = availableRooms.get(roomNumber);
-		panel.initPanel();	//panel neu initialisiert mit level, level.map, enemylist 
+		panel.initPanel();	//panel neu initialisiert mit level, level.map, enemylist
+		enemycontrol.initEnemyController();		
 		gameloop.initLoop();
 		bullethandler.initBulletHandler();
 		this.bulletsInRoom.clear();
 		this.specialEffects = this.activeLevel.specialEffects;
 		itemHandler.initItemHandler();
-		enemycontrol.initEnemyController();
+		//enemycontrol.initEnemyController();
 		System.out.println("Akt. Raum nr.: "+ activeLevel.nr);
 	}
 	
@@ -199,8 +200,9 @@ public class GameWindow extends JFrame{
 			l.loadSpecificRoomStuff();
 		}
 		
-		this.gameloop = new Gameloop(this);
 		this.enemycontrol = new EnemyController(this);
+		this.gameloop = new Gameloop(this);
+		//this.enemycontrol = new EnemyController(this);
 		this.bullethandler = new BulletHandler(this);
 		
 		activeLevel.map[10][20][5]=2;
@@ -215,9 +217,10 @@ public class GameWindow extends JFrame{
 		enemythread = new Thread(enemycontrol);
 		itemthread = new Thread(itemHandler);
 		panelThread.start();
+		enemythread.start();
 		gameloopthread.start();
 		bulletthread.start();
-		enemythread.start();
+		//enemythread.start();
 		itemthread.start();
 		panel.running = true;
 		gameloop.running = true;

@@ -7,7 +7,7 @@ public class Gameloop implements Runnable{
 	GameWindow window;
 	Player player;
 	Controls controls;
-	
+	EnemyController enemycontroller;
 	Enemy enemy;
 	GamePanel panel;
 	
@@ -23,11 +23,13 @@ public class Gameloop implements Runnable{
 		
 		window = w;
 		player = window.player;
+		enemycontroller = window.enemycontrol;
 		
 		panel = window.panel;
-		initLoop();
+		//initLoop();
 		controls = window.controls;
 		collisionshape = panel.collision;
+		initloop();
 		player.getMiddle();
 		altePos = new Point(player.playermiddle.x,player.playermiddle.y);
 	}
@@ -35,6 +37,7 @@ public class Gameloop implements Runnable{
 	public void initLoop(){
 		map = panel.level.map;
 		collisionshape = panel.collision;
+		enemycontroller.updateCollisionShape(collisionshape);
 	}
 	
 	@Override
