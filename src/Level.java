@@ -33,9 +33,6 @@ public class Level {
 	public Level(GameWindow w,BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems,int type, int roomNumber, int[] nextrooms){
 		if(roomNumber > (-1)){
 			window =w;
-			
-			
-			
 			mapPic = mapimgfloor;
 			mapwidth = mapPic.getWidth();
 			mapheight = mapPic.getHeight();
@@ -56,7 +53,6 @@ public class Level {
 			specialEffects = new ArrayList<SpecialEffect>();
 			
 			loadMap();
-			//assignDoors(roomtype);
 		}
 		
 	}
@@ -94,11 +90,13 @@ public class Level {
 				if(map[x][y][0] < 666){
 					if(zombieCount >=0){
 						if(random.nextInt(420) == 1){
-							//Enemy enemy1 = new Enemy(window,x*16,y*8,1);
-							//thisLevelsEnemies.add(new Enemy(window,x,y,1));
-							int rand = (int)(Math.random()*2)+1;
-							thisLevelsEnemies.add(new Enemy(window,x,y,rand));
-							zombieCount--;
+							if(this.collisionshape.contains(new Point(x*32,y*8))){
+								int rand = (int)(Math.random()*2)+1;
+							
+								thisLevelsEnemies.add(new Enemy(window,x,y,rand));
+								zombieCount--;
+							}
+							
 						}
 					}
 				}
@@ -698,29 +696,11 @@ public class Level {
 		for(int i =0; i < doorPoints.size();i++){
 			if(doorPoints.get(i) != null){
 				Polygon p = new Polygon();
-				//y%2 implementieren für korrekte position im türrahmen
-				//if()
-//				if(doorPoints.get(i).y%2 !=0){
 				
 				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+16);
 				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+16);
 				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+64);
 				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+64);
-				
-//					p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
-//					p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);
-//					p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+56);
-//					p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
-					
-					
-					
-//				}else{
-//					p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
-//					p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);
-//					p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+56);
-//					p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
-//				}
-				
 				doorShapes[i] = p;
 			}
 		}

@@ -202,7 +202,6 @@ public class GameWindow extends JFrame{
 		
 		this.enemycontrol = new EnemyController(this);
 		this.gameloop = new Gameloop(this);
-		//this.enemycontrol = new EnemyController(this);
 		this.bullethandler = new BulletHandler(this);
 		
 		activeLevel.map[10][20][5]=2;
@@ -220,7 +219,6 @@ public class GameWindow extends JFrame{
 		enemythread.start();
 		gameloopthread.start();
 		bulletthread.start();
-		//enemythread.start();
 		itemthread.start();
 		panel.running = true;
 		gameloop.running = true;

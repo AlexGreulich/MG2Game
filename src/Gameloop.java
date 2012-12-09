@@ -29,7 +29,7 @@ public class Gameloop implements Runnable{
 		//initLoop();
 		controls = window.controls;
 		collisionshape = panel.collision;
-		initloop();
+		initLoop();
 		player.getMiddle();
 		altePos = new Point(player.playermiddle.x,player.playermiddle.y);
 	}

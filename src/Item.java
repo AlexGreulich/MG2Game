@@ -68,7 +68,10 @@ public class Item extends Entity{
 		createActionMessage();
 		if(this.itemType == 0){
 			panel.player.weapons[0] = this;
-		}else{
+		}else if(this.itemType == 1){
+			panel.player.energy += healthPts;
+		}
+		else{
 			panel.player.equipment.add(this);
 		}
 //			if(this.itemType == 1){
