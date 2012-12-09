@@ -1,4 +1,3 @@
-import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -61,13 +60,6 @@ public class EnemyController implements Runnable{
 		}
 		if(meleeHit==true){
 			 player.meleeReset();
-		}
-	}
-	
-	public void updateCollisionShape(Polygon col){
-		theEnemies = new CopyOnWriteArrayList<Enemy>(enemylist);
-		for(Enemy e : theEnemies){
-			e.collisionshape=col;
 		}
 	}
 	

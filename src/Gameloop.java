@@ -7,7 +7,6 @@ public class Gameloop implements Runnable{
 	GameWindow window;
 	Player player;
 	Controls controls;
-	EnemyController enemycontroller;
 	
 	Enemy enemy;
 	GamePanel panel;
@@ -24,12 +23,11 @@ public class Gameloop implements Runnable{
 		
 		window = w;
 		player = window.player;
-		enemycontroller = window.enemycontrol;
+		
 		panel = window.panel;
-		//initLoop();
+		initLoop();
 		controls = window.controls;
 		collisionshape = panel.collision;
-		initLoop();
 		player.getMiddle();
 		altePos = new Point(player.playermiddle.x,player.playermiddle.y);
 	}
@@ -37,15 +35,18 @@ public class Gameloop implements Runnable{
 	public void initLoop(){
 		map = panel.level.map;
 		collisionshape = panel.collision;
-		enemycontroller.updateCollisionShape(collisionshape);
 	}
 	
 	@Override
 	public synchronized void run() {
 		while (running){
 			float onStart = System.currentTimeMillis();
-			if(window.pistolReload.isActive()){
+			if(!window.pistolReload.isActive()){
 				window.pistolReload.stop();
+				window.pistolReload.setFramePosition(0);
+			}if(!window.heartPumping.isActive()){
+				window.heartPumping.stop();
+				window.heartPumping.setFramePosition(0);
 			}
 			
 			if(!player.isDead){
@@ -56,17 +57,18 @@ public class Gameloop implements Runnable{
 					player.changeState(0);
 					player.speed=2;
 				}else if((player.energy <=30) && (player.energy >0)){
+					window.heartPumping.start();
 					player.changeState(1);
 					player.speed=1;
 				}else if(player.energy == 0){
 					player.changeState(2);
 					player.speed =0;
 				}
-				/*	spieler soll den rand nicht erschreiten knen
+				/*	spieler soll den rand nicht überschreiten können
 				*	- position in altePos speichern
 				*	- tasten abfragen
-				*	- wenn mittelpunkt im kollisionspolygon verdere position um speed
-				*	- richtung dern
+				*	- wenn mittelpunkt im kollisionspolygon verändere position um speed
+				*	- richtung ändern
 				*	- mittelpunkt neu berechnen
 				*	- abschliessend teten ob spielermitte immer noch im polygon
 				*	- wenn nicht setze position wieder auf altePos
