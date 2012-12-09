@@ -32,7 +32,7 @@ public class EnemyController implements Runnable{
 		this.corpses = window.activeLevel.corpsesInThisLevel;
 	}
 
-	public boolean collisionDetect(){
+	public void collisionDetect(){
 		meleeHit=false;
 		theEnemies = new CopyOnWriteArrayList<Enemy>(enemylist);
 		for(Enemy e:theEnemies){
@@ -61,10 +61,6 @@ public class EnemyController implements Runnable{
 		}
 		if(meleeHit==true){
 			 player.meleeReset();
-			 return true;
-		}
-		else{
-			return false;
 		}
 	}
 	

@@ -11,59 +11,27 @@ public class Controls implements KeyListener{
 	boolean levelChange = false;
 	boolean leftSwitch=false, rightSwitch=false;
 	boolean melee;
-	EnemyController enemycontroller;
-	GameWindow window;
-	int movementkeycounter = 0;
-	
-	public Controls(GameWindow w){
-		window = w;
-		enemycontroller = window.enemycontrol;
-	}
-	
-	public void increaseCounter(){
-		movementkeycounter++;
-		isMoving = true;
-	}
-	
-	public void decreaseCounter(){
-		movementkeycounter--;
-		if (movementkeycounter==0){
-			isMoving = false;
-		}
-	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_SPACE:
-				melee = true;
-				if(enemycontroller.collisionDetect()==false){
-					fire = true;
-				}
-				//fire = true;
+				fire = true;
 				break;
 			case KeyEvent.VK_W:
-				if(up==false){
-					increaseCounter();
-				}
+				isMoving = true;
 				up=true;
 				break;
 			case KeyEvent.VK_A:
-				if(left==false){
-					increaseCounter();
-				}
+				isMoving = true;
 				left=true;
 				break;
 			case KeyEvent.VK_S:
-				if(down==false){
-					increaseCounter();
-				}
+				isMoving = true;
 				down=true;
 				break;
 			case KeyEvent.VK_D:
-				if(right==false){
-					increaseCounter();
-				}
+				isMoving = true;
 				right=true;
 				break;
 			case KeyEvent.VK_E:
@@ -92,23 +60,22 @@ public class Controls implements KeyListener{
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_SPACE:
 				fire = false;
-				melee = false;
 				break;
 			case KeyEvent.VK_W:
 				up = false;
-				decreaseCounter();
+				isMoving = false;
 				break;
 			case KeyEvent.VK_A:
 				left = false;
-				decreaseCounter();
+				isMoving = false;
 				break;
 			case KeyEvent.VK_S:
 				down = false;
-				decreaseCounter();
+				isMoving = false;
 				break;
 			case KeyEvent.VK_D:
 				right = false;
-				decreaseCounter();
+				isMoving = false;
 				break;
 			case KeyEvent.VK_Q:
 				System.exit(0);

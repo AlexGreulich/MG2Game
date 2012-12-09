@@ -185,7 +185,7 @@ public class GameWindow extends JFrame{
 		allMapsFloors = new ArrayList<BufferedImage>();
 		allMapsWalls = new ArrayList<BufferedImage>();
 		allMapsItems = new ArrayList<BufferedImage>();
-		this.controls = new Controls(this);
+		this.controls = new Controls();
 		
 		loadLevelPics();
 		this.player = new Player(this);
