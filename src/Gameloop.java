@@ -17,6 +17,8 @@ public class Gameloop implements Runnable{
 	Point altePos;
 	Polygon collisionshape;
 	
+	int keyCntright=0, keyCntleft=0;
+	
 	public Gameloop(GameWindow w){
 		
 		window = w;
@@ -39,6 +41,10 @@ public class Gameloop implements Runnable{
 	public synchronized void run() {
 		while (running){
 			float onStart = System.currentTimeMillis();
+			if(window.pistolReload.isActive()){
+				window.pistolReload.stop();
+			}
+			
 			if(!player.isDead){
 				
 				player.updateBounds();
@@ -127,16 +133,41 @@ public class Gameloop implements Runnable{
 					}
 				}
 				
+				if(controls.leftSwitch){
+					keyCntleft++;
+					if(keyCntleft>5){
+						player.inventorySelect--;
+						keyCntleft =0;
+					}
+					
+					
+				}
+				if(controls.rightSwitch){
+					keyCntright++;
+					if(keyCntright>5){
+						player.inventorySelect++;
+						keyCntright=0;
+					}
+					
+					
+				}
+				if(player.inventorySelect>9){
+						player.inventorySelect=9;
+				}
+				if(player.inventorySelect < 0){
+						player.inventorySelect =0;
+				}
 				if(!collisionshape.contains(player.playermiddle)){
 					player.posX = altePos.x-16;
 					player.posY = altePos.y-16;
 				}
 				
 				if(controls.reload){
-					for(int i=0; i< player.equipment.length;i++){
-						if(player.equipment[i] != null){
-							if(player.equipment[i].itemType == 2){
-							player.equipment[i] =null;
+					for(int i=0; i< player.equipment.size();i++){
+						if(player.equipment.get(i) != null){
+							if(player.equipment.get(i).itemType == 2){
+							window.pistolReload.start();
+							player.equipment.remove(i);
 							player.ammo += 10;
 							break;
 						}

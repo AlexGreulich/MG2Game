@@ -9,7 +9,6 @@ public class SpecialEffect {
 	BufferedImage img;
 	BufferedImage[] animImages = new BufferedImage[8];
 	float animation = 0.0f;
-	//GameWindow window;
 	int xPos;
 	int yPos;
 	boolean stop = false;
@@ -45,9 +44,6 @@ public class SpecialEffect {
 			img = stoppedImg;
 			return img;
 		}
-		
-		
-		
 	}
 	public void setPos(int x,int y){
 		this.xPos = x;

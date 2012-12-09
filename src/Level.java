@@ -58,13 +58,13 @@ public class Level {
 	public void loadSpecificRoomStuff(){
 		/*
 		 * es gibt neben floor- und wall- map auch eine itemmap,
-		 * z.b. 5 verschiedene farben f 5 verschiedene typen von items
+		 * z.b. 5 verschiedene farben für 5 verschiedene typen von items
 		 * und dann per random, also typ 1 -> waffe; random 4 -> waffe nr 4 
 		 * so kann festgelegt werden an welcher stelle man etwas findet und es gibt trotzdem abwechslung
 		 * 
 		 * truhen/ spinde etc:
-		 * eine spawnfarbe f truhen, die truhe ist ein item
-		 * beim aufnehmen verschwindet die truhe nicht (dert nur grafik in gefnet)
+		 * eine spawnfarbe für truhen, die truhe ist ein item
+		 * beim aufnehmen verschwindet die truhe nicht (ändert nur grafik in geöffnet)
 		 * -> extramethode um item in truhe zu erstellen
 		 *  
 		 * */
@@ -89,6 +89,7 @@ public class Level {
 					if(zombieCount >=0){
 						if(random.nextInt(420) == 1){
 							//Enemy enemy1 = new Enemy(window,x*16,y*8,1);
+							//thisLevelsEnemies.add(new Enemy(window,x,y,1));
 							int rand = (int)(Math.random()*2)+1;
 							thisLevelsEnemies.add(new Enemy(window,x,y,rand));
 							zombieCount--;
@@ -209,8 +210,8 @@ public class Level {
 		 * z=0 	-> tiles 0 bis ...
 		 * 1 	-> begehbar oder nicht (0 / 1)
 		 * 2	-> item vorhanden? 0/1
-		 * 3	-> wde
-		 * 4	-> ten
+		 * 3	-> wände
+		 * 4	-> türen
 		 * 5	-> special effect -> 1 -> effect 1 usw 
  		 * */
 		
@@ -255,10 +256,28 @@ public class Level {
 		Color wandbeton1li = 		new Color(0,	150,	178);
 		Color wandbeton2re = 		new Color(0,	150,	180);
 		Color wandbeton2li = 		new Color(0,	150,	182);
-		Color wandbetonrohrre = 	new Color(0,	150,	184);
-		Color wandbetonrohrli = 	new Color(0,	150,	186);
+		Color wandbetonrohr1re= 	new Color(0,	150,	184);
+		Color wandbetonrohr1li = 	new Color(0,	150,	186);
 		Color wandbeton3re = 		new Color(0,	150,	188);
 		Color wandbeton3li = 		new Color(0,	150,	190);
+		
+		/*
+		 * Color wandbetonrohr2re
+		 * Color wandbetonrohr2li
+		 * Color wandbetonrohr3re
+		 * Color wandbetonrohr3li
+		 * Color wandbetonkabel1re
+		 * Color wandbetonkabel1li
+		 * Color wandbetonkabel2re
+		 * Color wandbetonkabel2li
+		 * Color wandbetonrohr4re
+		 * Color wandbetonrohr4li
+		 * Color tuer1re
+		 * Color tuer1li
+		 * Color wandbruchstueckre
+		 * Color wandbruchstueckli
+		 * 
+		 * */
 		
 		Color doorToRight = 		new Color(0,	250,	150);
 		Color doorToLeft = 			new Color(0,	250,	160);
@@ -418,13 +437,13 @@ public class Level {
 															collisionpoints.add(new Point(x,y));
 				
 }
-				else if(d.equals(wandbetonrohrre)){			map[x][y][3]=20;
+				else if(d.equals(wandbetonrohr1re)){			map[x][y][3]=20;
 															map[x][y][1]=1;
 															map[x][y][5]=666;
 															collisionpoints.add(new Point(x,y));
 				
 }
-				else if(d.equals(wandbetonrohrli)){			map[x][y][3]=21;
+				else if(d.equals(wandbetonrohr1li)){			map[x][y][3]=21;
 															map[x][y][1]=1;
 															map[x][y][5]=666;
 															collisionpoints.add(new Point(x,y));
@@ -529,7 +548,7 @@ public class Level {
 		for(int i =0; i < doorPoints.size();i++){
 			if(doorPoints.get(i) != null){
 				Polygon p = new Polygon();
-				//y%2 implementieren fkorrekte position im trahmen
+				//y%2 implementieren für korrekte position im türrahmen
 				//if()
 				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
 				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);

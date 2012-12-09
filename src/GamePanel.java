@@ -225,6 +225,7 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	public void drawGUI(Graphics g){
+		g.setFont(window.gameFont);
 		g.drawImage(hudImage, 0,panelheight - 650,null);
 		g.setColor(hudColor);
 		if(player.energy >0){
@@ -259,8 +260,8 @@ public class GamePanel extends Canvas implements Runnable{
 			}
 			cntX++;
 		}
-		if(player.equipment[0] != null){
-			g.drawString("Weapon " + player.equipment[0].name, 65,panelheight - 595);//
+		if(player.weapons[0] != null){//get(0) != null
+			g.drawString("Weapon " + player.weapons[0].name, 65,panelheight - 595);//
 		}else{
 			g.drawString("Weapon " + " --- ", 65,panelheight - 595);
 		}
@@ -273,6 +274,28 @@ public class GamePanel extends Canvas implements Runnable{
 //			g.drawString("Enemy: "+ e.posX+" "+e.posY + " bounds: "+ e.enemyBounds.x+", "+e.enemyBounds.y+ ", Energy: "+ e.energy, 50, 200 + (index*20));
 //			index++;
 //		}
+		g.drawImage(hudImage,panelwidth-1200,10,null);
+		for(int i=0;i<player.equipment.size();i++){
+			if(player.equipment.get(i) != null){
+				if(i<=4){
+					g.drawImage(player.equipment.get(i).invMiniImg, panelwidth-1150+(i*20),40,null);
+				}else{
+					g.drawImage(player.equipment.get(i).invMiniImg, panelwidth-1150+((i-5)*20),80,null);
+				}
+				
+				//g.drawRect(panelwidth - 1150 +(i*10), 40, 10,10);
+			}
+		}
+		g.setColor(Color.YELLOW);
+		if(player.inventorySelect <=4){
+			g.drawRect(panelwidth-1150+(player.inventorySelect*20), 40, 20, 20);
+		}else{
+			g.drawRect(panelwidth-1150+((player.inventorySelect-5)*20), 80, 20,20);
+		}
+		g.setColor(hudColor);
+		
+		
+		
 		g.drawString("[Q]uit", panelwidth - 20,30);
 						for(Point p: level.collisionpoints){
 							g.setColor(Color.RED);

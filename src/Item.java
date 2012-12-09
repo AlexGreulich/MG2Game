@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Item extends Entity{
 
-	BufferedImage img;
+	BufferedImage img, invMiniImg;
 	GameWindow window;
 	GamePanel panel;
 	
@@ -31,12 +31,10 @@ public class Item extends Entity{
 			case(0):			//Waffe
 				damage = 1;
 				name = "Waffe";
-				
 				break;
 			case(1):			//medikit, nahrung
 				healthPts = 10;
 				name = "Medikit";
-				
 				break;
 			case(2):			//ammo
 				shots = 10;
@@ -53,11 +51,11 @@ public class Item extends Entity{
 				break;
 		}
 		img = window.itemHandler.picturesOfAllItems[itemType];
+		invMiniImg = window.itemHandler.picturesInventory[itemType];
 	}
 	
 	public void createActionMessage(){
 		ActionMessage am = new ActionMessage(panel, "Picked up " + name);
-		//return "Picked up " + name ;
 		panel.actionMessages.add(am);
 	}
 	
@@ -70,13 +68,13 @@ public class Item extends Entity{
 		createActionMessage();
 		if(this.itemType == 0){
 			panel.player.weapons[0] = this;
-			//panel.actionMessages.add(s);
-		}else if(this.itemType == 1){
-			panel.player.energy += healthPts;
-			//panel.actionMessages.add(s);
-		}else if(this.itemType == 2){
-			panel.player.ammo += shots;
-			//panel.actionMessages.add(s);
+		}else{
+			panel.player.equipment.add(this);
 		}
+//			if(this.itemType == 1){
+//			panel.player.energy += healthPts;
+//		}else if(this.itemType == 2){
+//			panel.player.ammo += shots;
+//		}
 	}
 }

@@ -7,34 +7,17 @@ public class Controls implements KeyListener{
 	int direction=0;
 	boolean up = false,down = false, left = false, right = false, isMoving = false, reload = false;
 	boolean fire;
-//	, fireDOWN, fireLEFT, fireRIGHT;
 	boolean equip =false;
 	boolean levelChange = false;
+	boolean leftSwitch=false, rightSwitch=false;
+	boolean melee;
 	
-	/*
-	 * WASD - bewegen
-	 * Pfeiltasten - schiessen
-	 * E - equip
-	 * Space - benutzen/ sprechen/ öffnen
-	 *  TAB oder so - inventar durchlaufen
-	 *  1-5 - itemslots anwählen
-	 * 
-	 * */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_SPACE:
 				fire = true;
 				break;
-//			case KeyEvent.VK_DOWN:
-//				fireDOWN = true;
-//				break;
-//			case KeyEvent.VK_LEFT:
-//				fireLEFT = true;
-//				break;
-//			case KeyEvent.VK_RIGHT:
-//				fireRIGHT = true;
-//				break;
 			case KeyEvent.VK_W:
 				isMoving = true;
 				up=true;
@@ -60,6 +43,15 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_R:
 				reload = true;
 				break;
+			case KeyEvent.VK_LEFT:
+				leftSwitch = true;
+				break;
+			case KeyEvent.VK_RIGHT:
+				rightSwitch = true;
+				break;
+			case KeyEvent.VK_C:
+				melee = true;
+				break;
 		}
 	}
 
@@ -69,15 +61,6 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_SPACE:
 				fire = false;
 				break;
-//			case KeyEvent.VK_DOWN:
-//				fireDOWN = false;
-//				break;
-//			case KeyEvent.VK_LEFT:
-//				fireLEFT = false;
-//				break;
-//			case KeyEvent.VK_RIGHT:
-//				fireRIGHT = false;
-//				break;
 			case KeyEvent.VK_W:
 				up = false;
 				isMoving = false;
@@ -104,6 +87,15 @@ public class Controls implements KeyListener{
 				break;
 			case KeyEvent.VK_R:
 				reload = false;
+				break;
+			case KeyEvent.VK_LEFT:
+				leftSwitch = false;
+				break;
+			case KeyEvent.VK_RIGHT:
+				rightSwitch = false;
+				break;
+			case KeyEvent.VK_C:
+				melee = false;
 				break;
 		}
 	}

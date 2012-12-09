@@ -2,6 +2,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -16,7 +17,10 @@ public class Player {
 	float animation = 0.0f;
 	BufferedImage[] hoch_cycle,runter_cycle, links_cycle,rechts_cycle,hochlinks_cycle,hochrechts_cycle,runterlinks_cycle,runterrechts_cycle;
 	Rectangle playerBounds;
-	Item[] equipment;
+	ArrayList <Item> equipment;
+	int inventorySelect = 0;
+	boolean meleeReady;
+	int meleeCounter;
 	
 	int ammo;
 	Point playermiddle = new Point(0,0);
@@ -31,6 +35,9 @@ public class Player {
 		
 		window = w;
 		controls = w.controls;
+		
+		meleeReady = false;
+		meleeCounter = 100;
 		
 		posX =500;
 		posY = 250;
@@ -47,8 +54,7 @@ public class Player {
 		runterrechts_cycle = new BufferedImage[8];
 		getMiddle();
 		
-		equipment = new Item[10];
-				
+		equipment = new ArrayList<Item>();
 		ammo = 10;
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
@@ -89,10 +95,22 @@ public class Player {
 		}
 	}
 	
+	public boolean meleeHitDetection(int enemyPosX, int enemyPosY){
+		double distance = Math.sqrt( (enemyPosX-posX)*(enemyPosX-posX) + (enemyPosY-posY)*(enemyPosY-posY) );
+		if(distance<50){//50=meleerange
+			 return true;
+		}else{
+			return false;
+		}
+	}
+	public void meleeReset(){
+		meleeCounter = 100;
+		meleeReady = false;
+	}
+	
 	public void getMiddle(){
 		playermiddle.setLocation(posX+16, posY+16);
 	}
-	
 	public int getX(){
 		return posX;
 	}
@@ -105,11 +123,9 @@ public class Player {
 	public void setY(int y){
 		posY += y;
 	}
-	
 	public void updateBounds(){
 		playerBounds.setBounds(this.posX+4, this.posY+4, 24, 40);
 	}
-	
 	public void changeState(int option){
 		switch(option){
 		case 0:
@@ -162,5 +178,11 @@ public class Player {
 				break;
 		}
 		return image;
+	}
+	
+	public Item getSelectedItemInInv(){
+		
+		
+		return null;
 	}
 }

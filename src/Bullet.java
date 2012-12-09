@@ -11,17 +11,15 @@ public class Bullet extends Entity{
 	BufferedImage image;
 	boolean playerBullet;
 	
-	public Bullet(int x, int y, int d, boolean f){//, int direction
+	public Bullet(int x, int y, int d, boolean f){
 		
 		posX = x;
 		posY = y;
 		bounds = new Rectangle(this.posX,this.posY,3,3);
 		energy = 100;
-		
 		speed = 10;	
 		damageOnHit = d;
 		playerBullet = f;
-		
 	}
 	
 	public int dealDamage(){

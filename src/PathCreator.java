@@ -9,7 +9,7 @@ import java.util.*;
 public class PathCreator{
 	
 	File file = new File("raum.txt");
-	int maxRooms=20;
+	int maxRooms=12;
 	int roomCounter;
 	static HashMap<Integer,int[]> map = new HashMap<Integer,int[]>(36);
 	ArrayList<Integer> list = new ArrayList<Integer>();//Hilfsliste fuer roomChooser()

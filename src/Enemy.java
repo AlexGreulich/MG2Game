@@ -33,7 +33,7 @@ public class Enemy extends Entity{
 	int countToNextAttack =0;	//wenn schaden ausgeteilt, warte etwas bis zum nächsten schaden
 	boolean canAttack = true;
 	boolean isDead = false;
-	
+
 	public Enemy(GameWindow w, int x, int y, int type){//
 		window = w;
 		player = window.player;
@@ -59,44 +59,44 @@ public class Enemy extends Entity{
 		hochrechts_cycle = new BufferedImage[8];
 		runterlinks_cycle = new BufferedImage[8];
 		runterrechts_cycle = new BufferedImage[8];
-		
-		
+
+
 		try{
 			corpseImage = ImageIO.read(getClass().getResource("resources/corpse.gif"));
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
-			//int count =0;
+//	int count =0;
 			for(int a = 0; a< img.getHeight()/48; a++){
 				for(int b =0; b<img.getWidth()/32;b++){
-		//
+//
 					switch(a){
 					case(0):
 						runter_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
-					break;
+						break;
 					case(1):	
 						links_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
-					break;
+						break;
 					case(2):
 						rechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
-					break;
+						break;
 					case(3):
 						hoch_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
-					break;
+						break;
 					case(4):
 						runterlinks_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
-					break;
+						break;
 					case(5):
 						runterrechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
-					break;
+						break;
 					case(6):
 						hochrechts_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
-					break;
+						break;
 					case(7):
 						hochlinks_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
-					break;
+						break;
 					}
 				}
 			}
-		}catch(IOException e){e.printStackTrace();}		
+		}catch(IOException e){e.printStackTrace();}	
 	}
 	public int getX(){
 		return posX;
@@ -114,12 +114,12 @@ public class Enemy extends Entity{
 		enemymiddle.setLocation(posX+16, posY+16);
 	}
 	public int getXDistancePlayer(){
-		//int x = player.getX() - posX;
+//	int x = player.getX() - posX;
 		int x = targetX - posX;
 		return x;
 	}
 	public int getYDistancePlayer(){
-		//int y = player.getY() - posY;
+//int y = player.getY() - posY;
 		int y = targetY - posY;
 		return y;
 	}
@@ -165,10 +165,10 @@ public class Enemy extends Entity{
 			for (int i=0; i<7;i++){
 				if (i==0){
 					array[i]=disB;
-				}
+				}	
 				else if (i==1){
 					array[i]=disC;
-				}
+				}	
 				else if (i==2){
 					array[i]=disD;
 				}
@@ -176,7 +176,7 @@ public class Enemy extends Entity{
 					array[i]=disE;
 				}
 				else if (i==4){
-					array[i]=disF;
+					array[i]=disF;	
 				}
 				else if (i==5){
 					array[i]=disG;
@@ -193,7 +193,7 @@ public class Enemy extends Entity{
 			if(shortest == disB){
 				targetX=bX;
 				targetY=bY;
-		}
+			}
 			else if(shortest == disC){
 				targetX=cX;
 				targetY=cY;
@@ -222,7 +222,7 @@ public class Enemy extends Entity{
 	}
 	
 	public void calcDirection(){
-	/*
+		/*
 	90Grad eines ViertelKreises aufgeteilt in 4 Teile um jeder Richtung den gleichen Anteil zu geben
 	zb.0-22.5 fuer rechts = 1 Anteil (rechts wird in zwei Vierteln des Kreises erfasst und bekommt jeweils einen Anteil)
 	22.5-67.5 fuer oben/rechts = 2Anteile (oben/rechts wird nur in einem Viertelkreis beruecksichtigt und bekommt direkt 2 Anteile)
@@ -230,9 +230,9 @@ public class Enemy extends Entity{
 	1/tan(67.5Grad) = 0.41
 	1/tan(22.5Grad) = 2.42 --> wegen getXDistancePlayer()/getYDistancePlayer() entspricht
 	Ankathete/Gegenkathete (also 1/tan(alpha)). Andersrum waere es der normal tangens
-	*/
+		 */
 		if ((getXDistancePlayer()>0) && (getYDistancePlayer()<0)){ //spieler oben rechts vom gegner
-	
+			
 			if(getYDistancePlayer() != 0){
 				float tmp = getXDistancePlayer()/(getYDistancePlayer()*-1);
 				if (tmp >= 2.42){
@@ -245,7 +245,7 @@ public class Enemy extends Entity{
 					enemyDirection=3;
 				}
 			}
-		
+			
 		}
 		else if ( (getXDistancePlayer()>0) && (getYDistancePlayer()>0)){ //spieler unten rechts vom gegner
 			if(getYDistancePlayer() != 0){
@@ -260,10 +260,10 @@ public class Enemy extends Entity{
 					enemyDirection=4;
 				}
 			}	
-		
+			
 		}
 		else if ( (getXDistancePlayer()<0) && (getYDistancePlayer()>0)){ //spieler unten links vom gegner
-		
+			
 			if(getYDistancePlayer() != 0){
 				float tmp = (getXDistancePlayer()*-1)/(getYDistancePlayer());
 				if (tmp >= 2.42){
@@ -276,7 +276,7 @@ public class Enemy extends Entity{
 					enemyDirection=4;
 				}
 			}
-		
+			
 		}
 		else if ( (getXDistancePlayer()<0) && (getYDistancePlayer()<0)){ //spieler oben links vom gegner
 			if(getYDistancePlayer() != 0){
@@ -291,7 +291,7 @@ public class Enemy extends Entity{
 					enemyDirection=3;
 				}
 			}
-		
+			
 		}
 		else if ((getXDistancePlayer()==0) || (getYDistancePlayer()==0)){
 			if (getXDistancePlayer()==0){
@@ -318,185 +318,185 @@ public class Enemy extends Entity{
 		
 		int a = player.getX()-posX;
 		int b = player.getY()-posY;
-			if ((a>0) && (b<0)){ //spieler oben rechts vom gegner
-		
-				if(b != 0){
-					float tmp = a/(b*-1);
-					if (tmp >= 2.42){
-						shootDirection=2;
-					}
-					else if (tmp<2.42 && tmp>=0.41){
-						shootDirection=6;
-					}
-					else if (tmp<0.41){
-						shootDirection=3;
-					}
+		if ((a>0) && (b<0)){ //spieler oben rechts vom gegner
+			
+			if(b != 0){
+				float tmp = a/(b*-1);
+				if (tmp >= 2.42){
+					shootDirection=2;
 				}
-			
-			}
-			else if ( (a>0) && (b>0)){ //spieler unten rechts vom gegner
-				if(b != 0){
-					float tmp = a/b;
-					if (tmp >= 2.42){
-						shootDirection=2;
-					}
-					else if (tmp<2.42 && tmp>=0.41){
-						shootDirection=5;
-					}
-					else if (tmp<0.41){
-						shootDirection=0;
-					}
-				}	
-			
-			}
-			else if ( (a<0) && (b>0)){ //spieler unten links vom gegner
-			
-				if(b != 0){
-					float tmp = (a*-1)/b;
-					if (tmp >= 2.42){
-						shootDirection=1;
-					}
-					else if (tmp<2.42 && tmp>=0.41){
-						shootDirection=4;
-					}
-					else if (tmp<0.41){
-						shootDirection=0;
-					}
+				else if (tmp<2.42 && tmp>=0.41){
+					shootDirection=6;
 				}
-			
-			}
-			else if ( (a<0) && (b<0)){ //spieler oben links vom gegner
-				if(b != 0){
-					float tmp = (a*-1)/(b*-1);
-					if (tmp >= 2.42){
-						shootDirection=1;
-					}
-					else if (tmp<2.42 && tmp>=0.41){
-						shootDirection=7;
-					}
-					else if (tmp<0.41){
-						shootDirection=3;
-					}
-				}
-			
-			}
-			else if ((a==0) || (b==0)){
-				if (a==0){
-					if (b>0){
-						shootDirection=0;
-					}
-					else{
-						shootDirection=3;
-					}
-				}
-				else if (b==0){
-					if (a>0){
-						shootDirection=2;
-					}
-					else{
-						shootDirection=1;
-					}
+				else if (tmp<0.41){
+					shootDirection=3;
 				}
 			}
-			canAttack = false;
-			countToNextAttack =100;
-			return shootDirection;
+			
 		}
-	
-	
+		else if ( (a>0) && (b>0)){ //spieler unten rechts vom gegner
+			if(b != 0){
+				float tmp = a/b;
+				if (tmp >= 2.42){
+					shootDirection=2;
+				}
+				else if (tmp<2.42 && tmp>=0.41){
+					shootDirection=5;
+				}
+				else if (tmp<0.41){
+					shootDirection=0;
+				}
+			}	
+			
+		}	
+		else if ( (a<0) && (b>0)){ //spieler unten links vom gegner
+			
+			if(b != 0){
+				float tmp = (a*-1)/b;
+				if (tmp >= 2.42){
+					shootDirection=1	;
+				}
+				else if (tmp<2.42 && tmp>=0.41){
+					shootDirection=4;
+				}
+				else if (tmp<0.41){
+					shootDirection=0;
+				}
+			}
+
+		}
+		else if ( (a<0) && (b<0)){ //spieler oben links vom gegner
+			if(b != 0){
+				float tmp = (a*-1)/(b*-1);
+				if (tmp >= 2.42){
+					shootDirection=1;
+				}
+				else if (tmp<2.42 && tmp>=0.41){
+					shootDirection=7;
+				}
+				else if (tmp<0.41){
+					shootDirection=3;
+					}
+			}
+
+		}
+		else if ((a==0) || (b==0)){
+	if (a==0){
+		if (b>0){
+			shootDirection=0;
+		}
+		else{
+			shootDirection=3;
+		}
+	}
+	else if (b==0){
+		if (a>0){
+			shootDirection=2;
+		}
+		else{
+			shootDirection=1;
+		}
+	}
+		}
+		canAttack = false;
+		countToNextAttack =100;
+		return shootDirection;
+	}
+
+
 	public void move(){
 		targetDistance();
 		calcDirection();
 		getMiddle();
-		altePos.setLocation(enemymiddle.x,enemymiddle.y);
-		if((enemyDirection ==0)&&(collisionshape.contains(enemymiddle))){
-			int tmp = getX()-speed;
-			setX(tmp);
-			tmp = getY()-speed;
-			setY(tmp);
-			getMiddle();
-		}
-		else if((enemyDirection ==1)&&(collisionshape.contains(enemymiddle))){
-			int tmp = getX() -speed;
-			setX(tmp);
-			getMiddle();
-		}
-		else if((enemyDirection ==2)&&(collisionshape.contains(enemymiddle))){
-			int tmp = getX()-speed;
-			setX(tmp);
-			tmp = getY()+speed;
-			setY(tmp);
-			getMiddle();
-		}
-		else if((enemyDirection ==3)&&(collisionshape.contains(enemymiddle))){
-			int tmp = getY()-speed;
-			setY(tmp);
-			getMiddle();
-		}
-		else if((enemyDirection ==4)&&(collisionshape.contains(enemymiddle))){
-			int tmp = getY()+speed;
-			setY(tmp);
-			getMiddle();
-		}
-		else if((enemyDirection ==5)&&(collisionshape.contains(enemymiddle))){
-			int tmp = getX()+speed;
-			setX(tmp);
-			tmp = getY()-speed;
-			setY(tmp);
-			getMiddle();
-		}
-		else if((enemyDirection ==6)&&(collisionshape.contains(enemymiddle))){
-			int tmp = getX()+speed;
-			setX(tmp);
-			getMiddle();
-		}
-		else if((enemyDirection ==7)&&(collisionshape.contains(enemymiddle))){
-			int tmp = getX()+speed;
-			setX(tmp);
-			tmp = getY()+speed;
-			setY(tmp);
-			getMiddle();
-		}
-		if(!collisionshape.contains(enemymiddle)){
-			posX = altePos.x-16;
-			posY = altePos.y-16;
-		}
+	altePos.setLocation(enemymiddle.x,enemymiddle.y);
+	if((enemyDirection ==0)&&(collisionshape.contains(enemymiddle))){
+		int tmp = getX()-speed;
+		setX(tmp);
+		tmp = getY()-speed;
+		setY(tmp);
+		getMiddle();
+	}
+	else if((enemyDirection ==1)&&(collisionshape.contains(enemymiddle))){
+		int tmp = getX() -speed;
+		setX(tmp);
+		getMiddle();
+	}
+	else if((enemyDirection ==2)&&(collisionshape.contains(enemymiddle))){
+		int tmp = getX()-speed;
+		setX(tmp);
+		tmp = getY()+speed;
+		setY(tmp);
+		getMiddle();
+	}
+	else if((enemyDirection ==3)&&(collisionshape.contains(enemymiddle))){
+		int tmp = getY()-speed;
+		setY(tmp);
+		getMiddle();
+	}
+	else if((enemyDirection ==4)&&(collisionshape.contains(enemymiddle))){
+		int tmp = getY()+speed;
+		setY(tmp);
+		getMiddle();
+	}
+	else if((enemyDirection ==5)&&(collisionshape.contains(enemymiddle))){
+		int tmp = getX()+speed;
+		setX(tmp);
+		tmp = getY()-speed;
+		setY(tmp);
+		getMiddle();
+	}
+	else if((enemyDirection ==6)&&(collisionshape.contains(enemymiddle))){
+		int tmp = getX()+speed;
+		setX(tmp);
+		getMiddle();
+	}
+	else if((enemyDirection ==7)&&(collisionshape.contains(enemymiddle))){
+		int tmp = getX()+speed;
+		setX(tmp);
+		tmp = getY()+speed;
+		setY(tmp);
+		getMiddle();
+	}
+	if(!collisionshape.contains(enemymiddle)){
+		posX = altePos.x-16;
+		posY = altePos.y-16;
+	}
 	}
 	public BufferedImage getImage(){
 		animation += 0.33;
 		if((int)animation == 8){
 			animation =0.0f;
 		}
-	
-	
+
+
 		switch(enemyDirection){
 		case(4):
 			image = runter_cycle[(int)animation];
 			break;
 		case(1):
 			image = links_cycle[(int)animation];
-		break;
+			break;
 		case(6):
 			image = rechts_cycle[(int)animation];
-		break;
+			break;
 		case(3):
 			image = hoch_cycle[(int)animation];
-		break;
+			break;
 		case(2):
 			image = runterlinks_cycle[(int)animation];
-		break;
+			break;
 		case(7):
 			image = runterrechts_cycle[(int)animation];
-		break;
+			break;
 		case(5):
 			image = hochrechts_cycle[(int)animation];
-		break;
+			break;
 		case(0):
 			image = hochlinks_cycle[(int)animation];
-		break;
+			break;
 		}
 		return image;
-	
+
 	}
 	public void dealDamage(){
 		player.energy = player.energy - 0.5f;

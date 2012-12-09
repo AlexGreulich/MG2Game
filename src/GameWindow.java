@@ -1,4 +1,6 @@
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -9,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,16 +38,15 @@ public class GameWindow extends JFrame{
 	Player player;
 	Controls controls;
 	Thread panelThread, gameloopthread, bulletthread, enemythread, itemthread;
-	Level activeLevel;// = new Level(null,null,null,0,-1,null);
+	Level activeLevel;
 	Gameloop gameloop;
 	BulletHandler bullethandler;
 	EnemyController enemycontrol;
 	ItemHandler itemHandler;
 	ArrayList<Bullet> bulletsInRoom;
-	//ArrayList<Enemy> enemylist, corpses;
 	ArrayList<SpecialEffect> specialEffects;
 	
-	Clip bckgrdTrack,pistolShot,pistolHit,clip4;
+	Clip bckgrdTrack,pistolShot,pistolHit,clip4, pistolReload;
 	Clip tempClip ;
 	int framePosition;
 	
@@ -58,23 +58,20 @@ public class GameWindow extends JFrame{
 	BufferedImage startupBckgrd;
 	BufferedImage[] startupMenuPics;
 	
-	//HashMap levels;
 	ArrayList<BufferedImage> allMapsFloors;
 	ArrayList<BufferedImage> allMapsWalls;
 	ArrayList<BufferedImage> allMapsItems;
 	
 	Polygon doorShape;
 	
-	//JWindow loadingScreen;
-	
 	Random rdm = new Random();
 	PathCreator pathCreate = new PathCreator();
 	@SuppressWarnings("static-access")
 	HashMap<Integer,int[]> dungeon = pathCreate.map;
 	int startingRoom;
-	//ArrayList<Level> allPossibleRooms = new ArrayList<Level>();
 	HashMap<Integer,Level> availableRooms = new HashMap<Integer, Level>();
-	//PicContainer allPicsRaw;
+	Font gameFont;
+	
 	
 	public GameWindow() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		super("Cybercalypse");
@@ -83,7 +80,15 @@ public class GameWindow extends JFrame{
 		bckgrdTrack = loadMusic("audio/test_track_01.mp3");
 		pistolShot = loadMusic("audio/pistolshot01.mp3");
 		pistolHit = loadMusic("audio/pistolhit01.mp3");
-		//allPicsRaw = new PicContainer();
+		pistolReload = loadMusic("audio/pistolReload01.mp3");
+		
+		try {
+			gameFont = Font.createFont(NORMAL, getClass().getResourceAsStream("resources/pixelmix.ttf")).deriveFont(8f);
+			this.setFont(gameFont);
+		} catch (FontFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		screen = Toolkit.getDefaultToolkit().getScreenSize();
 		int scrx = (int) (screen.getWidth()/2)-500;
@@ -105,20 +110,20 @@ public class GameWindow extends JFrame{
 		
 		MouseAdapter ma = new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
-					int x = e.getX();
-					int y = e.getY();
+				int x = e.getX();
+				int y = e.getY();
 					
-					if((x > 70) && (x <= 270)){
-						if((y > 550) && (y <=600)){
-							splashwindow.dispose();
-							//startMusic("audio/test_track_01.mp3");
-							//clip1.stop();
-							bckgrdTrack.start();
-							startGame();	
-						}else if((y > 650) && (y <= 700)){
-							System.exit(0);
-						}
+				if((x > 70) && (x <= 270)){
+					if((y > 550) && (y <=600)){
+						splashwindow.dispose();
+						bckgrdTrack.loop(Clip.LOOP_CONTINUOUSLY);
+						bckgrdTrack.start();
+						
+						startGame();	
+					}else if((y > 650) && (y <= 700)){
+						System.exit(0);
 					}
+				}
 			}
 			public void mouseMoved(MouseEvent ev){
 				int x = ev.getX();
@@ -145,8 +150,6 @@ public class GameWindow extends JFrame{
 		splashwindow.addMouseListener(ma);
 		splashwindow.setVisible(true);
 		splashwindow.repaint();
-		//startMusic("audio/introtest.mp3");
-	//	clip1.start();
 		
 		setResizable(false);
 		setUndecorated(true);
@@ -162,20 +165,11 @@ public class GameWindow extends JFrame{
 	
 	public void reInitWindow(int roomNumber){
 		
-//vorher:		this.level = new Level(allMapsFloors.get(roomNumber), allMapsWalls.get(roomNumber), allMapsItems.get(roomNumber));
-		this.activeLevel = availableRooms.get(roomNumber);//allPossibleRooms.get(roomNumber);
-	
-		
+		this.activeLevel = availableRooms.get(roomNumber);
 		panel.initPanel();	//panel neu initialisiert mit level, level.map, enemylist 
 		gameloop.initLoop();
-//vorher:	this.activeLevel.loadSpecificRoomStuff();
 		bullethandler.initBulletHandler();
 		this.bulletsInRoom.clear();
-	//this.enemylist.clear();
-		//this.enemylist = this.activeLevel.thisLevelsEnemies;
-	//this.corpses.clear();
-		//this.corpses = this.activeLevel.corpsesInThisLevel;
-	//this.specialEffects.clear();
 		this.specialEffects = this.activeLevel.specialEffects;
 		itemHandler.initItemHandler();
 		enemycontrol.initEnemyController();
@@ -183,6 +177,7 @@ public class GameWindow extends JFrame{
 	}
 	
 	public void startGame(){
+		
 		
 		allMapsFloors = new ArrayList<BufferedImage>();
 		allMapsWalls = new ArrayList<BufferedImage>();
@@ -192,8 +187,7 @@ public class GameWindow extends JFrame{
 		loadLevelPics();
 		this.player = new Player(this);
 		createDungeon();
-		this.activeLevel = availableRooms.get(startingRoom);//allPossibleRooms.get(0);
-		
+		this.activeLevel = availableRooms.get(startingRoom);
 		this.itemHandler = new ItemHandler(this);
 		this.bulletsInRoom = new ArrayList<Bullet>();
 		this.specialEffects = new ArrayList<SpecialEffect>();
@@ -204,7 +198,6 @@ public class GameWindow extends JFrame{
 		}
 		
 		this.gameloop = new Gameloop(this);
-		
 		this.enemycontrol = new EnemyController(this);
 		this.bullethandler = new BulletHandler(this);
 		
@@ -212,7 +205,6 @@ public class GameWindow extends JFrame{
 		addKeyListener(controls);
 		add(panel);
 		this.setVisible(true);
-		
 		this.setIgnoreRepaint(true);
 		
 		panelThread = new Thread(panel);
@@ -327,5 +319,9 @@ public class GameWindow extends JFrame{
 			System.out.println("dungeon; raum nr: "+ i );
 		}
 		startingRoom = temp.get(0);
+	}
+	
+	public void playIntro(){
+		
 	}
 }
