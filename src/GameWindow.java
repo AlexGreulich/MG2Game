@@ -46,7 +46,7 @@ public class GameWindow extends JFrame{
 	ArrayList<Bullet> bulletsInRoom;
 	ArrayList<SpecialEffect> specialEffects;
 	
-	Clip bckgrdTrack,pistolShot,pistolHit,clip4, pistolReload, emptyPistol, heartPumping;
+	Clip bckgrdTrack,pistolShot,pistolHit,clip4, pistolReload;
 	Clip tempClip ;
 	int framePosition;
 	
@@ -81,8 +81,6 @@ public class GameWindow extends JFrame{
 		pistolShot = loadMusic("audio/pistolshot01.mp3");
 		pistolHit = loadMusic("audio/pistolhit01.mp3");
 		pistolReload = loadMusic("audio/pistolReload01.mp3");
-		emptyPistol = loadMusic("audio/emptyPistol.mp3");
-		heartPumping = loadMusic("audio/heartPumping.mp3");
 		
 		try {
 			gameFont = Font.createFont(NORMAL, getClass().getResourceAsStream("resources/pixelmix.ttf")).deriveFont(8f);
@@ -118,8 +116,8 @@ public class GameWindow extends JFrame{
 				if((x > 70) && (x <= 270)){
 					if((y > 550) && (y <=600)){
 						splashwindow.dispose();
-						//bckgrdTrack.loop(Clip.LOOP_CONTINUOUSLY);
-						//bckgrdTrack.start();
+						bckgrdTrack.loop(Clip.LOOP_CONTINUOUSLY);
+						bckgrdTrack.start();
 						
 						startGame();	
 					}else if((y > 650) && (y <= 700)){
@@ -169,12 +167,13 @@ public class GameWindow extends JFrame{
 		
 		this.activeLevel = availableRooms.get(roomNumber);
 		panel.initPanel();	//panel neu initialisiert mit level, level.map, enemylist 
+		enemycontrol.initEnemyController();
 		gameloop.initLoop();
 		bullethandler.initBulletHandler();
 		this.bulletsInRoom.clear();
 		this.specialEffects = this.activeLevel.specialEffects;
 		itemHandler.initItemHandler();
-		enemycontrol.initEnemyController();
+		//enemycontrol.initEnemyController();
 		System.out.println("Akt. Raum nr.: "+ activeLevel.nr);
 	}
 	
@@ -199,8 +198,9 @@ public class GameWindow extends JFrame{
 			l.loadSpecificRoomStuff();
 		}
 		
-		this.gameloop = new Gameloop(this);
 		this.enemycontrol = new EnemyController(this);
+		this.gameloop = new Gameloop(this);
+		//this.enemycontrol = new EnemyController(this);
 		this.bullethandler = new BulletHandler(this);
 		
 		activeLevel.map[10][20][5]=2;
@@ -215,9 +215,10 @@ public class GameWindow extends JFrame{
 		enemythread = new Thread(enemycontrol);
 		itemthread = new Thread(itemHandler);
 		panelThread.start();
+		enemythread.start();
 		gameloopthread.start();
 		bulletthread.start();
-		enemythread.start();
+		//enemythread.start();
 		itemthread.start();
 		panel.running = true;
 		gameloop.running = true;
@@ -244,7 +245,7 @@ public class GameWindow extends JFrame{
 				audioFormat.getSampleRate(), // frames per second 
 				false);
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(decoded, mp3audioInputStream);
-		//	später alternative für soundprobleme:
+		//	sper alternative f soundprobleme:
 //		SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat); 
 //		sourceDataLine.open(audioFormat);
 			tempClip = AudioSystem.getClip();
