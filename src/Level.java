@@ -28,9 +28,14 @@ public class Level {
 	HashMap<Integer,Point[]> doorsAssignment; 
 	Random random = new Random();
 	
+	
+	
 	public Level(GameWindow w,BufferedImage mapimgfloor, BufferedImage mapimgwalls, BufferedImage mapimgItems,int type, int roomNumber, int[] nextrooms){
 		if(roomNumber > (-1)){
 			window =w;
+			
+			
+			
 			mapPic = mapimgfloor;
 			mapwidth = mapPic.getWidth();
 			mapheight = mapPic.getHeight();
@@ -44,13 +49,14 @@ public class Level {
 			neighbors[1] = nextrooms[3];//rechts
 			neighbors[2] = nextrooms[4];//unten
 			neighbors[3] = nextrooms[5];//links
-			assignDoors(roomtype);
+			
 			thisLevelsEnemies = new ArrayList<Enemy>();
 			thisLevelsItems = new ArrayList<Item>();
 			corpsesInThisLevel = new ArrayList<Enemy>();
 			specialEffects = new ArrayList<SpecialEffect>();
 			
 			loadMap();
+			//assignDoors(roomtype);
 		}
 		
 	}
@@ -106,21 +112,25 @@ public class Level {
 		case 0:
 			if(neighbors[0] != (-1)){
 				doorPoints.add(new Point(7,22));
+				map[7][22][3]=45;
 			}else{
 				doorPoints.add(null);
 			}
 			if(neighbors[1] != (-1)){
 				doorPoints.add(new Point(22,22));
+				map[22][22][3]=44;
 			}else{
 				doorPoints.add(null);
 			}	
 			if(neighbors[2] != (-1)){
-				doorPoints.add(new Point(23,44));
+				doorPoints.add(new Point(23,47));
+				map[23][47][3]=51;
 			}else{
 				doorPoints.add(null);
 			}
 			if(neighbors[3] != (-1)){
 				doorPoints.add(new Point(6,46));
+				map[6][46][3]=50;
 			}else{
 				doorPoints.add(null);
 			}	
@@ -128,21 +138,25 @@ public class Level {
 		case 1:
 			if(neighbors[0] != (-1)){
 				doorPoints.add(new Point(4,27));
+				map[4][27][3]=45;
 			}else{
 				doorPoints.add(null);
 			}
 			if(neighbors[1] != (-1)){
 				doorPoints.add(new Point(21,20));
+				map[21][20][3]=44;
 			}else{
 				doorPoints.add(null);
 			}	
 			if(neighbors[2] != (-1)){
-				doorPoints.add(new Point(26,39));
+				doorPoints.add(new Point(26,41));
+				map[26][41][3]=51;
 			}else{
 				doorPoints.add(null);
 			}
 			if(neighbors[3] != (-1)){
 				doorPoints.add(new Point(3,41));
+				map[3][41][3]=50;
 			}else{
 				doorPoints.add(null);
 			}	
@@ -150,21 +164,25 @@ public class Level {
 		case 2:
 			if(neighbors[0] != (-1)){
 				doorPoints.add(new Point(6,24));
+				map[6][24][3]=45;
 			}else{
 				doorPoints.add(null);
 			}
 			if(neighbors[1] != (-1)){
 				doorPoints.add(new Point(24,27));
+				map[24][27][3]=44;
 			}else{
 				doorPoints.add(null);
 			}	
 			if(neighbors[2] != (-1)){
-				doorPoints.add(new Point(23,44));
+				doorPoints.add(new Point(23,47));
+				map[23][47][3]=51;
 			}else{
 				doorPoints.add(null);
 			}
 			if(neighbors[3] != (-1)){
 				doorPoints.add(new Point(5,44));
+				map[5][44][3]=50;
 			}else{
 				doorPoints.add(null);
 			}	
@@ -172,26 +190,31 @@ public class Level {
 		case 3:
 			if(neighbors[0] != (-1)){
 				doorPoints.add(new Point(8,31));
+				map[8][31][3]=45;
 			}else{
 				doorPoints.add(null);
 			}
 			if(neighbors[1] != (-1)){
 				doorPoints.add(new Point(21,21));
+				map[21][21][3]=44;
 			}else{
 				doorPoints.add(null);
 			}	
 			if(neighbors[2] != (-1)){
-				doorPoints.add(new Point(22,34));
+				doorPoints.add(new Point(22,37));
+				map[22][37][3]=51;
 			}else{
 				doorPoints.add(null);
 			}
 			if(neighbors[3] != (-1)){
-				doorPoints.add(new Point(7,48));
+				doorPoints.add(new Point(7,52));
+				map[7][52][3]=50;
 			}else{
 				doorPoints.add(null);
 			}	
 			break;
 		}
+		//createDoors();
 	}
 	
 	public void  loadMap(){
@@ -261,23 +284,31 @@ public class Level {
 		Color wandbeton3re = 		new Color(0,	150,	188);
 		Color wandbeton3li = 		new Color(0,	150,	190);
 		
-		/*
-		 * Color wandbetonrohr2re
-		 * Color wandbetonrohr2li
-		 * Color wandbetonrohr3re
-		 * Color wandbetonrohr3li
-		 * Color wandbetonkabel1re
-		 * Color wandbetonkabel1li
-		 * Color wandbetonkabel2re
-		 * Color wandbetonkabel2li
-		 * Color wandbetonrohr4re
-		 * Color wandbetonrohr4li
-		 * Color tuer1re
-		 * Color tuer1li
-		 * Color wandbruchstueckre
-		 * Color wandbruchstueckli
-		 * 
-		 * */
+		
+		 Color wandbetonrohr2re = 	new Color(0,	160,	10);
+		 Color wandbetonrohr2li= 	new Color(0,	160,	20);
+		 Color wandbetonrohr3re= 	new Color(0,	160,	30);
+		 Color wandbetonrohr3li= 	new Color(0,	160,	40);
+		 Color wandbetonkabel1re= 	new Color(0,	160,	50);
+		 Color wandbetonkabel1li= 	new Color(0,	160,	60);
+		 Color wandbetonkabel2re= 	new Color(0,	160,	70);
+		 Color wandbetonkabel2li= 	new Color(0,	160,	80);
+		 Color wandbetonrohr4re= 	new Color(0,	160,	90);
+		 Color wandbetonrohr4li= 	new Color(0,	160,	100);
+		 Color wandbetonkabel3re= 	new Color(0,	160,	150);
+		 Color wandbetonkabel3li= 	new Color(0,	160,	160);
+		 
+		 Color tuer1re= 			new Color(0,	160,	110);
+		 Color tuer1li= 			new Color(0,	160,	120);
+		 Color wandbruchstueckre= 	new Color(0,	160,	130);
+		 Color wandbruchstueckli= 	new Color(0,	160,	140);
+		 Color wandbruchstueckbetonre= 	new Color(0,	160,	170);
+		 Color wandbruchstueckbetonli= 	new Color(0,	160,	180);
+		 Color wandeckebruchstueck= 	new Color(0,	160,	190);
+		 Color wandeckebetonbruch = 	new Color(0,	160,	200);
+		 Color wandeckeobenbeton = 		new Color(0,	160,	210);
+		 
+		 
 		
 		Color doorToRight = 		new Color(0,	250,	150);
 		Color doorToLeft = 			new Color(0,	250,	160);
@@ -449,24 +480,129 @@ public class Level {
 															collisionpoints.add(new Point(x,y));
 				
 }
-				else if(d.equals(wandbeton3re)){			map[x][y][3]=22;
+				else if(d.equals(wandbeton3re)){			map[x][y][3]=24;
 															map[x][y][1]=1;
 															map[x][y][5]=666;
 															collisionpoints.add(new Point(x,y));
 				
 }
-				else if(d.equals(wandbeton3li)){			map[x][y][3]=23;
+				else if(d.equals(wandbeton3li)){			map[x][y][3]=25;
 															map[x][y][1]=1;
 															map[x][y][5]=666;
 															collisionpoints.add(new Point(x,y));
 				
 }
 				else if(d.equals(eckeoben)){
-															map[x][y][3] = 10;
+															map[x][y][3] = 12;
 															map[x][y][1] = 1;
 															collisionpoints.add(new Point(x,y));	
 															map[x][y][5]=666;
+															
+				}else if (d.equals(wandbetonrohr2re)){		map[x][y][3]=32;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonrohr2li)){		map[x][y][3]=33;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonrohr3re)){		map[x][y][3]=34;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonrohr3li)){		map[x][y][3]=35;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonkabel1re)){		map[x][y][3]=36;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonkabel1li)){		map[x][y][3]=37;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonkabel2re)){		map[x][y][3]=38;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonkabel2li)){		map[x][y][3]=39;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonrohr4re)){		map[x][y][3]=40;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonrohr4li)){		map[x][y][3]=41;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbetonkabel3re)){		map[x][y][3]=42;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+
+				}else if (d.equals(wandbetonkabel3li)){		map[x][y][3]=43;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
 				}
+				
+				
+				else if (d.equals(tuer1re)){				map[x][y][3]=44;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(tuer1li)){				map[x][y][3]=45;
+															map[x][y][1]=1;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}
+				else if (d.equals(wandbruchstueckre)){		map[x][y][3]=46;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbruchstueckli)){		map[x][y][3]=47;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+					
+				}else if (d.equals(wandbruchstueckbetonre)){map[x][y][3]=48;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+				
+				}else if (d.equals(wandbruchstueckbetonli)){map[x][y][3]=49;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+				
+				}else if (d.equals(wandeckebruchstueck)){	map[x][y][3]=13;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+
+				}else if (d.equals(wandeckebetonbruch)){	map[x][y][3]=64;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+
+				}else if (d.equals(wandeckeobenbeton)){	map[x][y][3]=65;
+															map[x][y][5]=666;
+															collisionpoints.add(new Point(x,y));	
+
+}
+				
+				
+				
 				else if (d.equals(invisibleCollisionWall)){
 															collisionpoints.add(new Point(x,y));
 															map[x][y][3]=666;
@@ -529,17 +665,31 @@ public class Level {
 					sortpoints.add(p);
 		}
 		generatePolygon(sortpoints.get(0));//Testweise <--- waende sollten dann aber auch durchgaengig sein und nicht irgendwo aufhoeren
+		assignDoors(roomtype);
 		createDoors();
 		for(int x =0; x<mapWidth;x++){
 			for(int y =0;y< mapHeight;y++){
 				
 			}
 		}
-		for(int i =0;i < doorPoints.size();i++){
-			if(doorPoints.get(i) != null){
-				map[doorPoints.get(i).x][doorPoints.get(i).y][3] = 666;
-			}
-		}
+//		for(int i =0;i < doorPoints.size();i++){
+//			if(doorPoints.get(i) != null){
+//				if(doorPoints.get(i).x <30){
+//					if(doorPoints.get(i).y <30){
+//						map[doorPoints.get(i).x][doorPoints.get(i).y][3] = 45;
+//					}else{
+//						map[doorPoints.get(i).x][doorPoints.get(i).y][3] = 44;
+//					}
+//				}else if(doorPoints.get(i).x >=30){
+//					if(doorPoints.get(i).y <30){
+//						map[doorPoints.get(i).x][doorPoints.get(i).y][3] = 50;
+//					}else{
+//						map[doorPoints.get(i).x][doorPoints.get(i).y][3] = 51;
+//					}
+//				}
+				
+//			}
+//		}
 	}
 	
 	public void createDoors(){
@@ -550,10 +700,27 @@ public class Level {
 				Polygon p = new Polygon();
 				//y%2 implementieren für korrekte position im türrahmen
 				//if()
-				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
-				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);
-				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+56);
-				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
+//				if(doorPoints.get(i).y%2 !=0){
+				
+				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+16);
+				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+16);
+				p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+64);
+				p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+64);
+				
+//					p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
+//					p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);
+//					p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+56);
+//					p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
+					
+					
+					
+//				}else{
+//					p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8);
+//					p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+8);
+//					p.addPoint(doorPoints.get(i).x * 32+32, doorPoints.get(i).y * 8+56);
+//					p.addPoint(doorPoints.get(i).x * 32+16, doorPoints.get(i).y * 8+48);
+//				}
+				
 				doorShapes[i] = p;
 			}
 		}

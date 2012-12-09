@@ -297,17 +297,17 @@ public class GamePanel extends Canvas implements Runnable{
 		
 		
 		g.drawString("[Q]uit", panelwidth - 20,30);
-						for(Point p: level.collisionpoints){
-							g.setColor(Color.RED);
-							g.fillRect(p.x, p.y, 1, 1);
-						}
-//		g.drawPolygon(collision);
-		for(int i=0; i< level.doorShapes.length;i++){
-			if(level.doorPoints.get(i) != null){
-				g.drawPolygon(level.doorShapes[i]);
-//				System.out.println("tür "+i+": "+ level.doorPoints.get(i).x+" , "+level.doorPoints.get(i).y );
-			}
-		}
+//		for(Point p: level.collisionpoints){
+//			g.setColor(Color.RED);
+//			g.fillRect(p.x, p.y, 1, 1);
+//		}
+		//g.drawPolygon(collision);
+//		for(int i=0; i< level.doorShapes.length;i++){
+//			if(level.doorPoints.get(i) != null){
+//				g.drawPolygon(level.doorShapes[i]);
+////				System.out.println("tür "+i+": "+ level.doorPoints.get(i).x+" , "+level.doorPoints.get(i).y );
+//			}
+//		}
 		for(int i =0;i< level.doorShapes.length;i++){
 			if(level.doorShapes[i] != null){
 				if(level.doorShapes[i].intersects(player.playerBounds)){
