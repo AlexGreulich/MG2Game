@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.awt.Polygon;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Gameloop implements Runnable{
@@ -17,8 +18,9 @@ public class Gameloop implements Runnable{
 	Point altePos;
 	Polygon collisionshape;
 	
-	int keyCntright=0, keyCntleft=0;
-	
+	int keyCntright=0, keyCntleft=0, keyCntToUse=0;
+	CopyOnWriteArrayList<Item> playersequipment;
+	int cntToUse;
 	public Gameloop(GameWindow w){
 		
 		window = w;
@@ -153,8 +155,11 @@ public class Gameloop implements Runnable{
 				if(controls.rightSwitch){
 					keyCntright++;
 					if(keyCntright>5){
-						player.inventorySelect++;
-						keyCntright=0;
+						if(player.equipment.size() >= player.inventorySelect){
+							player.inventorySelect++;
+							keyCntright=0;
+						}
+						
 					}
 					
 					
@@ -165,6 +170,43 @@ public class Gameloop implements Runnable{
 				if(player.inventorySelect < 0){
 						player.inventorySelect =0;
 				}
+				
+				playersequipment = new CopyOnWriteArrayList<Item>(player.equipment);
+				
+				for(Item i : playersequipment){
+					if(playersequipment.get(player.inventorySelect) != null){
+						if(controls.itemUse){
+							if(i.itemType != 2){
+								i.useIt();
+								player.equipment.remove(i);
+								if(player.inventorySelect >0){
+									player.inventorySelect--;
+								}
+								
+							}
+						}
+					}
+				}
+				
+//				if(controls.itemUse){
+//					cntToUse++;
+//					if(cntToUse >10){
+//						Item itemToUse = playersequipment.get(player.inventorySelect);
+//						if(itemToUse != null){
+//							if(itemToUse.itemType != 2){
+//								itemToUse.useIt();
+//								player.equipment.remove(player.inventorySelect);
+//							}
+//						}
+//						cntToUse =0;
+//					}
+//				}
+//				player.equipment.clear();
+//				for(int i=0;i<playersequipment.size();i++){
+//					player.equipment.add(playersequipment.get(i));
+//				}
+//				//player.equipment = playersequipment.
+				
 				if(!collisionshape.contains(player.playermiddle)){
 					player.posX = altePos.x-16;
 					player.posY = altePos.y-16;

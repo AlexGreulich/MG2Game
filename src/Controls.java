@@ -11,6 +11,20 @@ public class Controls implements KeyListener{
 	boolean levelChange = false;
 	boolean leftSwitch=false, rightSwitch=false;
 	boolean melee;
+	int movementkeycounter = 0;
+	boolean itemUse;
+	
+	public void increaseCounter(){
+		movementkeycounter++;
+		isMoving = true;
+	}
+	
+	public void decreaseCounter(){
+		movementkeycounter--;
+		if (movementkeycounter==0){
+			isMoving = false;
+		}
+	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -19,19 +33,31 @@ public class Controls implements KeyListener{
 				fire = true;
 				break;
 			case KeyEvent.VK_W:
-				isMoving = true;
+				//isMoving = true;
+				if(up==false){
+					increaseCounter();
+				}
 				up=true;
 				break;
 			case KeyEvent.VK_A:
-				isMoving = true;
+				//isMoving = true;
+				if(left==false){
+					increaseCounter();
+				}
 				left=true;
 				break;
 			case KeyEvent.VK_S:
-				isMoving = true;
+				//isMoving = true;
+				if(down==false){
+					increaseCounter();
+				}
 				down=true;
 				break;
 			case KeyEvent.VK_D:
-				isMoving = true;
+				//isMoving = true;
+				if(right==false){
+					increaseCounter();
+				}
 				right=true;
 				break;
 			case KeyEvent.VK_E:
@@ -52,6 +78,9 @@ public class Controls implements KeyListener{
 			case KeyEvent.VK_C:
 				melee = true;
 				break;
+			case KeyEvent.VK_DOWN:
+				itemUse= true;
+				break;
 		}
 	}
 
@@ -63,19 +92,23 @@ public class Controls implements KeyListener{
 				break;
 			case KeyEvent.VK_W:
 				up = false;
-				isMoving = false;
+				//isMoving = false;
+				decreaseCounter();
 				break;
 			case KeyEvent.VK_A:
 				left = false;
-				isMoving = false;
+				//isMoving = false;
+				decreaseCounter();
 				break;
 			case KeyEvent.VK_S:
 				down = false;
-				isMoving = false;
+				//isMoving = false;
+				decreaseCounter();
 				break;
 			case KeyEvent.VK_D:
 				right = false;
-				isMoving = false;
+				//isMoving = false;
+				decreaseCounter();
 				break;
 			case KeyEvent.VK_Q:
 				System.exit(0);
@@ -96,6 +129,9 @@ public class Controls implements KeyListener{
 				break;
 			case KeyEvent.VK_C:
 				melee = false;
+				break;
+			case KeyEvent.VK_DOWN:
+				itemUse= false;
 				break;
 		}
 	}

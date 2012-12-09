@@ -31,6 +31,8 @@ public class Player {
 	
 	Item[] weapons = new Item[2];	//0 - melee , 1 - distance
 	
+	int cash =0;
+	
 	public Player(GameWindow w){//, int x, int y
 		
 		window = w;

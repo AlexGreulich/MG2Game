@@ -60,11 +60,17 @@ public class ItemHandler implements Runnable{
 		while(running){
 			float onStart = System.currentTimeMillis();
 			
+			if(!window.pickup.isActive()){
+				window.pickup.stop();
+				window.pickup.setFramePosition(0);
+			}
 			if(controls.equip){
 				for(int i =0; i< window.activeLevel.thisLevelsItems.size(); i++){
 					if(window.activeLevel.thisLevelsItems.get(i).bounds.intersects(player.playerBounds)){	
 						if(player.equipment.size()<=10){
 							window.activeLevel.thisLevelsItems.get(i).equip();
+							window.pickup.start();
+							
 						}
 						
 //						if(window.activeLevel.thisLevelsItems.get(i).itemType == 0){

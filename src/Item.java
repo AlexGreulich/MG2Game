@@ -15,7 +15,7 @@ public class Item extends Entity{
  	boolean isEquipped = false;
  	String name;
  	Rectangle bounds;
- 	
+ 	int money =0;
 	public Item(GameWindow w, int x, int y, int type){
 		
 		window = w;
@@ -41,12 +41,15 @@ public class Item extends Entity{
 				name = "Ammo";
 				break;
 			case(3):			//div objekt
+				money = 10;
 				name = "nul";
 				break;
 			case(4):
+				money = 20;
 				name = "nul";
 				break;
 			case(5):
+				money =30;
 				name = "nul";
 				break;
 		}
@@ -68,16 +71,32 @@ public class Item extends Entity{
 		createActionMessage();
 		if(this.itemType == 0){
 			panel.player.weapons[0] = this;
-		}else if(this.itemType == 1){
-			panel.player.energy += healthPts;
+		}else{
+			panel.player.equipment.add(this);//energy += healthPts;
 		}
-		else{
-			panel.player.equipment.add(this);
-		}
+		
 //			if(this.itemType == 1){
 //			panel.player.energy += healthPts;
 //		}else if(this.itemType == 2){
 //			panel.player.ammo += shots;
 //		}
+	}
+	
+	public void useIt(){
+		
+		switch(this.itemType){
+		case(1):
+			panel.player.energy += healthPts;
+			break;
+		case(3):
+			panel.player.cash += money;
+			break;
+		case(4):
+			panel.player.cash += money;
+			break;
+		case(5):
+			panel.player.cash += money;
+			break;
+		}
 	}
 }
