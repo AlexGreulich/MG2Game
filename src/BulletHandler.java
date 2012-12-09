@@ -159,7 +159,11 @@ public class BulletHandler implements Runnable{
 			if(!window.pistolHit.isActive()){
 				window.pistolHit.stop();
 				window.pistolHit.setFramePosition(0);
+			}if(!window.emptyPistol.isActive()){
+				window.emptyPistol.stop();
+				window.emptyPistol.setFramePosition(0);
 			}
+			
 			collisionCheck();
 			createEnemyBullets();
 	// es kann nur gefeuert werden wenn abgefeuert == false ist, sonst wird feuerrate bis 50 gewartet
@@ -174,6 +178,8 @@ public class BulletHandler implements Runnable{
 						bulletsInRoom.add(b);
 						window.pistolShot.start();
 						fired = true;
+					}else if((player.weapons[0] != null)&&(player.ammo ==0)){
+						window.emptyPistol.start();
 					}
 				}
 				// else if((controls.fire) && (controls.fireRIGHT)){

@@ -46,7 +46,7 @@ public class GameWindow extends JFrame{
 	ArrayList<Bullet> bulletsInRoom;
 	ArrayList<SpecialEffect> specialEffects;
 	
-	Clip bckgrdTrack,pistolShot,pistolHit,clip4, pistolReload;
+	Clip bckgrdTrack,pistolShot,pistolHit,clip4, pistolReload, emptyPistol, heartPumping;
 	Clip tempClip ;
 	int framePosition;
 	
@@ -81,6 +81,8 @@ public class GameWindow extends JFrame{
 		pistolShot = loadMusic("audio/pistolshot01.mp3");
 		pistolHit = loadMusic("audio/pistolhit01.mp3");
 		pistolReload = loadMusic("audio/pistolReload01.mp3");
+		emptyPistol = loadMusic("audio/emptyPistol.mp3");
+		heartPumping = loadMusic("audio/heartPumping.mp3");
 		
 		try {
 			gameFont = Font.createFont(NORMAL, getClass().getResourceAsStream("resources/pixelmix.ttf")).deriveFont(8f);
@@ -116,8 +118,8 @@ public class GameWindow extends JFrame{
 				if((x > 70) && (x <= 270)){
 					if((y > 550) && (y <=600)){
 						splashwindow.dispose();
-						bckgrdTrack.loop(Clip.LOOP_CONTINUOUSLY);
-						bckgrdTrack.start();
+						//bckgrdTrack.loop(Clip.LOOP_CONTINUOUSLY);
+						//bckgrdTrack.start();
 						
 						startGame();	
 					}else if((y > 650) && (y <= 700)){

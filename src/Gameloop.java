@@ -41,8 +41,12 @@ public class Gameloop implements Runnable{
 	public synchronized void run() {
 		while (running){
 			float onStart = System.currentTimeMillis();
-			if(window.pistolReload.isActive()){
+			if(!window.pistolReload.isActive()){
 				window.pistolReload.stop();
+				window.pistolReload.setFramePosition(0);
+			}if(!window.heartPumping.isActive()){
+				window.heartPumping.stop();
+				window.heartPumping.setFramePosition(0);
 			}
 			
 			if(!player.isDead){
@@ -53,6 +57,7 @@ public class Gameloop implements Runnable{
 					player.changeState(0);
 					player.speed=2;
 				}else if((player.energy <=30) && (player.energy >0)){
+					window.heartPumping.start();
 					player.changeState(1);
 					player.speed=1;
 				}else if(player.energy == 0){
