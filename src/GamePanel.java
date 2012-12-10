@@ -234,9 +234,9 @@ public class GamePanel extends Canvas implements Runnable{
 			cntX++;
 		}
 		if(player.weapons[0] != null){
-			g.drawString("Weapon " + player.weapons[0].name, 65,panelheight - 595);//
+			g.drawString("Weapon: " + player.weapons[0].name, 65,panelheight - 595);//
 		}else{
-			g.drawString("Weapon " + " --- ", 65,panelheight - 595);
+			g.drawString("Weapon: " + " --- ", 65,panelheight - 595);
 		}
 		
 		g.drawString("Ammo " + player.ammo, 65,panelheight - 575);
@@ -283,6 +283,8 @@ public class GamePanel extends Canvas implements Runnable{
 			}
 		}
 		g.setColor(Color.GREEN);
+		
+		//DEBUG
 		//g.drawRect(player.playerBounds.x,player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
 		//g.drawRect(player.playermiddle.x, player.playermiddle.y, 1,1);
 	}

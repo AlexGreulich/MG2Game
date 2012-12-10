@@ -30,27 +30,27 @@ public class Item extends Entity{
 		switch(itemType){
 			case(0):			//Waffe
 				damage = 1;
-				name = "magnum";
+				name = "Magnum";
 				break;
 			case(1):			//medikit, nahrung
 				healthPts = 10;
-				name = "medikit";
+				name = "Medikit";
 				break;
 			case(2):			//ammo
 				shots = 10;
-				name = "ammo";
+				name = "Ammo";
 				break;
 			case(3):			//div objekt
-				money = 10;
-				name = "pills";
+				healthPts = 5;
+				name = "Pills";
 				break;
 			case(4):
 				money = 20;
-				name = "money";
+				name = "some money";
 				break;
 			case(5):
 				money =30;
-				name = "money";
+				name = "some money";
 				break;
 		}
 		img = window.itemHandler.picturesOfAllItems[itemType];
@@ -95,8 +95,16 @@ public class Item extends Entity{
 			
 			break;
 		case(3):
-			panel.player.cash += money;
-			panel.actionMessages.add(new ActionMessage(panel,"Got " +money+"$"));
+			if(panel.player.energy <100){
+				int diff = (int) (100 - panel.player.energy);
+				if(diff > healthPts){
+					panel.player.energy += healthPts;
+					panel.actionMessages.add(new ActionMessage(panel,"Got " +healthPts+" HP"));
+				}else{
+					panel.player.energy += diff;
+					panel.actionMessages.add(new ActionMessage(panel,"Got " +diff+" HP"));
+				}
+			}
 			break;
 		case(4):
 			panel.player.cash += money;

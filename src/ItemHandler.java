@@ -89,6 +89,9 @@ public class ItemHandler implements Runnable{
 					Item i = player.equipment.get(player.inventorySelect);
 					if(i.itemType != 2){
 						i.useIt();
+						if(player.inventorySelect >=1){
+							player.inventorySelect--;
+						}
 					}
 					
 					try {
