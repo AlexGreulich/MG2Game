@@ -33,28 +33,24 @@ public class Controls implements KeyListener{
 				fire = true;
 				break;
 			case KeyEvent.VK_W:
-				//isMoving = true;
 				if(up==false){
 					increaseCounter();
 				}
 				up=true;
 				break;
 			case KeyEvent.VK_A:
-				//isMoving = true;
 				if(left==false){
 					increaseCounter();
 				}
 				left=true;
 				break;
 			case KeyEvent.VK_S:
-				//isMoving = true;
 				if(down==false){
 					increaseCounter();
 				}
 				down=true;
 				break;
 			case KeyEvent.VK_D:
-				//isMoving = true;
 				if(right==false){
 					increaseCounter();
 				}
@@ -92,22 +88,18 @@ public class Controls implements KeyListener{
 				break;
 			case KeyEvent.VK_W:
 				up = false;
-				//isMoving = false;
 				decreaseCounter();
 				break;
 			case KeyEvent.VK_A:
 				left = false;
-				//isMoving = false;
 				decreaseCounter();
 				break;
 			case KeyEvent.VK_S:
 				down = false;
-				//isMoving = false;
 				decreaseCounter();
 				break;
 			case KeyEvent.VK_D:
 				right = false;
-				//isMoving = false;
 				decreaseCounter();
 				break;
 			case KeyEvent.VK_Q:

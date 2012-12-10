@@ -119,8 +119,8 @@ public class GameWindow extends JFrame{
 				if((x > 70) && (x <= 270)){
 					if((y > 550) && (y <=600)){
 						splashwindow.dispose();
-						//bckgrdTrack.loop(Clip.LOOP_CONTINUOUSLY);
-						//bckgrdTrack.start();
+						bckgrdTrack.loop(Clip.LOOP_CONTINUOUSLY);
+						bckgrdTrack.start();
 						
 						startGame();	
 					}else if((y > 650) && (y <= 700)){

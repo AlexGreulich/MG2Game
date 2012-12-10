@@ -15,7 +15,6 @@ public class PathCreator{
 	ArrayList<Integer> list = new ArrayList<Integer>();//Hilfsliste fuer roomChooser()
 	ArrayList<Integer> list2 = new ArrayList<Integer>();//Hilfsliste fuer createRoom()
 	
-	//Variablen fuer array auslesen/testen
 	int elementcounter=0;
 	
 	public void printStuff(){

@@ -51,7 +51,7 @@ public class GamePanel extends Canvas implements Runnable{
 	Polygon collision;
 	double transformModifier; 
 	
-	BufferedImage hudImage;
+	BufferedImage hudImage,inventoryHudImg;
 	Color hudColor = new Color(90,192,119);
 	int floatingItems =10;
 	boolean floatUpItem=false;
@@ -61,17 +61,12 @@ public class GamePanel extends Canvas implements Runnable{
 		window = w;
 		enemylist = window.activeLevel.thisLevelsEnemies;
 		corpses = window.activeLevel.corpsesInThisLevel;
-		bulletsInRoom = window.bulletsInRoom;//
-		/*hier stand:
-		 * 
-		 * level = window.level;
-		mapWidth = level.mapPic.getWidth()*32;//
-		mapHeight = level.mapPic.getHeight()*64;//vllt raus? lvl hat ja immer selbe größe
-		 * */
+		bulletsInRoom = window.bulletsInRoom;
 		initPanel();
 		
 		try{
 			hudImage = ImageIO.read(getClass().getResource("resources/hudentwurf.gif"));
+			inventoryHudImg= ImageIO.read(getClass().getResource("resources/inventoryhud.gif"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -81,9 +76,6 @@ public class GamePanel extends Canvas implements Runnable{
 		tilesetwalls = tileset.tilesetwalls;
 		
 		player = window.player;
-		// hier stand: enemylist = window.enemylist;
-//		itemsInLevel = new ArrayList<Item>();
-		
 		this.setIgnoreRepaint(true);
 		
 		graphics =null;
@@ -100,19 +92,17 @@ public class GamePanel extends Canvas implements Runnable{
 	public void initPanel(){
 		level = window.activeLevel;
 		mapWidth = window.activeLevel.mapwidth*32;
-		mapHeight = level.mapheight*64;//vllt raus? lvl hat ja immer selbe größe
+		mapHeight = level.mapheight*64;
 		map = level.map;
 		collision = level.collisionshape;//
 		System.out.println("raumtyp: "+ level.roomtype + " floor[x]: "+ window.allMapsFloors.indexOf(level.mapPic)+ " walls[y]: "+ window.allMapsWalls.indexOf(level.mapPicwalls));
-//		for(int i=0;i< collision.npoints; i++){
-//			System.out.println("Collisionshape x[]:"+ collision.xpoints[i]+" collisionshape y[]: " + collision.ypoints[i]);
-//		}
+
 		enemylist = window.activeLevel.thisLevelsEnemies;
 		corpses = window.activeLevel.corpsesInThisLevel;
 	}
 	
 	public Dimension getPreferredSize(){
-		return new Dimension(panelwidth,panelheight);		//?
+		return new Dimension(panelwidth,panelheight);		
 	}
 	
 	public void drawEnemies(Graphics g){
@@ -139,49 +129,30 @@ public class GamePanel extends Canvas implements Runnable{
 					switch(z){
 					case(0):
 						g.drawImage(i, x*32,y*8,null);
-					//alternativ 64pixel:
-					//g.drawImage(i, x*64,y*16-16,null);-16
-					break;
+						break;
 					case(1):
 						g.drawImage(i, x*32+16, y*8,null);
-					//alternativ 64pixel:
-					//g.drawImage(i, x*64 +32, y*16-16,null);
 						break;
 					}
 				}
-				
-				//64 pixel:
-//			for(int x = 0; x < mapWidth/64;x++){
-//				for(int y = 0; y < mapHeight/128;y++){
-//					BufferedImage i = tileset.get(level.map[x][y][0]);
-//					if(y%2 == 0){
-//						g.drawImage(i, x*64,y*16,null);//g.drawImage(i, x*64,y*16-16,null);
-//					}else{
-//						g.drawImage(i, x*64 +32, y*16,null);//g.drawImage(i, x*64 +32, y*16-16,null);
-//					}
-				//i=null;
 			}
 		}
 	}
 	public void drawLevelWalls(Graphics g){
 		for(int y = 0; y < mapHeight/64;y++){
 			for(int x = 0; x < mapWidth/32;x++){
-				if((level.map[x][y][3] < 200)){//&&(level.map[x][y][3]>=0)
+				if((level.map[x][y][3] < 200)){
 					
 					if(level.map[x][y][3] !=666){
 						BufferedImage i = tilesetwalls.get(level.map[x][y][3]);
-						//					if(y%2 == 0){
+						
 						int z = y%2;
 						switch(z){
 							case(0):
 								g.drawImage(i, x*32,y*8+8,null);
-							//alternativ 64pixel:
-							//g.drawImage(i, x*64,y*16-16,null);
 								break;
 							case(1):
 								g.drawImage(i, x*32 +16, y*8+8,null);
-							//alternativ 64pixel:
-							//g.drawImage(i, x*64 +32, y*16-16,null);
 								break;
 						}
 					}
@@ -216,7 +187,6 @@ public class GamePanel extends Canvas implements Runnable{
 				g.setColor(new Color(255,255,255,2*m.lifetime));		// old: new Color(255,50,50,200- (2*m.lifetime)		new Color(hudColor.getRGB() )
 				g.drawRect(panelwidth/4-(m.getText().length()*2)-5, panelheight/4 + (b * 15) + m.lifetime/10 - 15, m.getText().length()*8-4,20);
 				g.drawString(m.getText(), panelwidth/4-(m.getText().length()*2 -2), panelheight/4 + (b * 15) +m.lifetime/10);//
-//				g.drawImage(m.producePicFromMessage(g),0,0,null );
 				b++;
 				m.reduceLife();
 				if(m.lifetime ==0){
@@ -270,38 +240,41 @@ public class GamePanel extends Canvas implements Runnable{
 		}
 		
 		g.drawString("Ammo " + player.ammo, 65,panelheight - 575);
-		g.drawImage(hudImage,panelwidth-1200,10,null);
+		
+		
+		g.drawImage(inventoryHudImg,panelwidth-1200,10,null);
 		for(int i=0;i<player.equipment.size();i++){
 			if(player.equipment.get(i) != null){
 				if(i<=4){
-					g.drawImage(player.equipment.get(i).invMiniImg, panelwidth-1150+(i*20),40,null);
+					g.drawImage(player.equipment.get(i).invMiniImg, panelwidth-1150+(i*20),30,null);
 				}else{
-					g.drawImage(player.equipment.get(i).invMiniImg, panelwidth-1150+((i-5)*20),80,null);
+					g.drawImage(player.equipment.get(i).invMiniImg, panelwidth-1150+((i-5)*20),50,null);
 				}
 			}
 		}
 		g.setColor(Color.YELLOW);
 		if(player.inventorySelect <=4){
-			g.drawRect(panelwidth-1150+(player.inventorySelect*20), 40, 20, 20);
+			g.drawRect(panelwidth-1151+(player.inventorySelect*20), 29, 21, 21);
 		}else{
-			g.drawRect(panelwidth-1150+((player.inventorySelect-5)*20), 80, 20,20);
+			g.drawRect(panelwidth-1151+((player.inventorySelect-5)*20), 49, 21,21);
 		}
 		g.setColor(hudColor);
+		g.drawString("Cash: "+player.cash+" $", panelwidth-1150, 80);
 		g.drawString("[Q]uit", panelwidth - 20,30);
+							//DEBUG			
+								//		for(Point p: level.collisionpoints){
+								//			g.setColor(Color.RED);
+								//			g.fillRect(p.x, p.y, 1, 1);
+								//		}
 		
-//		for(Point p: level.collisionpoints){
-//			g.setColor(Color.RED);
-//			g.fillRect(p.x, p.y, 1, 1);
-//		}
+								//		g.drawPolygon(collision);
 		
-		//g.drawPolygon(collision);
-		
-//		for(int i=0; i< level.doorShapes.length;i++){
-//			if(level.doorPoints.get(i) != null){
-//				g.drawPolygon(level.doorShapes[i]);
-////				System.out.println("tür "+i+": "+ level.doorPoints.get(i).x+" , "+level.doorPoints.get(i).y );
-//			}
-//		}
+								//		for(int i=0; i< level.doorShapes.length;i++){
+								//			if(level.doorPoints.get(i) != null){
+								//				g.drawPolygon(level.doorShapes[i]);
+								////				System.out.println("tür "+i+": "+ level.doorPoints.get(i).x+" , "+level.doorPoints.get(i).y );
+								//			}
+								//		}
 		for(int i =0;i< level.doorShapes.length;i++){
 			if(level.doorShapes[i] != null){
 				if(level.doorShapes[i].intersects(player.playerBounds)){
@@ -358,7 +331,7 @@ public class GamePanel extends Canvas implements Runnable{
 	@Override
 	public synchronized void run() {
 		
-		this.createBufferStrategy(2);	//Bufferstrategie setzen, 2= double buffer, 3=triple buffer
+		this.createBufferStrategy(2);	
 		buffer = this.getBufferStrategy();
 		
 		while(running){
@@ -368,29 +341,19 @@ public class GamePanel extends Canvas implements Runnable{
 				g2d.setColor(Color.BLACK);
 				g2d.fillRect(window.cameraPosition.x,window.cameraPosition.y,window.screen.width,window.screen.height);
 				
-				//hier dinge zeichnen
 				drawLevelFloor(g2d);
 				drawLevelWalls(g2d);
-				
 				drawItems(g2d);
 				drawEnemies(g2d);
 				drawPlayer(g2d);
 				drawSpecialeffects(g2d);
 				drawBullets(g2d);
-				
 				drawGUI(g2d);
 				
 				drawLatestActionMessage(g2d);
 				graphics = buffer.getDrawGraphics();
 				
 				AffineTransform at = new AffineTransform();
-				
-//				if(window.screenoption == 1){
-//					at.scale(1.25,1.25);
-//				}
-//				if(window.screenoption == 2){
-//					at.scale(2,2);
-//				}
 				at.scale(2,2);
 				
 				Graphics2D gr2d = (Graphics2D)graphics;

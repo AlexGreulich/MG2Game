@@ -65,7 +65,6 @@ public class BulletHandler implements Runnable{
 	}
 
 	public void setImage(Bullet b){
-		//b.image = bulletpics[b.getDirection()];
 		switch(b.getDirection()){
 		case(0):
 			b.image = bulletpics[6];
@@ -182,55 +181,6 @@ public class BulletHandler implements Runnable{
 						window.emptyPistol.start();
 					}
 				}
-				// else if((controls.fire) && (controls.fireRIGHT)){
-				// Bullet b = new Bullet(player.posX + 16, player.posY+16, 10); //spaeter fuer damageonhit: player.aktuelleWaffe.damage
-				// b.setDirection(5);
-				// setImage(b);
-				// bulletsInRoom.add(b);
-				// fired = true;
-				//
-				// }else if((controls.fireDOWN) && (controls.fireLEFT)){
-				// Bullet b = new Bullet(player.posX + 16, player.posY+16, 10); //spaeter fuer damageonhit: player.aktuelleWaffe.damage
-				// b.setDirection(2);
-				// setImage(b);
-				// bulletsInRoom.add(b);
-				// fired = true;
-				//
-				// }else if((controls.fireDOWN) && (controls.fireRIGHT)){
-				// Bullet b = new Bullet(player.posX + 16, player.posY+16, 10); //spaeter fuer damageonhit: player.aktuelleWaffe.damage
-				// b.setDirection(7);
-				// setImage(b);
-				// bulletsInRoom.add(b);
-				// fired = true;
-				//
-				// }else if(controls.fire){
-				// Bullet b = new Bullet(player.posX + 16, player.posY+16, 10); //spaeter fuer damageonhit: player.aktuelleWaffe.damage
-				// b.setDirection(3);
-				// setImage(b);
-				// bulletsInRoom.add(b);
-				// fired = true;
-				//
-				// }else if(controls.fireDOWN){
-				// Bullet b = new Bullet(player.posX + 16, player.posY+16, 10); //spaeter fuer damageonhit: player.aktuelleWaffe.damage
-				// b.setDirection(4);
-				// setImage(b);
-				// bulletsInRoom.add(b);
-				// fired = true;
-				//
-				// }else if(controls.fireLEFT){
-				// Bullet b = new Bullet(player.posX + 16, player.posY+16, 10); //spaeter fuer damageonhit: player.aktuelleWaffe.damage
-				// b.setDirection(1);
-				// setImage(b);
-				// bulletsInRoom.add(b);
-				// fired = true;
-				//
-				// }else if(controls.fireRIGHT){
-				// Bullet b = new Bullet(player.posX + 16, player.posY+16, 10); //spaeter fuer damageonhit: player.aktuelleWaffe.damage
-				// b.setDirection(6);
-				// setImage(b);
-				// bulletsInRoom.add(b);
-				// fired = true;
-				// }
 			}
 			firerate++;
 			//kugel-array durchgehen und bewegung/position durchfhren/aktualisieren
@@ -243,35 +193,32 @@ public class BulletHandler implements Runnable{
 						switch(b.getDirection()){
 
 						case(0):
-							//b.posX = b.posX - 20;
-							//b.posY = b.posY - 20;
 							b.posY = b.posY+20;
 							break;
 						case(1):
-							b.posX = b.posX - 20;//--;
+							b.posX = b.posX - 20;
 							break;
 						case(2):
-							b.posX = b.posX + 20;//--;
-							//b.posY = b.posY + 20;//++;
+							b.posX = b.posX + 20;
 							break;
 						case(3):
-							b.posY = b.posY - 20;//--;
+							b.posY = b.posY - 20;
 							break;
 						case(4):
-							b.posY = b.posY + 20;//++;
+							b.posY = b.posY + 20;
 							b.posX = b.posX-20;
 							break;
 						case(5):
-							b.posX = b.posX + 20;//++;
-							b.posY = b.posY + 20;//--;
+							b.posX = b.posX + 20;
+							b.posY = b.posY + 20;
 							break;
 						case(6):
-							b.posX = b.posX + 20;//++;
+							b.posX = b.posX + 20;
 							b.posY = b.posY-20;
 							break;
 						case(7):
-							b.posX = b.posX - 20;//++;
-							b.posY = b.posY - 20;//++;
+							b.posX = b.posX - 20;
+							b.posY = b.posY - 20;
 							break;
 						}
 

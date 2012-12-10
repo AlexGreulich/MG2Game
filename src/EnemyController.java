@@ -11,7 +11,6 @@ public class EnemyController implements Runnable{
 	Controls controls;
 	GamePanel panel;
 	ArrayList<Enemy> enemylist, corpses;
-//	Enemy enemy1;
 	Player player;
 	CopyOnWriteArrayList<Enemy> theEnemies;
 	Level level;
@@ -91,13 +90,14 @@ public class EnemyController implements Runnable{
 				}
 				if(e.countToNextAttack ==0){
 					e.canAttack=true;
-//	e.countToNextAttack =10;
 				}
 				if(e.energy <= 0){
 					e.isDead =true;
 					e.speed=0;
 					enemylist.remove(e);
 					corpses.add(e);
+					Item i = new Item(window,e.posX,e.posY, (int)Math.random()*2 + 3);
+					window.activeLevel.thisLevelsItems.add(i);
 					panel.actionMessages.add(new ActionMessage(panel,"Enemy killed"));
 				}
 			}

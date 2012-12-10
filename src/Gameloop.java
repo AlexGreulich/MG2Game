@@ -28,7 +28,6 @@ public class Gameloop implements Runnable{
 		enemycontroller = window.enemycontrol;
 		
 		panel = window.panel;
-		//initLoop();
 		controls = window.controls;
 		collisionshape = panel.collision;
 		initLoop();
@@ -149,8 +148,6 @@ public class Gameloop implements Runnable{
 						player.inventorySelect--;
 						keyCntleft =0;
 					}
-					
-					
 				}
 				if(controls.rightSwitch){
 					keyCntright++;
@@ -159,10 +156,7 @@ public class Gameloop implements Runnable{
 							player.inventorySelect++;
 							keyCntright=0;
 						}
-						
 					}
-					
-					
 				}
 				if(player.inventorySelect>9){
 						player.inventorySelect=9;
@@ -182,15 +176,13 @@ public class Gameloop implements Runnable{
 					for(int i=0; i< player.equipment.size();i++){
 						if(player.equipment.get(i) != null){
 							if(player.equipment.get(i).itemType == 2){
-							window.pistolReload.start();
-							player.equipment.remove(i);
-							player.ammo += 10;
-							break;
+								window.pistolReload.start();
+								player.equipment.remove(i);
+								player.ammo += 10;
+								break;
+							}
 						}
-						}
-						
 					}
-					
 				}
 				
 				for(int i = 0; i< window.activeLevel.doorShapes.length;i++){

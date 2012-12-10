@@ -33,7 +33,7 @@ public class Player {
 	
 	int cash =0;
 	
-	public Player(GameWindow w){//, int x, int y
+	public Player(GameWindow w){
 		
 		window = w;
 		controls = w.controls;
@@ -60,10 +60,10 @@ public class Player {
 		ammo = 10;
 		try{
 			img = ImageIO.read(getClass().getResource("resources/charset.gif"));
-//			int count =0;
+
 			for(int a = 0; a< img.getHeight()/48; a++){
 				for(int b =0; b<img.getWidth()/32;b++){
-					//
+					
 					switch(a){
 						case(0):
 							runter_cycle[b] = img.getSubimage(b*32, a*48, 32, 48);
@@ -183,7 +183,6 @@ public class Player {
 	}
 	
 	public Item getSelectedItemInInv(){
-		
 		
 		return null;
 	}

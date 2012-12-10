@@ -79,24 +79,22 @@ public class ItemHandler implements Runnable{
 //							window.activeLevel.thisLevelsItems.remove(i);
 //							break;
 //						}
-//						for(int j=0;j < player.equipment.size();j++){
-//							
-//							if(player.equipment.get(j) == null){
-//								player.equipment.get(j) = window.activeLevel.thisLevelsItems.get(i);
-//								window.activeLevel.thisLevelsItems.remove(i);
-//								break;
-//							}
-//						}
+//						
 					}
 				}
 			}
 			
 			if(controls.itemUse){
-				Item i = player.equipment.get(player.inventorySelect);
-				i.useIt();
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {e.printStackTrace();}
+				if(player.equipment.size() >0){
+					Item i = player.equipment.get(player.inventorySelect);
+					if(i.itemType != 2){
+						i.useIt();
+					}
+					
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {e.printStackTrace();}
+				}
 			}
 			
 			float onEnd = System.currentTimeMillis() - onStart;

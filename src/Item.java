@@ -30,27 +30,27 @@ public class Item extends Entity{
 		switch(itemType){
 			case(0):			//Waffe
 				damage = 1;
-				name = "Waffe";
+				name = "magnum";
 				break;
 			case(1):			//medikit, nahrung
 				healthPts = 10;
-				name = "Medikit";
+				name = "medikit";
 				break;
 			case(2):			//ammo
 				shots = 10;
-				name = "Ammo";
+				name = "ammo";
 				break;
 			case(3):			//div objekt
 				money = 10;
-				name = "nul";
+				name = "pills";
 				break;
 			case(4):
 				money = 20;
-				name = "nul";
+				name = "money";
 				break;
 			case(5):
 				money =30;
-				name = "nul";
+				name = "money";
 				break;
 		}
 		img = window.itemHandler.picturesOfAllItems[itemType];
@@ -67,14 +67,13 @@ public class Item extends Entity{
 	}
 	public void equip(){
 		isEquipped = true;
-		window.activeLevel.thisLevelsItems.remove(this);		//direkt in gamepanel oder so?
+		window.activeLevel.thisLevelsItems.remove(this);		
 		createActionMessage();
 		if(this.itemType == 0){
 			panel.player.weapons[0] = this;
 		}else{
-			panel.player.equipment.add(this);//energy += healthPts;
+			panel.player.equipment.add(this);
 		}
-		
 	}
 	
 	public void useIt(){
@@ -83,16 +82,29 @@ public class Item extends Entity{
 		
 		switch(this.itemType){
 		case(1):
-			panel.player.energy += healthPts;
+			if(panel.player.energy <100){
+				int diff = (int) (100 - panel.player.energy);
+				if(diff > healthPts){
+					panel.player.energy += healthPts;
+					panel.actionMessages.add(new ActionMessage(panel,"Got " +healthPts+" HP"));
+				}else{
+					panel.player.energy += diff;
+					panel.actionMessages.add(new ActionMessage(panel,"Got " +diff+" HP"));
+				}
+			}
+			
 			break;
 		case(3):
 			panel.player.cash += money;
+			panel.actionMessages.add(new ActionMessage(panel,"Picked up " +money+"$"));
 			break;
 		case(4):
 			panel.player.cash += money;
+			panel.actionMessages.add(new ActionMessage(panel,"Picked up " +money+"$"));
 			break;
 		case(5):
 			panel.player.cash += money;
+			panel.actionMessages.add(new ActionMessage(panel,"Picked up " +money+"$"));
 			break;
 		}
 	}

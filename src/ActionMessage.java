@@ -30,7 +30,6 @@ public class ActionMessage {
 		Graphics2D g2d= (Graphics2D)g;
 		BufferedImage bi = new BufferedImage(panel.panelwidth/4-(this.getText().length()*2)-5, panel.panelheight/4  - 15, BufferedImage.TYPE_INT_RGB );
 		
-		
 		return bi;
 	}
 }
