@@ -96,7 +96,7 @@ public class EnemyController implements Runnable{
 					e.speed=0;
 					enemylist.remove(e);
 					corpses.add(e);
-					Item i = new Item(window,e.posX,e.posY, (int)Math.random()*2 + 3);
+					Item i = new Item(window,e.posX,e.posY, (int)Math.random()*1 + 4);
 					window.activeLevel.thisLevelsItems.add(i);
 					panel.actionMessages.add(new ActionMessage(panel,"Enemy killed"));
 				}

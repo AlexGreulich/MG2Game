@@ -283,8 +283,8 @@ public class GamePanel extends Canvas implements Runnable{
 			}
 		}
 		g.setColor(Color.GREEN);
-		g.drawRect(player.playerBounds.x,player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
-		g.drawRect(player.playermiddle.x, player.playermiddle.y, 1,1);
+		//g.drawRect(player.playerBounds.x,player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
+		//g.drawRect(player.playermiddle.x, player.playermiddle.y, 1,1);
 	}
 	
 	public void drawItems(Graphics g){

@@ -96,15 +96,15 @@ public class Item extends Entity{
 			break;
 		case(3):
 			panel.player.cash += money;
-			panel.actionMessages.add(new ActionMessage(panel,"Picked up " +money+"$"));
+			panel.actionMessages.add(new ActionMessage(panel,"Got " +money+"$"));
 			break;
 		case(4):
 			panel.player.cash += money;
-			panel.actionMessages.add(new ActionMessage(panel,"Picked up " +money+"$"));
+			panel.actionMessages.add(new ActionMessage(panel,"Got " +money+"$"));
 			break;
 		case(5):
 			panel.player.cash += money;
-			panel.actionMessages.add(new ActionMessage(panel,"Picked up " +money+"$"));
+			panel.actionMessages.add(new ActionMessage(panel,"Got " +money+"$"));
 			break;
 		}
 	}
