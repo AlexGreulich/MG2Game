@@ -171,41 +171,7 @@ public class Gameloop implements Runnable{
 						player.inventorySelect =0;
 				}
 				
-				playersequipment = new CopyOnWriteArrayList<Item>(player.equipment);
-				
-				for(Item i : playersequipment){
-					if(playersequipment.get(player.inventorySelect) != null){
-						if(controls.itemUse){
-							if(i.itemType != 2){
-								i.useIt();
-								player.equipment.remove(i);
-								if(player.inventorySelect >0){
-									player.inventorySelect--;
-								}
-								
-							}
-						}
-					}
-				}
-				
-//				if(controls.itemUse){
-//					cntToUse++;
-//					if(cntToUse >10){
-//						Item itemToUse = playersequipment.get(player.inventorySelect);
-//						if(itemToUse != null){
-//							if(itemToUse.itemType != 2){
-//								itemToUse.useIt();
-//								player.equipment.remove(player.inventorySelect);
-//							}
-//						}
-//						cntToUse =0;
-//					}
-//				}
-//				player.equipment.clear();
-//				for(int i=0;i<playersequipment.size();i++){
-//					player.equipment.add(playersequipment.get(i));
-//				}
-//				//player.equipment = playersequipment.
+			
 				
 				if(!collisionshape.contains(player.playermiddle)){
 					player.posX = altePos.x-16;

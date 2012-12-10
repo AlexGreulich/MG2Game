@@ -75,14 +75,11 @@ public class Item extends Entity{
 			panel.player.equipment.add(this);//energy += healthPts;
 		}
 		
-//			if(this.itemType == 1){
-//			panel.player.energy += healthPts;
-//		}else if(this.itemType == 2){
-//			panel.player.ammo += shots;
-//		}
 	}
 	
 	public void useIt(){
+		
+		panel.player.equipment.remove(this);
 		
 		switch(this.itemType){
 		case(1):

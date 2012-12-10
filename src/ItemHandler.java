@@ -91,6 +91,14 @@ public class ItemHandler implements Runnable{
 				}
 			}
 			
+			if(controls.itemUse){
+				Item i = player.equipment.get(player.inventorySelect);
+				i.useIt();
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {e.printStackTrace();}
+			}
+			
 			float onEnd = System.currentTimeMillis() - onStart;
 			if( gamespeed> onEnd){
 				try{

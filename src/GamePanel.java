@@ -53,6 +53,9 @@ public class GamePanel extends Canvas implements Runnable{
 	
 	BufferedImage hudImage;
 	Color hudColor = new Color(90,192,119);
+	int floatingItems =10;
+	boolean floatUpItem=false;
+	
 	public GamePanel(GameWindow w ){//int scrsizeopt
 		//transformModifier = scrsizeopt;
 		window = w;
@@ -312,10 +315,23 @@ public class GamePanel extends Canvas implements Runnable{
 	}
 	
 	public void drawItems(Graphics g){
-		CopyOnWriteArrayList<Item> itemList = new CopyOnWriteArrayList<Item>(window.activeLevel.thisLevelsItems); 
+		CopyOnWriteArrayList<Item> itemList = new CopyOnWriteArrayList<Item>(window.activeLevel.thisLevelsItems);
+		if(floatUpItem){
+			floatingItems++;
+		}else{
+			floatingItems--;
+		}
+		if(floatingItems == 0){
+			floatUpItem = true;
+		}
+		if(floatingItems ==32){
+			floatUpItem =false;
+		}
+		
 		for(Item i: itemList){
+			
 			if(i != null){
-				g.drawImage(i.getImage(), i.posX,i.posY,null);
+				g.drawImage(i.getImage(), i.posX,i.posY+floatingItems/4 ,null);
 			}
 		}
 	}
